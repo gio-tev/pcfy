@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import logo from '../../assets/logo.png';
 import landingImage from '../../assets/landing-image.png';
-import Button from '../../components/UI/Button';
+import Button from '../../components/UI/button';
 import styles from './Landing.module.css';
 
 const Landing = () => {

@@ -1,8 +1,7 @@
 import Navigation from '../../components/UI/navigation';
+import styles from './Laptop.module.css';
 
-import styles from './Employee.module.css';
-
-const Employee = () => {
+const Laptop = () => {
   return (
     <div className={styles.container}>
       <Navigation />
@@ -10,4 +9,4 @@ const Employee = () => {
   );
 };
 
-export default Employee;
+export default Laptop;

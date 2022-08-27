@@ -1,5 +1,6 @@
 :root {
   --primary-blue: #62a1eb;
+  --black-700: #232323;
 }
 
 * {
@@ -10,7 +11,8 @@
 
 @font-face {
   font-family: 'HelveticaNeue';
-  src: local('HelveticaNeue'), url('./fonts/HelveticaNeue-Medium-11.ttf') format('truetype');
+  src: local('HelveticaNeue'),
+    url('./fonts/HelveticaNeue-Medium-11.ttf') format('truetype');
 }
 
 body {
@@ -24,4 +26,5 @@ body {
   color: #fff;
   border-radius: 8px;
   border: none;
+  cursor: pointer;
 }

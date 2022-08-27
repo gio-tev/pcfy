@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  gap: 60px;
+}
+
+.linkText {
+  font-family: 'HelveticaNeue';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--black-700);
+  text-decoration: none;
+}
+
+.underline {
+  content: '';
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+  padding-top: 10px;
+  border-bottom: 2px solid black;
+}
