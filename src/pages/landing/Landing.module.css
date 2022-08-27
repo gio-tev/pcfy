@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 100vh;
+}
+
+.logo {
+  display: block;
+  width: 112px;
+  height: 18px;
+}
+
+.landingImg {
+  display: block;
+  width: 40%;
+}
+
+.btnContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 4rem;
+}
+
+.btn {
+  font-family: 'HelveticaNeue';
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  padding: 22px 70px;
+}
