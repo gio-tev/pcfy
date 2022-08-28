@@ -29,5 +29,6 @@
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
+  background: var(--primary-blue);
   padding: 22px 70px;
 }

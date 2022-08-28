@@ -1,6 +1,11 @@
 :root {
+  --background-color: #f6f6f5;
   --primary-blue: #62a1eb;
   --black-700: #232323;
+  --black-500: #2e2e2e;
+  --blue-400: #8ac0e2;
+  --dropdown-background: #ebebeb;
+  --error: #e52f2f;
 }
 
 * {
@@ -16,15 +21,8 @@
 }
 
 body {
+  background-color: var(--background-color);
   font-family: 'HelveticaNeue';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.btnPrimarty {
-  background: var(--primary-blue);
-  color: #fff;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
 }

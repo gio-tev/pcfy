@@ -2,4 +2,118 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-evenly;
+  height: 100vh;
+  /* padding: 50px 0; */
+}
+
+.form {
+  /* position: relative; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: space-around; */
+  padding-top: 4rem;
+  /* padding-bottom: 10rem; */
+  width: 1226px;
+  /* height: 750px; */
+  background: white;
+  border-radius: 18px;
+}
+
+.nameLastnameContainer {
+  display: flex;
+  gap: 4rem;
+}
+
+.labelInputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nameLastnameInput {
+  width: 407px;
+  padding-left: 1rem;
+}
+
+.dropdownsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.form select {
+  font-family: 'HelveticaNeue';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21px;
+  width: 878px;
+  height: 50px;
+  background: var(--dropdown-background);
+  border-radius: 8px;
+  padding-left: 1rem;
+  margin-bottom: 5px;
+  background-image: url(../../assets/arrow-dropdown.png);
+  background-repeat: no-repeat;
+  background-position: 95% 55%;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.emailNumberContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.emailNumberInput {
+  width: 878px;
+  padding-left: 1rem;
+}
+
+.btnNext {
+  /* position: absolute;
+  right: 174px;
+  bottom: 40px; */
+  align-self: flex-end;
+  font-family: 'HelveticaNeue';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  background: var(--primary-blue);
+  margin-right: 174px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+  padding: 20px 50px;
+}
+
+.btnBack {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+}
+
+.logo {
+  width: 75px;
+  height: 75px;
+}
+
+.hint {
+  width: 407px;
+  height: 21px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--black-500);
+}
+
+.error {
+  color: var(--error);
 }
