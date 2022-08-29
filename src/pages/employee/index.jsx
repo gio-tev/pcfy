@@ -19,21 +19,26 @@ const teamIds = {
 };
 
 const Employee = () => {
-  const [userInputs, setUserInputs] = useState({});
-  const [hasError, setHasError] = useState(false);
-  const [focusedInput, setFocusedInput] = useState({
-    name: false,
-    surname: false,
-    email: false,
-    phone_number: false,
-  });
-
-  const { name, surname, team, position, email, phone_number } = userInputs;
-
   const teams = useFetch(process.env.REACT_APP_GET_TEAMS);
   const positions = useFetch(process.env.REACT_APP_GET_POSITIONS);
 
+  const [userInputs, setUserInputs] = useState({});
+  const [hasError, setHasError] = useState(false);
+  const [isFocused, setIsFocued] = useState({});
+
+  const { name, surname, team, position, email, phone_number } = userInputs;
+
   const navigate = useNavigate();
+
+  let selectedTeamId;
+
+  for (const member in teamIds) {
+    if (member === team) selectedTeamId = teamIds[member];
+  }
+
+  const filteredPositions = positions.response?.data.filter(
+    position => position.team_id === selectedTeamId
+  );
 
   const handleInputs = (inputIdentifier, e) => {
     setUserInputs(prevState => {
@@ -46,26 +51,17 @@ const Employee = () => {
 
   const handleFocus = inputFocused => {
     setHasError(false);
-    setFocusedInput(prevState => {
+
+    setIsFocued(prevState => {
       return { ...prevState, [inputFocused]: true };
     });
   };
 
   const handleBlur = inputBlurred => {
-    setFocusedInput(prevState => {
+    setIsFocued(prevState => {
       return { ...prevState, [inputBlurred]: false };
     });
   };
-
-  let selectedTeamId;
-
-  for (const member in teamIds) {
-    if (member === team) selectedTeamId = teamIds[member];
-  }
-
-  const filteredPositions = positions.response?.data.filter(
-    position => position.team_id === selectedTeamId
-  );
 
   const handleGoBackClick = () => navigate('/');
 
@@ -88,32 +84,62 @@ const Employee = () => {
       return setHasError(true);
     }
 
+    // Save to the localSorage
+
+    // Dispatch to the global state
+
     navigate('/laptop');
+  };
+
+  const nameSurnameHasError = value => {
+    return (hasError && value && !/^[ა-ჰ]+$/i.test(value)) ||
+      (hasError && !value) ||
+      (hasError && value && value.length < 2)
+      ? true
+      : false;
+  };
+
+  const emailHasError = value => {
+    return (hasError && value && !value.trim().endsWith('@redberry.ge')) ||
+      (hasError && !value)
+      ? true
+      : false;
+  };
+
+  const phoneHasError = value => {
+    return (hasError &&
+      value &&
+      (value.length !== 13 || !value.trim().startsWith('+995'))) ||
+      (hasError && !value)
+      ? true
+      : false;
   };
 
   return (
     <div className={styles.container}>
-      <Navigation />
-
       <Button onClick={handleGoBackClick} className={styles.btnBack}>
         <img src={arrowBack} alt="arrow back" />
       </Button>
 
+      <Navigation />
+
       <form className={styles.form}>
         <div className={styles.nameLastnameContainer}>
           <div className={styles.labelInputContainer}>
-            <Label>სახელი</Label>
+            <Label className={nameSurnameHasError(name) && styles.error}>სახელი</Label>
             <Input
-              className={styles.nameLastnameInput}
+              className={`${styles.nameLastnameInput} ${
+                nameSurnameHasError(name) && styles.inputError
+              }`}
               onChange={handleInputs.bind(this, 'name')}
               onFocus={handleFocus.bind(this, 'name')}
               onBlur={handleBlur.bind(this, 'name')}
             />
-            {focusedInput.name && (
+            {isFocused.name && (
               <p className={styles.hint}>მინიმუმ 2 სიმბოლო, ქართული ასოები</p>
             )}
 
-            {hasError && name && !/^[ა-ჰ]+$/i.test(name) && (
+            {hasError && name && !/^[ა-ჰ]+$/i.test(name.trim()) && (
               <p className={`${styles.hint} ${styles.error}`}>გამოიყენე ქართული ასოები</p>
             )}
 
@@ -121,24 +147,26 @@ const Employee = () => {
               <p className={`${styles.hint} ${styles.error}`}>აუცილებელი ველი</p>
             )}
 
-            {hasError && name && name.length < 2 && (
+            {hasError && name && name.trim().length < 2 && (
               <p className={`${styles.hint} ${styles.error}`}>მინიმუმ 2 სიმბოლო</p>
             )}
           </div>
 
           <div className={styles.labelInputContainer}>
-            <Label>გვარი</Label>
+            <Label className={nameSurnameHasError(surname) && styles.error}>გვარი</Label>
             <Input
-              className={styles.nameLastnameInput}
+              className={`${styles.nameLastnameInput} ${
+                nameSurnameHasError(surname) && styles.inputError
+              }`}
               onChange={handleInputs.bind(this, 'surname')}
               onFocus={handleFocus.bind(this, 'surname')}
               onBlur={handleBlur.bind(this, 'surname')}
             />
-            {focusedInput.surname && (
+            {isFocused.surname && (
               <p className={styles.hint}>მინიმუმ 2 სიმბოლო, ქართული ასოები</p>
             )}
 
-            {hasError && surname && !/^[ა-ჰ]+$/i.test(surname) && (
+            {hasError && surname && !/^[ა-ჰ]+$/i.test(surname.trim()) && (
               <p className={`${styles.hint} ${styles.error}`}>გამოიყენე ქართული ასოები</p>
             )}
 
@@ -146,7 +174,7 @@ const Employee = () => {
               <p className={`${styles.hint} ${styles.error}`}>აუცილებელი ველი</p>
             )}
 
-            {hasError && surname && surname.length < 2 && (
+            {hasError && surname && surname.trim().length < 2 && (
               <p className={`${styles.hint} ${styles.error}`}>მინიმუმ 2 სიმბოლო</p>
             )}
           </div>
@@ -201,15 +229,17 @@ const Employee = () => {
 
         <div className={styles.emailNumberContainer}>
           <div className={styles.labelInputContainer}>
-            <Label>მეილი</Label>
+            <Label className={emailHasError(email) && styles.error}>მეილი</Label>
             <Input
-              className={styles.emailNumberInput}
+              className={`${styles.emailNumberInput} ${
+                emailHasError(email) && styles.inputError
+              }`}
               onChange={handleInputs.bind(this, 'email')}
               onFocus={handleFocus.bind(this, 'email')}
               onBlur={handleBlur.bind(this, 'email')}
             />
 
-            {focusedInput.email && (
+            {isFocused.email && (
               <p className={styles.hint}>უნდა მთავრდებოდეს @redberry.ge-ით</p>
             )}
 
@@ -225,15 +255,19 @@ const Employee = () => {
           </div>
 
           <div className={styles.labelInputContainer}>
-            <Label>ტელეფონის ნომერი</Label>
+            <Label className={phoneHasError(phone_number) && styles.error}>
+              ტელეფონის ნომერი
+            </Label>
             <Input
-              className={styles.emailNumberInput}
+              className={`${styles.emailNumberInput} ${
+                phoneHasError(phone_number) && styles.inputError
+              }`}
               onChange={handleInputs.bind(this, 'phone_number')}
               onFocus={handleFocus.bind(this, 'phone_number')}
               onBlur={handleBlur.bind(this, 'phone_number')}
             />
 
-            {focusedInput.phone_number && (
+            {isFocused.phone_number && (
               <p className={styles.hint}>
                 უნდა აკმაყოფილებდეს ქართული მობ-ნომრის ფორმატს
               </p>
@@ -241,7 +275,8 @@ const Employee = () => {
 
             {hasError &&
               phone_number &&
-              (phone_number.length !== 13 || !phone_number.trim().startsWith('+995')) && (
+              (phone_number.trim().length !== 13 ||
+                !phone_number.trim().startsWith('+995')) && (
                 <p className={`${styles.hint} ${styles.error}`}>
                   უნდა აკმაყოფილებდეს ქართული მობ-ნომრის ფორმატს
                 </p>

@@ -3,8 +3,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  height: 100vh;
-  /* padding: 50px 0; */
+  gap: 40px;
+  /* justify-content: center; */
+  /* height: 100vh; */
+  padding: 40px 0;
 }
 
 .form {
@@ -13,10 +15,11 @@
   flex-direction: column;
   align-items: center;
   /* justify-content: space-around; */
-  padding-top: 4rem;
+  padding: 4rem 0 2rem 0;
   /* padding-bottom: 10rem; */
   width: 1226px;
-  /* height: 750px; */
+
+  /* height: 900px; */
   background: white;
   border-radius: 18px;
 }
@@ -89,14 +92,19 @@
   background: var(--primary-blue);
   margin-right: 174px;
   margin-top: 50px;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
   padding: 20px 50px;
 }
 
-.btnBack {
+/* .btnBack {
   position: absolute;
   top: 40px;
   left: 40px;
+} */
+.btnBack {
+  align-self: flex-start;
+  margin-left: 40px;
+  /* margin-top: 40px; */
 }
 
 .logo {
@@ -116,4 +124,8 @@
 
 .error {
   color: var(--error);
+}
+
+.inputError {
+  border-color: var(--error);
 }
