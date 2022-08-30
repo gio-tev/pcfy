@@ -19,10 +19,7 @@ const Laptop = () => {
   const [userInputs, setUserInputs] = useState({});
   const [driveType, setDriveType] = useState('');
   const [laptopState, setLaptopState] = useState('');
-
-  console.log(laptopState);
-
-  // const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const [isFocued, setIsFocued] = useState({});
 
   const {
@@ -78,7 +75,32 @@ const Laptop = () => {
     navigate('/employee');
   };
 
-  const handleNextClick = () => {};
+  const handleNextClick = () => {
+    if (
+      !image ||
+      !/^[\w!@#$%^&*()+=]*$/.test(laptop_name) ||
+      !laptop_brand ||
+      !laptop_cpu ||
+      !laptop_cpu_cores ||
+      !+laptop_cpu_cores > 0 ||
+      !isFinite(laptop_cpu_cores) ||
+      !laptop_cpu_threads ||
+      !+laptop_cpu_threads > 0 ||
+      !isFinite(laptop_cpu_threads) ||
+      !laptop_ram ||
+      !+laptop_ram > 0 ||
+      !isFinite(laptop_ram) ||
+      !driveType ||
+      !laptopState ||
+      !laptop_price ||
+      !+laptop_price > 0 ||
+      !isFinite(laptop_price)
+    ) {
+      return setHasError(true);
+    }
+
+    navigate('/success');
+  };
 
   const laptopNameHasError = value => {};
   const cpuCoreHasError = value => {};

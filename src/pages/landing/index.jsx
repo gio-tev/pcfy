@@ -9,7 +9,7 @@ const Landing = () => {
   const navigate = useNavigate();
 
   const handleAddClick = () => navigate('/employee');
-  const handleListClick = () => navigate('/record-list');
+  const handleListClick = () => navigate('/records');
 
   return (
     <div className={styles.container}>

@@ -3,8 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import Landing from './pages/landing';
 import Employee from './pages/employee';
 import Laptop from './pages/laptop';
-
-import RecordList from './pages/record-list';
+import Success from './pages/success';
+import Records from './pages/records';
 
 function App() {
   return (
@@ -12,7 +12,8 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/employee" element={<Employee />} />
       <Route path="/laptop" element={<Laptop />} />
-      <Route path="/record-list" element={<RecordList />} />
+      <Route path="/success" element={<Success />} />
+      <Route path="/records" element={<Records />} />
     </Routes>
   );
 }

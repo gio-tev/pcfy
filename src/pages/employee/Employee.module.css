@@ -38,6 +38,7 @@
 .nameLastnameInput {
   width: 407px;
   padding-left: 1rem;
+  border: 1.8px solid var(--blue-400);
 }
 
 .dropdownsContainer {
@@ -77,6 +78,7 @@
 .emailNumberInput {
   width: 878px;
   padding-left: 1rem;
+  border: 1.8px solid var(--blue-400);
 }
 
 .btnNext {
