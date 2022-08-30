@@ -1,14 +1,17 @@
 :root {
   --background-color: #f6f6f5;
   --primary-blue: #62a1eb;
+  --black-800: #202020;
   --black-700: #232323;
   --black-500: #2e2e2e;
+  --black-400: #5f5f5f;
   --black-200: #c7c7c7;
   --blue-700: #4386a9;
   --blue-500: #62a1eb;
   --blue-400: #8ac0e2;
   --dropdown-background: #ebebeb;
   --error: #e52f2f;
+  --image-error: #fff1f1;
   --dropbox-background: #f7f7f7;
 }
 

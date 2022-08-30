@@ -24,7 +24,7 @@ const Employee = () => {
 
   const [userInputs, setUserInputs] = useState({});
   const [hasError, setHasError] = useState(false);
-  const [isFocused, setIsFocued] = useState({});
+  // const [isFocused, setIsFocued] = useState({});
 
   const { name, surname, team, position, email, phone_number } = userInputs;
 
@@ -91,31 +91,25 @@ const Employee = () => {
     navigate('/laptop');
   };
 
-  const nameSurnameHasError = value => {
-    return (hasError && value && !/^[ა-ჰ]+$/i.test(value)) ||
-      (hasError && !value) ||
-      (hasError && value && value.length < 2)
+  const nameSurnameHasError = value =>
+    (hasError && value && !/^[ა-ჰ]+$/i.test(value)) ||
+    (hasError && !value) ||
+    (hasError && value && value.length < 2)
       ? true
       : false;
-  };
 
-  const emailHasError = value => {
-    return (hasError && value && !value.trim().endsWith('@redberry.ge')) ||
-      (hasError && !value)
+  const emailHasError = value =>
+    (hasError && value && !value.trim().endsWith('@redberry.ge')) || (hasError && !value)
       ? true
       : false;
-  };
 
-  const phoneHasError = value => {
-    return (hasError &&
-      value &&
-      (value.length !== 13 || !value.trim().startsWith('+995'))) ||
-      (hasError && !value)
+  const phoneHasError = value =>
+    (hasError && value && (value.length !== 13 || !value.trim().startsWith('+995'))) ||
+    (hasError && !value)
       ? true
       : false;
-  };
 
-  const selectHasError = value => (hasError && !value ? true : false);
+  const selectFieldHasError = value => (hasError && !value ? true : false);
 
   return (
     <div className={styles.container}>
@@ -202,7 +196,7 @@ const Employee = () => {
         <div className={styles.dropdownsContainer}>
           <div>
             <select
-              className={selectHasError(team) && styles.inputError}
+              className={selectFieldHasError(team) && styles.inputError}
               onChange={handleInputs.bind(this, 'team')}
               defaultValue="default"
             >
@@ -226,7 +220,7 @@ const Employee = () => {
 
           <div>
             <select
-              className={selectHasError(position) && styles.inputError}
+              className={selectFieldHasError(position) && styles.inputError}
               onChange={handleInputs.bind(this, 'position')}
               defaultValue="default"
               disabled={team ? false : true}
