@@ -120,7 +120,7 @@ const Laptop = () => {
   const selectUploadFieldHasError = value => (hasError && !value ? true : false);
 
   const numberInputHasError = value =>
-    hasError && (!value || !+value > 0 || !isFinite(value)) ? true : false;
+    hasError && (!value || +value < 1 || !isFinite(value)) ? true : false;
 
   // const laptopImageHasError = value => (hasError && !value ? true : false);
   // const cpuThreadHasError = value => {};
@@ -128,6 +128,10 @@ const Laptop = () => {
   // const driveTypeHasError = value => (hasError && !value ? true : false);
   // const laptopStateHasError = value => {};
   // const laptopPriceHasError = value => {};
+
+  // console.log(numberInputHasError(-45454, ';;;;;;;'));
+  console.log(+'-55' < 1);
+  // console.log(!isFinite('-55'));
 
   return (
     <div className={styles.container}>
