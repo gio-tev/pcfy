@@ -1,4 +1,4 @@
-import { useCallback, useState, useContext } from 'react';
+import { useCallback, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 
@@ -17,16 +17,27 @@ import { AppContext } from '../../store';
 const Laptop = () => {
   const { dispatch } = useContext(AppContext);
 
-  const brands = useFetch(process.env.REACT_APP_GET_BRANDS);
-  const cpus = useFetch(process.env.REACT_APP_GET_CPUS);
+  const brands = useFetch();
+  const cpus = useFetch();
 
+  const storageData = JSON.parse(window.localStorage.getItem('laptopData'));
+
+  const [userInputs, setUserInputs] = useState(storageData ? storageData : {});
   const [image, setImage] = useState(null);
   const [imagePreviewData, setImagePreviewData] = useState({});
-  const [userInputs, setUserInputs] = useState({});
-  const [driveType, setDriveType] = useState('');
-  const [laptopState, setLaptopState] = useState('');
+  const [driveType, setDriveType] = useState(
+    storageData ? storageData.laptop_hard_drive_type : ''
+  );
+  const [laptopState, setLaptopState] = useState(
+    storageData ? storageData.laptop_state : ''
+  );
   const [hasError, setHasError] = useState(false);
-  // const [isFocued, setIsFocued] = useState({});
+
+  console.log(userInputs, 'oooooooo');
+  useEffect(() => {
+    brands.sendHttp(process.env.REACT_APP_GET_BRANDS);
+    cpus.sendHttp(process.env.REACT_APP_GET_CPUS);
+  }, []);
 
   const { imagePath, imageName, imageSize } = imagePreviewData;
 
@@ -76,18 +87,7 @@ const Laptop = () => {
     setLaptopState(inputIdentifier === 'ახალი' ? 'new' : 'used');
   };
 
-  const handleFocus = inputFocused => {
-    setHasError(false);
-    // setIsFocued(prevState => {
-    //   return { ...prevState, [inputFocused]: true };
-    // });
-  };
-
-  // const handleBlur = inputBlurred => {
-  //   setIsFocued(prevState => {
-  //     return { ...prevState, [inputBlurred]: false };
-  //   });
-  // };
+  const handleFocus = () => setHasError(false);
 
   const handleUploadAgain = () => setImage(null);
 
@@ -127,7 +127,7 @@ const Laptop = () => {
     const enteredDateInMilliseconds = enteredDate.getTime();
     const dateISValid = Date.now() > enteredDateInMilliseconds;
 
-    const laptopData = {
+    const payloadData = {
       laptop_name,
       laptop_image: image,
       laptop_brand_id,
@@ -140,9 +140,23 @@ const Laptop = () => {
       laptop_price,
       laptop_purchase_date: dateISValid ? laptopPurchaseDate : undefined,
     };
-    // Save to the localsotrage
 
-    dispatch({ type: 'LAPTOP_INPUT', payload: laptopData });
+    const storageData = {
+      laptop_name,
+      laptop_brand,
+      laptop_cpu,
+      laptop_cpu_cores,
+      laptop_cpu_threads,
+      laptop_ram,
+      laptop_hard_drive_type: driveType,
+      laptop_state: laptopState,
+      laptop_price,
+      laptop_purchase_date: dateISValid ? laptopPurchaseDate : undefined,
+    };
+
+    dispatch({ type: 'LAPTOP_INPUT', payload: payloadData });
+
+    window.localStorage.setItem('laptopData', JSON.stringify(storageData));
 
     navigate('/success');
   };
@@ -155,17 +169,7 @@ const Laptop = () => {
   const numberInputHasError = value =>
     hasError && (!value || +value < 1 || !isFinite(value)) ? true : false;
 
-  // const laptopImageHasError = value => (hasError && !value ? true : false);
-  // const cpuThreadHasError = value => {};
-  // const ramHasError = value => {};
-  // const driveTypeHasError = value => (hasError && !value ? true : false);
-  // const laptopStateHasError = value => {};
-  // const laptopPriceHasError = value => {};
-
-  // console.log(numberInputHasError(-45454, ';;;;;;;'));
-
-  // console.log(!isFinite('-55'));
-
+  console.log(driveType, '...................................');
   return (
     <div className={styles.container}>
       <Button onClick={handleGoBackClick} className={styles.btnBack}>
@@ -218,7 +222,6 @@ const Laptop = () => {
         )}
 
         <div className={styles.laptopContainer}>
-          {/* <div className={styles.laptopInnerContainer}> */}
           <div className={styles.labelInputContainer}>
             <Label className={laptopNameHasError(laptop_name) ? styles.error : undefined}>
               ლეპტოპის სახელი
@@ -229,7 +232,7 @@ const Laptop = () => {
               }`}
               onChange={handleInputs.bind(this, 'laptop_name')}
               onFocus={handleFocus.bind(this, 'laptop_name')}
-              // onBlur={handleBlur.bind(this, 'laptop_name')}
+              value={laptop_name}
             />
 
             <p
@@ -249,7 +252,7 @@ const Laptop = () => {
               defaultValue="default"
             >
               <option value="default" disabled hidden>
-                ლეპტოპის ბრენდი
+                {laptop_brand ? laptop_brand : 'ლეპტოპის ბრენდი'}
               </option>
 
               {brands.response?.data.map(brand => {
@@ -261,7 +264,6 @@ const Laptop = () => {
               })}
             </select>
           </div>
-          {/* </div> */}
         </div>
 
         <div className={styles.cpuContainer}>
@@ -274,7 +276,7 @@ const Laptop = () => {
               defaultValue="default"
             >
               <option value="default" disabled hidden>
-                CPU
+                {laptop_cpu ? laptop_cpu : 'CPU'}
               </option>
 
               {cpus.response?.data.map(cpu => {
@@ -299,7 +301,7 @@ const Laptop = () => {
               }`}
               onChange={handleInputs.bind(this, 'laptop_cpu_cores')}
               onFocus={handleFocus.bind(this, 'laptop_cpu_cores')}
-              // onBlur={handleBlur.bind(this, 'laptop_cpu_cores')}
+              value={laptop_cpu_cores}
             />
 
             <p
@@ -325,7 +327,7 @@ const Laptop = () => {
               }`}
               onChange={handleInputs.bind(this, 'laptop_cpu_threads')}
               onFocus={handleFocus.bind(this, 'laptop_cpu_threads')}
-              // onBlur={handleBlur.bind(this, 'laptop_cpu_threads')}
+              value={laptop_cpu_threads}
             />
 
             <p
@@ -349,7 +351,7 @@ const Laptop = () => {
               }`}
               onChange={handleInputs.bind(this, 'laptop_ram')}
               onFocus={handleFocus.bind(this, 'laptop_ram')}
-              // onBlur={handleBlur.bind(this, 'laptop_ram')}
+              value={laptop_ram}
             />
             <p
               className={`${styles.hint} ${
@@ -372,6 +374,7 @@ const Laptop = () => {
                   onChange={handleDriveTypeCheck.bind(this, 'SSD')}
                   type="radio"
                   name="memoryType"
+                  checked={driveType === 'SSD' ? true : false}
                 />
                 <Label>SSD</Label>
               </div>
@@ -381,6 +384,7 @@ const Laptop = () => {
                   onChange={handleDriveTypeCheck.bind(this, 'HDD')}
                   type="radio"
                   name="memoryType"
+                  checked={driveType === 'HDD' ? true : false}
                 />
                 <Label>HDD</Label>
               </div>
@@ -394,6 +398,7 @@ const Laptop = () => {
             <Input
               className={styles.inputs}
               onChange={handleInputs.bind(this, 'laptop_purchase_date')}
+              value={laptop_purchase_date}
               placeholder="დდ / თთ / წწწწ"
             />
           </div>
@@ -410,7 +415,7 @@ const Laptop = () => {
               }`}
               onChange={handleInputs.bind(this, 'laptop_price')}
               onFocus={handleFocus.bind(this, 'laptop_price')}
-              // onBlur={handleBlur.bind(this, 'laptop_price ')}
+              value={laptop_price}
             />
 
             <p
@@ -438,6 +443,7 @@ const Laptop = () => {
                   onChange={handleLaptopStateCheck.bind(this, 'ახალი')}
                   type="radio"
                   name="laptopState"
+                  checked={laptopState === 'new' ? true : false}
                 />
                 <Label>ახალი</Label>
               </div>
@@ -447,6 +453,7 @@ const Laptop = () => {
                   onChange={handleLaptopStateCheck.bind(this, 'მეორადი')}
                   type="radio"
                   name="laptopState"
+                  checked={laptopState === 'used' ? true : false}
                 />
                 <Label>მეორადი</Label>
               </div>
