@@ -33,8 +33,6 @@ const Laptop = () => {
   );
   const [hasError, setHasError] = useState(false);
 
-  // console.log(userInputs, 'oooooooo');
-
   useEffect(() => {
     brands.sendHttp(process.env.REACT_APP_GET_BRANDS);
     cpus.sendHttp(process.env.REACT_APP_GET_CPUS);
@@ -80,21 +78,17 @@ const Laptop = () => {
     });
   };
 
-  const handleDriveTypeCheck = inputIdentifier => {
+  const handleDriveTypeCheck = inputIdentifier =>
     setDriveType(inputIdentifier === 'SSD' ? 'SSD' : 'HDD');
-  };
 
-  const handleLaptopStateCheck = inputIdentifier => {
+  const handleLaptopStateCheck = inputIdentifier =>
     setLaptopState(inputIdentifier === 'ახალი' ? 'new' : 'used');
-  };
 
   const handleFocus = () => setHasError(false);
 
   const handleUploadAgain = () => setImage(null);
 
-  const handleGoBackClick = () => {
-    navigate('/employee');
-  };
+  const handleGoBackClick = () => navigate('/employee');
 
   const handleNextClick = () => {
     if (

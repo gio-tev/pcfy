@@ -1,12 +1,19 @@
 import { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import styles from './Success.module.css';
 import { AppContext } from '../../store';
 import useFetch from '../../hooks/useFetch';
+import successImage from '../../assets/success-image.png';
+import Button from '../../components/UI/button';
 
 const Success = () => {
+  const { state } = useContext(AppContext);
+
   const fetch = useFetch();
 
-  const { state } = useContext(AppContext);
-  console.log(state, 'stttttttt');
+  const navigate = useNavigate();
+
   const finalData = { ...state };
 
   for (const [key, value] of Object.entries(finalData)) {
@@ -19,19 +26,43 @@ const Success = () => {
     formData.append(name, finalData[name]);
   }
 
-  // useEffect(() => {
-  //   fetch.sendHttp(process.env.REACT_APP_CREATE_LAPTOP, {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //     },
-  //     body: formData,
-  //   });
-  // }, []);
+  useEffect(() => {
+    fetch.sendHttp(process.env.REACT_APP_CREATE_LAPTOP, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+      },
+      body: formData,
+    });
+  }, []);
 
-  //  // Clear storage after submit
+  if (fetch.error === null) {
+    window.localStorage.clear();
+  }
 
-  return <div>Success</div>;
+  const handleRecordsClick = () => navigate('/records');
+
+  const handleLandingClick = () => navigate('/');
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.popupContainer}>
+        <img src={successImage} alt="success" className={styles.img} />
+
+        <p className={styles.title}>ჩანაწერი დამატებულია!</p>
+
+        <div className={styles.btnContainer}>
+          <Button className={styles.btnRecords} onClick={handleRecordsClick}>
+            სიაში გადაყვანა
+          </Button>
+
+          <Button className={styles.btnLanding} onClick={handleLandingClick}>
+            მთავარი
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Success;
