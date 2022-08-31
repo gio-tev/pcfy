@@ -1,46 +1,25 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-
 import styles from './Navigation.module.css';
+import Button from '../button';
 
-const Navigation = () => {
-  const [employeeActive, setEmployeeActive] = useState(false);
-  const [laptopActive, setLaptopActive] = useState(false);
-
+const Navigation = ({ onToLaptop, onToEmployee }) => {
   return (
     <div className={styles.container}>
       <div>
-        <NavLink
-          to={'/employee'}
-          className={({ isActive }) => {
-            if (isActive) {
-              setEmployeeActive(true);
-              setLaptopActive(false);
-            }
-            return styles.linkText;
-          }}
-        >
+        <Button className={styles.btn} onClick={onToEmployee}>
           თანამშრომლის ინფო
-        </NavLink>
-
-        {employeeActive && <div className={styles.underline}></div>}
+        </Button>
+        {window.location.href.endsWith('employee') && (
+          <div className={styles.underline}></div>
+        )}
       </div>
 
       <div>
-        <NavLink
-          to={'/laptop'}
-          className={({ isActive }) => {
-            if (isActive) {
-              setLaptopActive(true);
-              setEmployeeActive(false);
-            }
-            return styles.linkText;
-          }}
-        >
+        <Button className={styles.btn} onClick={onToLaptop}>
           ლეპტოპის მახასიათებლები
-        </NavLink>
-
-        {laptopActive && <div className={styles.underline}></div>}
+        </Button>
+        {window.location.href.endsWith('laptop') && (
+          <div className={styles.underline}></div>
+        )}
       </div>
     </div>
   );

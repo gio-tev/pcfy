@@ -24,7 +24,8 @@ const Employee = () => {
 
   const { name, surname, team, position, email, phone_number } = userInputs;
 
-  console.log(userInputs, 'laptop inputssssssss');
+  // console.log(userInputs, 'laptop inputssssssss');
+  // console.log('sssssssssssssssssssssinputssssssss');
 
   const navigate = useNavigate();
 
@@ -121,7 +122,7 @@ const Employee = () => {
         <img src={arrowBack} alt="arrow back" />
       </Button>
 
-      <Navigation />
+      <Navigation onToLaptop={handleNextClick} />
 
       <form className={styles.form}>
         <div className={styles.nameLastnameContainer}>

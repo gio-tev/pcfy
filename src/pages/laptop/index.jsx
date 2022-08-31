@@ -33,7 +33,8 @@ const Laptop = () => {
   );
   const [hasError, setHasError] = useState(false);
 
-  console.log(userInputs, 'oooooooo');
+  // console.log(userInputs, 'oooooooo');
+
   useEffect(() => {
     brands.sendHttp(process.env.REACT_APP_GET_BRANDS);
     cpus.sendHttp(process.env.REACT_APP_GET_CPUS);
@@ -169,14 +170,13 @@ const Laptop = () => {
   const numberInputHasError = value =>
     hasError && (!value || +value < 1 || !isFinite(value)) ? true : false;
 
-  console.log(driveType, '...................................');
   return (
     <div className={styles.container}>
       <Button onClick={handleGoBackClick} className={styles.btnBack}>
         <img src={arrowBack} alt="arrow back" />
       </Button>
 
-      <Navigation />
+      <Navigation onToEmployee={handleGoBackClick} />
 
       <form className={styles.form}>
         {image && (
