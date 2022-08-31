@@ -24,10 +24,17 @@ import { AppContext } from '../../store';
 const Success = () => {
   const { state } = useContext(AppContext);
   console.log(state);
+
+  const finalData = { ...state };
+
+  for (const [key, value] of Object.entries(finalData)) {
+    if (value === undefined) delete finalData[key];
+  }
+
   const formData = new FormData();
 
-  for (const name in state) {
-    formData.append(name, state[name]);
+  for (const name in finalData) {
+    formData.append(name, finalData[name]);
   }
 
   const save = async () => {

@@ -120,7 +120,12 @@ const Laptop = () => {
       return setHasError(true);
     }
 
-    const laptopPurchaseDate = laptop_purchase_date.split('/').join('-');
+    const laptopPurchaseDate =
+      laptop_purchase_date && laptop_purchase_date.split('/').join('-');
+
+    const enteredDate = new Date(laptopPurchaseDate);
+    const enteredDateInMilliseconds = enteredDate.getTime();
+    const dateISValid = Date.now() > enteredDateInMilliseconds;
 
     const laptopData = {
       laptop_name,
@@ -133,6 +138,7 @@ const Laptop = () => {
       laptop_hard_drive_type: driveType,
       laptop_state: laptopState,
       laptop_price,
+      laptop_purchase_date: dateISValid ? laptopPurchaseDate : undefined,
     };
     // Save to the localsotrage
 
