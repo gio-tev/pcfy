@@ -68,7 +68,8 @@
 
 .prevDescriptionInnerContainer {
   display: flex;
-  width: 190px;
+  min-width: 190px;
+  gap: 15px;
   justify-content: space-between;
   /* border: 1px solid red; */
 }
