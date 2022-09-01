@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone';
 
 import styles from './Laptop.module.css';
 import useFetch from '../../hooks/useFetch';
+import useLocalStorage from '../../hooks/useLocalStorage';
 import Navigation from '../../components/UI/navigation';
 import Button from '../../components/UI/button';
 import arrowBack from '../../assets/arrow-back.png';
@@ -20,23 +21,25 @@ const Laptop = () => {
   const brands = useFetch();
   const cpus = useFetch();
 
-  const storageData = JSON.parse(window.localStorage.getItem('laptopData'));
-
-  const [userInputs, setUserInputs] = useState(storageData ? storageData : {});
   const [image, setImage] = useState(null);
   const [imagePreviewData, setImagePreviewData] = useState({});
-  const [driveType, setDriveType] = useState(
-    storageData ? storageData.laptop_hard_drive_type : ''
-  );
-  const [laptopState, setLaptopState] = useState(
-    storageData ? storageData.laptop_state : ''
-  );
-  const [hasError, setHasError] = useState(false);
 
-  useEffect(() => {
-    brands.sendHttp(process.env.REACT_APP_GET_BRANDS);
-    cpus.sendHttp(process.env.REACT_APP_GET_CPUS);
-  }, []);
+  const [userInputs, setUserInputs] = useLocalStorage('laptopData', {
+    laptop_name: '',
+    laptop_brand: '',
+    laptop_cpu: '',
+    laptop_cpu_cores: '',
+    laptop_cpu_threads: '',
+    laptop_ram: '',
+    laptop_price: '',
+    laptop_purchase_date: '',
+  });
+  const [driveType, setDriveType] = useLocalStorage('driveType', '');
+  const [laptopState, setLaptopState] = useLocalStorage('laptopState', '');
+  const [laptopBrandId, setLaptopBrandId] = useLocalStorage('laptopBrandId', '');
+  const [laptopImage, setLaptopImage] = useLocalStorage('laptopImage', '');
+
+  const [hasError, setHasError] = useState(false);
 
   const { imagePath, imageName, imageSize } = imagePreviewData;
 
@@ -51,10 +54,23 @@ const Laptop = () => {
     laptop_purchase_date,
   } = userInputs;
 
-  const currentBrandObj = brands.response?.data.filter(
-    value => value.name === laptop_brand
-  );
-  const laptop_brand_id = currentBrandObj ? currentBrandObj[0]?.id : undefined;
+  useEffect(() => {
+    brands.sendHttp(process.env.REACT_APP_GET_BRANDS);
+    cpus.sendHttp(process.env.REACT_APP_GET_CPUS);
+  }, []);
+
+  const brandsData = brands.response?.data;
+
+  useEffect(() => {
+    if (laptop_brand) {
+      const currentBrandObj = brands.response?.data.filter(
+        value => value.name === laptop_brand
+      );
+      const laptopBrandId = currentBrandObj ? currentBrandObj[0]?.id : undefined;
+
+      setLaptopBrandId(laptopBrandId);
+    }
+  }, [laptop_brand, brandsData]);
 
   const navigate = useNavigate();
 
@@ -65,6 +81,13 @@ const Laptop = () => {
 
     setImagePreviewData({ imagePath, imageName, imageSize });
     setImage(acceptedFiles[0]);
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setLaptopImage(reader.result);
+    };
+    reader.readAsDataURL(acceptedFiles[0]);
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
@@ -117,41 +140,25 @@ const Laptop = () => {
 
     const laptopPurchaseDate =
       laptop_purchase_date && laptop_purchase_date.split('/').join('-');
-
     const enteredDate = new Date(laptopPurchaseDate);
     const enteredDateInMilliseconds = enteredDate.getTime();
     const dateISValid = Date.now() > enteredDateInMilliseconds;
 
-    const payloadData = {
-      laptop_name,
-      laptop_image: image,
-      laptop_brand_id,
-      laptop_cpu,
-      laptop_cpu_cores,
-      laptop_cpu_threads,
-      laptop_ram,
-      laptop_hard_drive_type: driveType,
-      laptop_state: laptopState,
-      laptop_price,
-      laptop_purchase_date: dateISValid ? laptopPurchaseDate : undefined,
-    };
+    // const payloadData = {
+    //   laptop_name,
+    //   laptop_image: image,
+    //   laptop_brand_id: laptopBrandId,
+    //   laptop_cpu,
+    //   laptop_cpu_cores,
+    //   laptop_cpu_threads,
+    //   laptop_ram,
+    //   laptop_hard_drive_type: driveType,
+    //   laptop_state: laptopState,
+    //   laptop_price,
+    //   laptop_purchase_date: dateISValid ? laptopPurchaseDate : undefined,
+    // };
 
-    const storageData = {
-      laptop_name,
-      laptop_brand,
-      laptop_cpu,
-      laptop_cpu_cores,
-      laptop_cpu_threads,
-      laptop_ram,
-      laptop_hard_drive_type: driveType,
-      laptop_state: laptopState,
-      laptop_price,
-      laptop_purchase_date: dateISValid ? laptopPurchaseDate : undefined,
-    };
-
-    dispatch({ type: 'LAPTOP_INPUT', payload: payloadData });
-
-    window.localStorage.setItem('laptopData', JSON.stringify(storageData));
+    // dispatch({ type: 'LAPTOP_INPUT', payload: payloadData });
 
     navigate('/success');
   };

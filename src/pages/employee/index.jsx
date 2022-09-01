@@ -10,6 +10,7 @@ import Button from '../../components/UI/button';
 import arrowBack from '../../assets/arrow-back.png';
 import useFetch from '../../hooks/useFetch';
 import { AppContext } from '../../store';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 const Employee = () => {
   const { dispatch } = useContext(AppContext);
@@ -17,42 +18,88 @@ const Employee = () => {
   const teams = useFetch();
   const positions = useFetch();
 
-  const storageData = JSON.parse(window.localStorage.getItem('employeeData'));
+  const [userInputs, setUserInputs] = useLocalStorage('employeeData', {
+    name: '',
+    surname: '',
+    team: '',
+    position: '',
+    phone_number: '',
+    email: '',
+  });
+  const [teamPositionIds, setTeamPositionIds] = useLocalStorage('teamPositionIds', {});
+  const [filteredPositions, setFilteredPositions] = useLocalStorage(
+    'filteredPositions',
+    []
+  );
 
-  const [userInputs, setUserInputs] = useState(storageData ? storageData : {});
+  const [sameTeam, setSameTeam] = useState(true);
   const [hasError, setHasError] = useState(false);
 
   const { name, surname, team, position, email, phone_number } = userInputs;
 
-  // console.log(userInputs, 'laptop inputssssssss');
-  // console.log('sssssssssssssssssssssinputssssssss');
+  const { team_id, position_id } = teamPositionIds;
 
   const navigate = useNavigate();
-
-  const currentTeamObj = teams.response?.data.filter(value => value.name === team);
-  const team_id = currentTeamObj ? currentTeamObj[0]?.id : undefined;
-
-  const currentPosObj = positions.response?.data.filter(value => value.name === position);
-  const position_id = currentPosObj ? currentPosObj[0]?.id : undefined;
-
-  const filteredPositions = positions.response?.data.filter(
-    position => position.team_id === team_id
-  );
 
   useEffect(() => {
     teams.sendHttp(process.env.REACT_APP_GET_TEAMS);
     positions.sendHttp(process.env.REACT_APP_GET_POSITIONS);
   }, []);
 
+  const teamsData = teams.response?.data;
+
   useEffect(() => {
-    if (filteredPositions && position) {
-      setUserInputs(prevState => {
-        return { ...prevState, position: filteredPositions[0].name };
+    if (team) {
+      const currentTeamObj = teams.response?.data.filter(value => value.name === team);
+
+      const teamId = currentTeamObj ? currentTeamObj[0]?.id : undefined;
+      const filtered = positions.response?.data.filter(
+        position => position.team_id === teamId
+      );
+      if (filtered && position && sameTeam) {
+        setUserInputs(prevState => {
+          return { ...prevState, position: position };
+        });
+      } else if (filtered && position && !sameTeam) {
+        setUserInputs(prevState => {
+          return { ...prevState, position: filtered[0]?.name };
+        });
+      }
+
+      setFilteredPositions(filtered);
+
+      setTeamPositionIds(prevState => {
+        return {
+          ...prevState,
+          team_id: teamId,
+        };
       });
     }
-  }, [team]);
+  }, [team, teamsData]);
+
+  const positionsData = positions.response?.data;
+
+  useEffect(() => {
+    if (position) {
+      const currentPosObj = positions.response?.data.filter(
+        value => value.name === position
+      );
+      const positionId = currentPosObj ? currentPosObj[0]?.id : undefined;
+
+      setTeamPositionIds(prevState => {
+        return {
+          ...prevState,
+          position_id: positionId,
+        };
+      });
+    }
+  }, [position, positionsData]);
 
   const handleInputs = (inputIdentifier, e) => {
+    if (inputIdentifier === 'team') {
+      setSameTeam(false);
+    }
+
     setUserInputs(prevState => {
       return {
         ...prevState,
@@ -81,15 +128,19 @@ const Employee = () => {
       phone_number.trim().length !== 13 ||
       !phone_number.trim().startsWith('+995')
     ) {
-      console.log('yes');
       return setHasError(true);
     }
 
-    const payloadData = { name, surname, team_id, position_id, phone_number, email };
-    const storageData = { name, surname, team, position, phone_number, email };
+    const payloadData = {
+      name,
+      surname,
+      team_id,
+      position_id,
+      phone_number,
+      email,
+    };
 
     dispatch({ type: 'EMPLOYEE_INPUT', payload: payloadData });
-    window.localStorage.setItem('employeeData', JSON.stringify(storageData));
 
     navigate('/laptop');
   };
@@ -178,7 +229,7 @@ const Employee = () => {
               defaultValue="default"
             >
               <option value="default" disabled hidden>
-                {team ? team : 'თიმი'}
+                {team ? userInputs.team : 'თიმი'}
               </option>
 
               {teams.response?.data.map(team => {
