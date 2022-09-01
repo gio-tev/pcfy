@@ -138,12 +138,6 @@ const Laptop = () => {
       return setHasError(true);
     }
 
-    const laptopPurchaseDate =
-      laptop_purchase_date && laptop_purchase_date.split('/').join('-');
-    const enteredDate = new Date(laptopPurchaseDate);
-    const enteredDateInMilliseconds = enteredDate.getTime();
-    const dateISValid = Date.now() > enteredDateInMilliseconds;
-
     // const payloadData = {
     //   laptop_name,
     //   laptop_image: image,

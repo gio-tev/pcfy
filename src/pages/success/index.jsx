@@ -23,18 +23,20 @@ const Success = () => {
   const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
-    const dataURLtoFile = async dataURL => {
-      const res = await fetch(dataURL);
-      const blob = await res.blob();
-      const file = new File([blob], 'laptopImage.png', {
-        type: "'image/png'",
-        lastModified: new Date(),
-      });
-      setImageFile(file);
-    };
+    if (laptopImage) {
+      const dataURLtoFile = async dataURL => {
+        const res = await fetch(dataURL);
+        const blob = await res.blob();
+        const file = new File([blob], 'laptopImage.png', {
+          type: "'image/png'",
+          lastModified: new Date(),
+        });
+        setImageFile(file);
+      };
 
-    dataURLtoFile(laptopImage);
-  }, []);
+      dataURLtoFile(laptopImage);
+    }
+  }, [laptopImage]);
   // useEffect(() => {
   //   const dataURLtoFile = dataURL => {
   //     fetch(dataURL)
@@ -114,10 +116,10 @@ const Success = () => {
   for (const name in finalData) {
     formData.append(name, finalData[name]);
   }
-  // console.log(finalData, ';;;;;;;;;;;;;;;;;;;;;;;;;;;;');
+  console.log(finalData, 'finalData');
 
   useEffect(() => {
-    if (imageFile) {
+    if (imageFile && employeeData.name) {
       sendHttp(process.env.REACT_APP_CREATE_LAPTOP, {
         method: 'POST',
         headers: {
@@ -125,9 +127,12 @@ const Success = () => {
         },
         body: formData,
       });
-      window.localStorage.clear();
     }
-  }, [imageFile]);
+
+    return () => {
+      window.localStorage.clear();
+    };
+  }, [imageFile, employeeData.name]);
 
   // window.localStorage.clear(); // To be deleted
 
