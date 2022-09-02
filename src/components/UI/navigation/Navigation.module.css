@@ -1,6 +1,7 @@
 .container {
   display: flex;
   gap: 60px;
+  list-style: none;
 }
 
 .btn {

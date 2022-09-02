@@ -167,6 +167,8 @@ const Employee = () => {
 
   const selectFieldHasError = value => (hasError && !value ? true : false);
 
+  // console.log(userInputs);
+
   return (
     <div className={styles.container}>
       <Button onClick={handleGoBackClick} className={styles.btnBack}>

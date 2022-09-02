@@ -16,13 +16,8 @@ import checked from '../../assets/checked.png';
 import { AppContext } from '../../store';
 
 const Laptop = () => {
-  const { dispatch } = useContext(AppContext);
-
   const brands = useFetch();
   const cpus = useFetch();
-
-  const [image, setImage] = useState(null);
-  const [imagePreviewData, setImagePreviewData] = useState({});
 
   const [userInputs, setUserInputs] = useLocalStorage('laptopData', {
     laptop_name: '',
@@ -37,7 +32,8 @@ const Laptop = () => {
   const [driveType, setDriveType] = useLocalStorage('driveType', '');
   const [laptopState, setLaptopState] = useLocalStorage('laptopState', '');
   const [laptopBrandId, setLaptopBrandId] = useLocalStorage('laptopBrandId', '');
-  const [laptopImage, setLaptopImage] = useLocalStorage('laptopImage', '');
+  const [imageDataURL, setImageDataURL] = useLocalStorage('laptopImage', '');
+  const [imagePreviewData, setImagePreviewData] = useLocalStorage('imagePreviewData', {});
 
   const [hasError, setHasError] = useState(false);
 
@@ -77,15 +73,15 @@ const Laptop = () => {
   const onDrop = useCallback(acceptedFiles => {
     const imagePath = URL.createObjectURL(acceptedFiles[0]);
     const imageName = acceptedFiles[0].name;
-    const imageSize = (acceptedFiles[0].size / 1000000).toString().substring(0, 3);
+    const imageSize = (acceptedFiles[0].size / 1000000 + 0.1).toString().substring(0, 3);
 
     setImagePreviewData({ imagePath, imageName, imageSize });
-    setImage(acceptedFiles[0]);
+    // setImage(acceptedFiles[0]);
 
     const reader = new FileReader();
 
     reader.onload = () => {
-      setLaptopImage(reader.result);
+      setImageDataURL(reader.result);
     };
     reader.readAsDataURL(acceptedFiles[0]);
   }, []);
@@ -109,13 +105,14 @@ const Laptop = () => {
 
   const handleFocus = () => setHasError(false);
 
-  const handleUploadAgain = () => setImage(null);
+  // const handleUploadAgain = () => setImage(null);
+  const handleUploadAgain = () => setImageDataURL('');
 
   const handleGoBackClick = () => navigate('/employee');
 
   const handleNextClick = () => {
     if (
-      !image ||
+      !imageDataURL ||
       !laptop_name ||
       !/^[\w!@#$%^&*()+= ]*$/.test(laptop_name.trim()) ||
       !laptop_brand ||
@@ -165,6 +162,7 @@ const Laptop = () => {
   const numberInputHasError = value =>
     hasError && (!value || +value < 1 || !isFinite(value)) ? true : false;
 
+  // console.log(userInputs);
   return (
     <div className={styles.container}>
       <Button onClick={handleGoBackClick} className={styles.btnBack}>
@@ -174,7 +172,7 @@ const Laptop = () => {
       <Navigation onToEmployee={handleGoBackClick} />
 
       <form className={styles.form}>
-        {image && (
+        {imageDataURL && (
           <div className={styles.imagePreviewContainer}>
             <img src={imagePath} alt="img upload" className={styles.previewImage} />
             <div className={styles.prevDescriptionContainer}>
@@ -194,17 +192,17 @@ const Laptop = () => {
           </div>
         )}
 
-        {!image && (
+        {!imageDataURL && (
           <div {...getRootProps()}>
             <div
               className={`${styles.imageContainer} ${
-                selectUploadFieldHasError(image) ? styles.imageError : undefined
+                selectUploadFieldHasError(imageDataURL) ? styles.imageError : undefined
               }`}
             >
               <input {...getInputProps()} />
 
               <div className={styles.errorImageTitleContainer}>
-                {selectUploadFieldHasError(image) && (
+                {selectUploadFieldHasError(imageDataURL) && (
                   <img src={noImage} alt="no image" className={styles.noImage} />
                 )}
 

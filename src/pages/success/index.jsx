@@ -1,16 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './Success.module.css';
-import { AppContext } from '../../store';
 import useFetch from '../../hooks/useFetch';
 import successImage from '../../assets/success-image.png';
 import Button from '../../components/UI/button';
 import useLocalStorage from '../../hooks/useLocalStorage';
 
 const Success = () => {
-  const { state } = useContext(AppContext);
-
   const [employeeData] = useLocalStorage('employeeData', {});
   const [teamPositionIds] = useLocalStorage('teamPositionIds', {});
 
@@ -18,41 +15,26 @@ const Success = () => {
   const [driveType] = useLocalStorage('driveType', '');
   const [laptopState] = useLocalStorage('laptopState', '');
   const [laptopBrandId] = useLocalStorage('laptopBrandId', '');
-  const [laptopImage] = useLocalStorage('laptopImage', '');
+  const [imageDataURL] = useLocalStorage('laptopImage', '');
+  const [imagePreviewData] = useLocalStorage('imagePreviewData', {});
 
   const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
-    if (laptopImage) {
+    if (imageDataURL) {
       const dataURLtoFile = async dataURL => {
         const res = await fetch(dataURL);
         const blob = await res.blob();
-        const file = new File([blob], 'laptopImage.png', {
+        const file = new File([blob], `${imagePreviewData.imageName}`, {
           type: "'image/png'",
           lastModified: new Date(),
         });
         setImageFile(file);
       };
 
-      dataURLtoFile(laptopImage);
+      dataURLtoFile(imageDataURL);
     }
-  }, [laptopImage]);
-  // useEffect(() => {
-  //   const dataURLtoFile = dataURL => {
-  //     fetch(dataURL)
-  //       .then(res => res.blob())
-  //       .then(blob => {
-  //         const file = new File([blob], 'laptopImage.png', {
-  //           type: "'image/png'",
-  //           lastModified: new Date(),
-  //         });
-  //         setImageFile(file);
-  //       })
-  //       .catch(err => console.log(err));
-  //   };
-
-  //   dataURLtoFile(laptopImage);
-  // }, []);
+  }, [imageDataURL]);
 
   const { sendHttp } = useFetch();
 
@@ -79,7 +61,7 @@ const Success = () => {
     }
   };
 
-  const ifDateInPast = str => {
+  const isDateInPast = str => {
     const dateString = str,
       dateArgs = dateString.match(/\d{2,4}/g),
       year = dateArgs[2],
@@ -94,7 +76,7 @@ const Success = () => {
   if (
     finalData.laptop_purchase_date &&
     isValidFormat(finalData.laptop_purchase_date) &&
-    ifDateInPast(finalData.laptop_purchase_date)
+    isDateInPast(finalData.laptop_purchase_date)
   ) {
     finalData.laptop_purchase_date = finalData.laptop_purchase_date.split('/').join('-');
   } else {
@@ -116,6 +98,7 @@ const Success = () => {
   for (const name in finalData) {
     formData.append(name, finalData[name]);
   }
+
   console.log(finalData, 'finalData');
 
   useEffect(() => {
@@ -145,7 +128,7 @@ const Success = () => {
       <div className={styles.popupContainer}>
         <img src={successImage} alt="success" className={styles.img} />
 
-        <p className={styles.title}>ჩანაწერი დამატებულია!</p>
+        <h1 className={styles.title}>ჩანაწერი დამატებულია!</h1>
 
         <div className={styles.btnContainer}>
           <Button className={styles.btnRecords} onClick={handleRecordsClick}>

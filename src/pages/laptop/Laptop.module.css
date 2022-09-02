@@ -31,7 +31,7 @@
 
 .btnBack {
   align-self: flex-start;
-  margin-left: 40px;
+  margin-left: 70px;
   /* margin-top: 40px; */
 }
 
@@ -69,10 +69,10 @@
 
 .prevDescriptionInnerContainer {
   display: flex;
-  min-width: 190px;
+  max-width: 500px;
+  flex-wrap: wrap;
   gap: 15px;
   justify-content: space-between;
-  /* border: 1px solid red; */
 }
 
 .previewImageChecked {

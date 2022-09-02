@@ -5,6 +5,7 @@ import Employee from './pages/employee';
 import Laptop from './pages/laptop';
 import Success from './pages/success';
 import Records from './pages/records';
+import Record from './pages/record';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path="/laptop" element={<Laptop />} />
       <Route path="/success" element={<Success />} />
       <Route path="/records" element={<Records />} />
+      <Route path="/records/:id" element={<Record />} />
     </Routes>
   );
 }
