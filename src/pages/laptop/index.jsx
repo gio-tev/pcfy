@@ -1,4 +1,4 @@
-import { useCallback, useState, useContext, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 
@@ -13,12 +13,13 @@ import Input from '../../components/UI/input';
 import logo from '../../assets/logo.png';
 import noImage from '../../assets/no-image.png';
 import checked from '../../assets/checked.png';
-import { AppContext } from '../../store';
+import Success from '../success';
 
 const Laptop = () => {
   const brands = useFetch();
   const cpus = useFetch();
 
+  const [showPopup, setShowPopup] = useState(false);
   const [userInputs, setUserInputs] = useLocalStorage('laptopData', {
     laptop_name: '',
     laptop_brand: '',
@@ -29,6 +30,7 @@ const Laptop = () => {
     laptop_price: '',
     laptop_purchase_date: '',
   });
+
   const [driveType, setDriveType] = useLocalStorage('driveType', '');
   const [laptopState, setLaptopState] = useLocalStorage('laptopState', '');
   const [laptopBrandId, setLaptopBrandId] = useLocalStorage('laptopBrandId', '');
@@ -150,8 +152,8 @@ const Laptop = () => {
     // };
 
     // dispatch({ type: 'LAPTOP_INPUT', payload: payloadData });
-
-    navigate('/success');
+    // navigate('/success');
+    setShowPopup(true);
   };
 
   const laptopNameHasError = value =>
@@ -164,308 +166,328 @@ const Laptop = () => {
 
   // console.log(userInputs);
   return (
-    <div className={styles.container}>
-      <Button onClick={handleGoBackClick} className={styles.btnBack}>
-        <img src={arrowBack} alt="arrow back" />
-      </Button>
+    <>
+      {showPopup ? (
+        <Success />
+      ) : (
+        <div className={styles.container}>
+          <Button onClick={handleGoBackClick} className={styles.btnBack}>
+            <img src={arrowBack} alt="arrow back" />
+          </Button>
 
-      <Navigation onToEmployee={handleGoBackClick} />
+          <Navigation onToEmployee={handleGoBackClick} />
 
-      <form className={styles.form}>
-        {imageDataURL && (
-          <div className={styles.imagePreviewContainer}>
-            {/* <img src={imagePath} alt="img upload" className={styles.previewImage} /> */}
-            <div className={`${styles.imageContainer} ${styles.noBorder}`}></div>
-            <div className={styles.prevDescriptionContainer}>
-              <div className={styles.prevDescriptionInnerContainer}>
-                <img
-                  src={checked}
-                  alt="img checked"
-                  className={styles.previewImageChecked}
-                />
-                <p className={styles.imageName}>{imageName},</p>
-                <p className={styles.imageSize}>{imageSize} mb</p>
+          <form className={styles.form}>
+            {imageDataURL && (
+              <div className={styles.imagePreviewContainer}>
+                {/* <img src={imagePath} alt="img upload" className={styles.previewImage} /> */}
+                <div className={`${styles.imageContainer} ${styles.noBorder}`}></div>
+                <div className={styles.prevDescriptionContainer}>
+                  <div className={styles.prevDescriptionInnerContainer}>
+                    <img
+                      src={checked}
+                      alt="img checked"
+                      className={styles.previewImageChecked}
+                    />
+                    <p className={styles.imageName}>{imageName},</p>
+                    <p className={styles.imageSize}>{imageSize} mb</p>
+                  </div>
+                  <Button onClick={handleUploadAgain} className={styles.btnAgainNext}>
+                    თავიდან ატვირთე
+                  </Button>
+                </div>
               </div>
-              <Button onClick={handleUploadAgain} className={styles.btnAgainNext}>
-                თავიდან ატვირთე
+            )}
+
+            {!imageDataURL && (
+              <div {...getRootProps()}>
+                <div
+                  className={`${styles.imageContainer} ${
+                    selectUploadFieldHasError(imageDataURL)
+                      ? styles.imageError
+                      : undefined
+                  }`}
+                >
+                  <input {...getInputProps()} />
+
+                  <div className={styles.errorImageTitleContainer}>
+                    {selectUploadFieldHasError(imageDataURL) && (
+                      <img src={noImage} alt="no image" className={styles.noImage} />
+                    )}
+
+                    <p className={styles.uploadTitle}>ჩააგდე ან ატვირთე ლეპტოპის ფოტო</p>
+                  </div>
+
+                  <Button className={styles.uploadBtn}>ატვირთე</Button>
+                </div>
+              </div>
+            )}
+
+            <div className={styles.laptopContainer}>
+              <div className={styles.labelInputContainer}>
+                <Label
+                  className={laptopNameHasError(laptop_name) ? styles.error : undefined}
+                >
+                  ლეპტოპის სახელი
+                </Label>
+                <Input
+                  className={`${styles.inputs} ${
+                    laptopNameHasError(laptop_name) ? styles.inputError : undefined
+                  }`}
+                  onChange={handleInputs.bind(this, 'laptop_name')}
+                  onFocus={handleFocus.bind(this, 'laptop_name')}
+                  value={laptop_name}
+                />
+
+                <p
+                  className={`${styles.hint} ${
+                    laptopNameHasError(laptop_name) ? styles.error : undefined
+                  }`}
+                >
+                  ლათინური ასოები, ციფრები, !@#$%^&*()_+=
+                </p>
+              </div>
+              <div className={styles.selectContainer}>
+                <select
+                  className={`${styles.selectBrand} ${
+                    selectUploadFieldHasError(laptop_brand)
+                      ? styles.inputError
+                      : undefined
+                  }`}
+                  onChange={handleInputs.bind(this, 'laptop_brand')}
+                  defaultValue="default"
+                >
+                  <option value="default" disabled hidden>
+                    {laptop_brand ? laptop_brand : 'ლეპტოპის ბრენდი'}
+                  </option>
+
+                  {brands.response?.data.map(brand => {
+                    return (
+                      <option key={brand.id} value={brand.name}>
+                        {brand.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+
+            <div className={styles.cpuContainer}>
+              <div className={styles.selectContainer}>
+                <select
+                  className={`${styles.selectCPU} ${
+                    selectUploadFieldHasError(laptop_cpu) ? styles.inputError : undefined
+                  }`}
+                  onChange={handleInputs.bind(this, 'laptop_cpu')}
+                  defaultValue="default"
+                >
+                  <option value="default" disabled hidden>
+                    {laptop_cpu ? laptop_cpu : 'CPU'}
+                  </option>
+
+                  {cpus.response?.data.map(cpu => {
+                    return (
+                      <option key={cpu.id} value={cpu.name}>
+                        {cpu.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+
+              <div className={styles.labelInputContainer}>
+                <Label
+                  className={
+                    numberInputHasError(laptop_cpu_cores) ? styles.error : undefined
+                  }
+                >
+                  CPU-ს ბირთვი
+                </Label>
+                <Input
+                  className={`${styles.cpuInputs} ${
+                    numberInputHasError(laptop_cpu_cores) ? styles.inputError : undefined
+                  }`}
+                  onChange={handleInputs.bind(this, 'laptop_cpu_cores')}
+                  onFocus={handleFocus.bind(this, 'laptop_cpu_cores')}
+                  value={laptop_cpu_cores}
+                />
+
+                <p
+                  className={`${styles.hint} ${
+                    numberInputHasError(laptop_cpu_cores) ? styles.error : undefined
+                  }`}
+                >
+                  მხოლოდ ციფრები
+                </p>
+              </div>
+
+              <div className={styles.labelInputContainer}>
+                <Label
+                  className={
+                    numberInputHasError(laptop_cpu_threads) ? styles.error : undefined
+                  }
+                >
+                  CPU-ს ნაკადი
+                </Label>
+                <Input
+                  className={`${styles.cpuInputs} ${
+                    numberInputHasError(laptop_cpu_threads)
+                      ? styles.inputError
+                      : undefined
+                  }`}
+                  onChange={handleInputs.bind(this, 'laptop_cpu_threads')}
+                  onFocus={handleFocus.bind(this, 'laptop_cpu_threads')}
+                  value={laptop_cpu_threads}
+                />
+
+                <p
+                  className={`${styles.hint} ${
+                    numberInputHasError(laptop_cpu_threads) ? styles.error : undefined
+                  }`}
+                >
+                  მხოლოდ ციფრები
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.ramContainer}>
+              <div className={styles.labelInputContainer}>
+                <Label
+                  className={numberInputHasError(laptop_ram) ? styles.error : undefined}
+                >
+                  ლეპტოპის RAM (GB)
+                </Label>
+                <Input
+                  className={`${styles.inputs} ${
+                    numberInputHasError(laptop_ram) ? styles.inputError : undefined
+                  }`}
+                  onChange={handleInputs.bind(this, 'laptop_ram')}
+                  onFocus={handleFocus.bind(this, 'laptop_ram')}
+                  value={laptop_ram}
+                />
+                <p
+                  className={`${styles.hint} ${
+                    numberInputHasError(laptop_ram) ? styles.error : undefined
+                  }`}
+                >
+                  მხოლოდ ციფრები
+                </p>
+              </div>
+
+              <div className={styles.labelInputContainer}>
+                <Label
+                  className={
+                    selectUploadFieldHasError(driveType) ? styles.error : undefined
+                  }
+                >
+                  მეხსიერების ტიპი
+                </Label>
+                <div className={styles.radioContainer}>
+                  <div className={styles.radioLabelInputContainer}>
+                    <Input
+                      onChange={handleDriveTypeCheck.bind(this, 'SSD')}
+                      type="radio"
+                      name="memoryType"
+                      checked={driveType === 'SSD' ? true : false}
+                    />
+                    <Label>SSD</Label>
+                  </div>
+
+                  <div className={styles.radioLabelInputContainer}>
+                    <Input
+                      onChange={handleDriveTypeCheck.bind(this, 'HDD')}
+                      type="radio"
+                      name="memoryType"
+                      checked={driveType === 'HDD' ? true : false}
+                    />
+                    <Label>HDD</Label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.priceDateContainer}>
+              <div className={styles.labelInputContainer}>
+                <Label>შეძენის რიცხვი (არჩევითი)</Label>
+                <Input
+                  className={styles.inputs}
+                  onChange={handleInputs.bind(this, 'laptop_purchase_date')}
+                  value={laptop_purchase_date}
+                  placeholder="დდ / თთ / წწწწ"
+                />
+              </div>
+
+              <div className={styles.labelInputContainer}>
+                <Label
+                  className={numberInputHasError(laptop_price) ? styles.error : undefined}
+                >
+                  ლეპტოპის ფასი
+                </Label>
+                <Input
+                  className={`${styles.inputs} ${
+                    numberInputHasError(laptop_price) ? styles.inputError : undefined
+                  }`}
+                  onChange={handleInputs.bind(this, 'laptop_price')}
+                  onFocus={handleFocus.bind(this, 'laptop_price')}
+                  value={laptop_price}
+                />
+
+                <p
+                  className={`${styles.hint} ${
+                    numberInputHasError(laptop_price) ? styles.error : undefined
+                  }`}
+                >
+                  მხოლოდ ციფრები
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.laptopStateContainer}>
+              <div className={`${styles.labelInputContainer} ${styles.laptopState}`}>
+                <Label
+                  className={
+                    selectUploadFieldHasError(laptopState) ? styles.error : undefined
+                  }
+                >
+                  ლეპტოპის მდგომარეობა
+                </Label>
+                <div className={styles.radioContainer}>
+                  <div className={styles.radioLabelInputContainer}>
+                    <Input
+                      onChange={handleLaptopStateCheck.bind(this, 'ახალი')}
+                      type="radio"
+                      name="laptopState"
+                      checked={laptopState === 'new' ? true : false}
+                    />
+                    <Label>ახალი</Label>
+                  </div>
+
+                  <div className={styles.radioLabelInputContainer}>
+                    <Input
+                      onChange={handleLaptopStateCheck.bind(this, 'მეორადი')}
+                      type="radio"
+                      name="laptopState"
+                      checked={laptopState === 'used' ? true : false}
+                    />
+                    <Label>მეორადი</Label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.formBtnsContainer}>
+              <Button onClick={handleGoBackClick} className={styles.formBtnBack}>
+                უკან
+              </Button>
+              <Button onClick={handleNextClick} className={styles.btnAgainNext}>
+                შემდეგი
               </Button>
             </div>
-          </div>
-        )}
-
-        {!imageDataURL && (
-          <div {...getRootProps()}>
-            <div
-              className={`${styles.imageContainer} ${
-                selectUploadFieldHasError(imageDataURL) ? styles.imageError : undefined
-              }`}
-            >
-              <input {...getInputProps()} />
-
-              <div className={styles.errorImageTitleContainer}>
-                {selectUploadFieldHasError(imageDataURL) && (
-                  <img src={noImage} alt="no image" className={styles.noImage} />
-                )}
-
-                <p className={styles.uploadTitle}>ჩააგდე ან ატვირთე ლეპტოპის ფოტო</p>
-              </div>
-
-              <Button className={styles.uploadBtn}>ატვირთე</Button>
-            </div>
-          </div>
-        )}
-
-        <div className={styles.laptopContainer}>
-          <div className={styles.labelInputContainer}>
-            <Label className={laptopNameHasError(laptop_name) ? styles.error : undefined}>
-              ლეპტოპის სახელი
-            </Label>
-            <Input
-              className={`${styles.inputs} ${
-                laptopNameHasError(laptop_name) ? styles.inputError : undefined
-              }`}
-              onChange={handleInputs.bind(this, 'laptop_name')}
-              onFocus={handleFocus.bind(this, 'laptop_name')}
-              value={laptop_name}
-            />
-
-            <p
-              className={`${styles.hint} ${
-                laptopNameHasError(laptop_name) ? styles.error : undefined
-              }`}
-            >
-              ლათინური ასოები, ციფრები, !@#$%^&*()_+=
-            </p>
-          </div>
-          <div className={styles.selectContainer}>
-            <select
-              className={`${styles.selectBrand} ${
-                selectUploadFieldHasError(laptop_brand) ? styles.inputError : undefined
-              }`}
-              onChange={handleInputs.bind(this, 'laptop_brand')}
-              defaultValue="default"
-            >
-              <option value="default" disabled hidden>
-                {laptop_brand ? laptop_brand : 'ლეპტოპის ბრენდი'}
-              </option>
-
-              {brands.response?.data.map(brand => {
-                return (
-                  <option key={brand.id} value={brand.name}>
-                    {brand.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
+          </form>
+          <img src={logo} alt="logo" className={styles.logo} />
         </div>
-
-        <div className={styles.cpuContainer}>
-          <div className={styles.selectContainer}>
-            <select
-              className={`${styles.selectCPU} ${
-                selectUploadFieldHasError(laptop_cpu) ? styles.inputError : undefined
-              }`}
-              onChange={handleInputs.bind(this, 'laptop_cpu')}
-              defaultValue="default"
-            >
-              <option value="default" disabled hidden>
-                {laptop_cpu ? laptop_cpu : 'CPU'}
-              </option>
-
-              {cpus.response?.data.map(cpu => {
-                return (
-                  <option key={cpu.id} value={cpu.name}>
-                    {cpu.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
-          <div className={styles.labelInputContainer}>
-            <Label
-              className={numberInputHasError(laptop_cpu_cores) ? styles.error : undefined}
-            >
-              CPU-ს ბირთვი
-            </Label>
-            <Input
-              className={`${styles.cpuInputs} ${
-                numberInputHasError(laptop_cpu_cores) ? styles.inputError : undefined
-              }`}
-              onChange={handleInputs.bind(this, 'laptop_cpu_cores')}
-              onFocus={handleFocus.bind(this, 'laptop_cpu_cores')}
-              value={laptop_cpu_cores}
-            />
-
-            <p
-              className={`${styles.hint} ${
-                numberInputHasError(laptop_cpu_cores) ? styles.error : undefined
-              }`}
-            >
-              მხოლოდ ციფრები
-            </p>
-          </div>
-
-          <div className={styles.labelInputContainer}>
-            <Label
-              className={
-                numberInputHasError(laptop_cpu_threads) ? styles.error : undefined
-              }
-            >
-              CPU-ს ნაკადი
-            </Label>
-            <Input
-              className={`${styles.cpuInputs} ${
-                numberInputHasError(laptop_cpu_threads) ? styles.inputError : undefined
-              }`}
-              onChange={handleInputs.bind(this, 'laptop_cpu_threads')}
-              onFocus={handleFocus.bind(this, 'laptop_cpu_threads')}
-              value={laptop_cpu_threads}
-            />
-
-            <p
-              className={`${styles.hint} ${
-                numberInputHasError(laptop_cpu_threads) ? styles.error : undefined
-              }`}
-            >
-              მხოლოდ ციფრები
-            </p>
-          </div>
-        </div>
-
-        <div className={styles.ramContainer}>
-          <div className={styles.labelInputContainer}>
-            <Label className={numberInputHasError(laptop_ram) ? styles.error : undefined}>
-              ლეპტოპის RAM (GB)
-            </Label>
-            <Input
-              className={`${styles.inputs} ${
-                numberInputHasError(laptop_ram) ? styles.inputError : undefined
-              }`}
-              onChange={handleInputs.bind(this, 'laptop_ram')}
-              onFocus={handleFocus.bind(this, 'laptop_ram')}
-              value={laptop_ram}
-            />
-            <p
-              className={`${styles.hint} ${
-                numberInputHasError(laptop_ram) ? styles.error : undefined
-              }`}
-            >
-              მხოლოდ ციფრები
-            </p>
-          </div>
-
-          <div className={styles.labelInputContainer}>
-            <Label
-              className={selectUploadFieldHasError(driveType) ? styles.error : undefined}
-            >
-              მეხსიერების ტიპი
-            </Label>
-            <div className={styles.radioContainer}>
-              <div className={styles.radioLabelInputContainer}>
-                <Input
-                  onChange={handleDriveTypeCheck.bind(this, 'SSD')}
-                  type="radio"
-                  name="memoryType"
-                  checked={driveType === 'SSD' ? true : false}
-                />
-                <Label>SSD</Label>
-              </div>
-
-              <div className={styles.radioLabelInputContainer}>
-                <Input
-                  onChange={handleDriveTypeCheck.bind(this, 'HDD')}
-                  type="radio"
-                  name="memoryType"
-                  checked={driveType === 'HDD' ? true : false}
-                />
-                <Label>HDD</Label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.priceDateContainer}>
-          <div className={styles.labelInputContainer}>
-            <Label>შეძენის რიცხვი (არჩევითი)</Label>
-            <Input
-              className={styles.inputs}
-              onChange={handleInputs.bind(this, 'laptop_purchase_date')}
-              value={laptop_purchase_date}
-              placeholder="დდ / თთ / წწწწ"
-            />
-          </div>
-
-          <div className={styles.labelInputContainer}>
-            <Label
-              className={numberInputHasError(laptop_price) ? styles.error : undefined}
-            >
-              ლეპტოპის ფასი
-            </Label>
-            <Input
-              className={`${styles.inputs} ${
-                numberInputHasError(laptop_price) ? styles.inputError : undefined
-              }`}
-              onChange={handleInputs.bind(this, 'laptop_price')}
-              onFocus={handleFocus.bind(this, 'laptop_price')}
-              value={laptop_price}
-            />
-
-            <p
-              className={`${styles.hint} ${
-                numberInputHasError(laptop_price) ? styles.error : undefined
-              }`}
-            >
-              მხოლოდ ციფრები
-            </p>
-          </div>
-        </div>
-
-        <div className={styles.laptopStateContainer}>
-          <div className={`${styles.labelInputContainer} ${styles.laptopState}`}>
-            <Label
-              className={
-                selectUploadFieldHasError(laptopState) ? styles.error : undefined
-              }
-            >
-              ლეპტოპის მდგომარეობა
-            </Label>
-            <div className={styles.radioContainer}>
-              <div className={styles.radioLabelInputContainer}>
-                <Input
-                  onChange={handleLaptopStateCheck.bind(this, 'ახალი')}
-                  type="radio"
-                  name="laptopState"
-                  checked={laptopState === 'new' ? true : false}
-                />
-                <Label>ახალი</Label>
-              </div>
-
-              <div className={styles.radioLabelInputContainer}>
-                <Input
-                  onChange={handleLaptopStateCheck.bind(this, 'მეორადი')}
-                  type="radio"
-                  name="laptopState"
-                  checked={laptopState === 'used' ? true : false}
-                />
-                <Label>მეორადი</Label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.formBtnsContainer}>
-          <Button onClick={handleGoBackClick} className={styles.formBtnBack}>
-            უკან
-          </Button>
-          <Button onClick={handleNextClick} className={styles.btnAgainNext}>
-            შემდეგი
-          </Button>
-        </div>
-      </form>
-      <img src={logo} alt="logo" className={styles.logo} />
-    </div>
+      )}
+    </>
   );
 };
 

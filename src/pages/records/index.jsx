@@ -17,7 +17,7 @@ const Records = () => {
 
   console.log(response, 'responseeeeee');
 
-  const handleGoBackClick = () => navigate(-1);
+  const handleGoBackClick = () => navigate('/');
 
   return (
     <div className={styles.container}>

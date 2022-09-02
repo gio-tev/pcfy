@@ -34,14 +34,61 @@
   flex-direction: column;
   flex-wrap: wrap;
   width: 1255px;
-  gap: 50px;
+  /* gap: 50px; */
 }
 
 .employeeInformationContainer {
   display: flex;
+  padding-bottom: 50px;
+}
+
+.employeeInformation {
+  display: flex;
+  margin-left: 50px;
+  gap: 70px;
+  padding: 50px 0;
+}
+
+.laptopInformationContainer {
+  display: flex;
+  margin-left: 50px;
+  gap: 70px;
+  padding: 50px 0;
+  border-top: 1px solid var(--black-300);
 }
 
 .img {
   width: 577px;
   height: 342px;
+}
+
+.descriptionContainer {
+  display: flex;
+  flex-direction: column;
+  /* gap: 70px; */
+  /* border: 1px solid red; */
+  /* width: 100%; */
+  /* justify-content: baseline; */
+  /* min-width: 400px; */
+}
+
+.description {
+  font-family: 'HelveticaNeue';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 27px;
+  color: var(--black-500);
+
+  /* შავი/500 */
+}
+
+.value {
+  font-family: 'HelveticaNeue';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+
+  color: var(--black-350);
 }
