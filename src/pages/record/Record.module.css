@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 80px;
+  /* border: 1px solid red; */
+  padding: 50px 0;
+  min-height: 100vh;
+}
+
+.btnTitleContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 70px;
+  align-items: center;
+  /* border: 1px solid blue; */
+  width: 55%;
+  align-self: flex-start;
+  /* position: absolute; */
+}
+
+.title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 21px;
+}
+
+.recordContainer {
+  border: 1px solid green;
+  display: flex;
+  /* justify-content: space-between; */
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 1255px;
+  gap: 50px;
+}
+
+.employeeInformationContainer {
+  display: flex;
+}
+
+.img {
+  width: 577px;
+  height: 342px;
+}

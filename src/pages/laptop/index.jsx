@@ -37,7 +37,7 @@ const Laptop = () => {
 
   const [hasError, setHasError] = useState(false);
 
-  const { imagePath, imageName, imageSize } = imagePreviewData;
+  const { imageName, imageSize } = imagePreviewData;
 
   const {
     laptop_name,
@@ -71,11 +71,11 @@ const Laptop = () => {
   const navigate = useNavigate();
 
   const onDrop = useCallback(acceptedFiles => {
-    const imagePath = URL.createObjectURL(acceptedFiles[0]);
+    // const imagePath = URL.createObjectURL(acceptedFiles[0]);
     const imageName = acceptedFiles[0].name;
     const imageSize = (acceptedFiles[0].size / 1000000 + 0.1).toString().substring(0, 3);
 
-    setImagePreviewData({ imagePath, imageName, imageSize });
+    setImagePreviewData({ imageName, imageSize });
     // setImage(acceptedFiles[0]);
 
     const reader = new FileReader();
@@ -174,7 +174,8 @@ const Laptop = () => {
       <form className={styles.form}>
         {imageDataURL && (
           <div className={styles.imagePreviewContainer}>
-            <img src={imagePath} alt="img upload" className={styles.previewImage} />
+            {/* <img src={imagePath} alt="img upload" className={styles.previewImage} /> */}
+            <div className={`${styles.imageContainer} ${styles.noBorder}`}></div>
             <div className={styles.prevDescriptionContainer}>
               <div className={styles.prevDescriptionInnerContainer}>
                 <img

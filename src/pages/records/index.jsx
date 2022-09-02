@@ -33,7 +33,7 @@ const Records = () => {
           return (
             <li className={styles.record} key={record.laptop.id}>
               <img
-                src={`https://pcfy.redberryinternship.ge/${record.laptop.image}`}
+                src={`https://pcfy.redberryinternship.ge${record.laptop.image}`}
                 alt="laptop"
                 className={styles.recordImage}
               />

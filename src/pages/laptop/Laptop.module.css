@@ -313,6 +313,9 @@
   gap: 15px;
 }
 
+.noBorder {
+  border: none;
+}
 /* .margin {
   margin-right: 4rem;
   margin-bottom: 0.5rem;
