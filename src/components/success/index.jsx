@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Success.module.css';
 import useFetch from '../../hooks/useFetch';
 import successImage from '../../assets/success-image.png';
-import Button from '../../components/UI/button';
+import Button from '../UI/button';
 import useLocalStorage from '../../hooks/useLocalStorage';
 
 const Success = () => {

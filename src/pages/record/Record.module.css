@@ -3,7 +3,7 @@
   flex-direction: column;
   /* justify-content: center; */
   align-items: center;
-  gap: 80px;
+  gap: 70px;
   /* border: 1px solid red; */
   padding: 50px 0;
   min-height: 100vh;
@@ -28,11 +28,11 @@
 }
 
 .recordContainer {
-  border: 1px solid green;
+  /* border: 1px solid green; */
   display: flex;
   /* justify-content: space-between; */
   flex-direction: column;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   width: 1255px;
   /* gap: 50px; */
 }
@@ -40,33 +40,85 @@
 .employeeInformationContainer {
   display: flex;
   padding-bottom: 50px;
-}
-
-.employeeInformation {
-  display: flex;
-  margin-left: 50px;
-  gap: 70px;
-  padding: 50px 0;
-}
-
-.laptopInformationContainer {
-  display: flex;
-  margin-left: 50px;
-  gap: 70px;
-  padding: 50px 0;
-  border-top: 1px solid var(--black-300);
+  gap: 60px;
 }
 
 .img {
   width: 577px;
+  /* width: 50%; */
   height: 342px;
+  /* margin-right: 50px; */
 }
+
+.employeeInformation {
+  display: flex;
+  /* margin-left: 50px; */
+  gap: 70px;
+  padding: 50px 0;
+  /* border: 1px solid red; */
+  width: 50%;
+  /* justify-content: space-between; */
+  /* width: 280px; */
+}
+
+.laptopInformationContainer {
+  display: flex;
+  /* width: 25%; */
+  /* margin-left: 50px; */
+  /* gap: 85px; */
+
+  padding: 50px 0;
+  border-top: 1px solid var(--black-300);
+  /* width: 800px; */
+  /* border: 1px solid red; */
+}
+
+.laptopInnerContainer1 {
+  /* border: 1px solid blue; */
+  display: flex;
+  width: 577px;
+  margin-right: 60px;
+  gap: 100px;
+}
+.laptopInnerContainer2 {
+  /* border: 1px solid blue; */
+  display: flex;
+  width: 577px;
+  /* margin-right: 50px; */
+  gap: 65px;
+}
+.laptopInnerContainer3 {
+  /* border: 1px solid blue; */
+  display: flex;
+  width: 577px;
+  margin-right: 60px;
+  gap: 30px;
+}
+.laptopInnerContainer4 {
+  /* border: 1px solid blue; */
+  display: flex;
+  width: 577px;
+  /* margin-right: 50px; */
+  gap: 50px;
+}
+.containerWidth {
+  /* width: 280px; */
+  /* justify-content: space-between; */
+  /* gap: 70px; */
+  display: flex;
+  /* border: 1px solid rgb(250, 16, 172); */
+}
+
+/* .extraWidth {
+  width: 577px;
+} */
 
 .descriptionContainer {
   display: flex;
   flex-direction: column;
-  /* gap: 70px; */
-  /* border: 1px solid red; */
+  gap: 20px;
+  /* width: 25%; */
+  /* border: 1px solid rgb(0, 47, 255); */
   /* width: 100%; */
   /* justify-content: baseline; */
   /* min-width: 400px; */

@@ -25,8 +25,10 @@ const Record = () => {
   const handleGoBackClick = () => navigate(-1);
 
   const image = response?.data?.laptop?.image;
-  // const image =
-  //   response && response?.data && response?.data?.laptop && response?.data?.laptop?.image;
+
+  const laptopPurchaseDate =
+    response?.data?.laptop?.purchase_date &&
+    response?.data?.laptop?.purchase_date.split('-').join(' / ');
 
   return (
     <div className={styles.container}>
@@ -56,57 +58,73 @@ const Record = () => {
               <span className={styles.description}>ტელ. ნომერი:</span>
             </div>
             <div className={styles.descriptionContainer}>
-              <span className={styles.value}>{'hhhh'}</span>
-              <span className={styles.value}>{'hhhhh'}</span>
-              <span className={styles.value}>{'hhhhh'}</span>
-              <span className={styles.value}>{'hhhhh'}</span>
-              <span className={styles.value}>{'hhhhh'}</span>
+              <span className={styles.value}>
+                {response?.data?.user?.name} {response?.data?.user?.surname}
+              </span>
+              <span className={styles.value}>?????</span>
+              <span className={styles.value}>?????</span>
+              <span className={styles.value}>{response?.data?.user?.email}</span>
+              <span className={styles.value}>{response?.data?.user?.phone_number}</span>
             </div>
           </div>
         </div>
 
         <div className={styles.laptopInformationContainer}>
-          <div className={styles.descriptionContainer}>
-            <span className={styles.description}>ლეპტოპის სახელი:</span>
-            <span className={styles.description}>ლეპტოპის ბრენდი:</span>
-            <span className={styles.description}>RAM:</span>
-            <span className={styles.description}>მეხსიერების ტიპი:</span>
-          </div>
-          <div className={styles.descriptionContainer}>
-            <span className={styles.value}>{'hhhh'}</span>
-            <span className={styles.value}>{'hhhh'}</span>
-            <span className={styles.value}>{'hhhh'}</span>
-            <span className={styles.value}>{'hhhh'}</span>
+          <div className={styles.laptopInnerContainer1}>
+            <div className={styles.descriptionContainer}>
+              <span className={styles.description}>ლეპტოპის სახელი:</span>
+              <span className={styles.description}>ლეპტოპის ბრენდი:</span>
+              <span className={styles.description}>RAM:</span>
+              <span className={styles.description}>მეხსიერების ტიპი:</span>
+            </div>
+            <div className={styles.descriptionContainer}>
+              <span className={styles.value}>{response?.data?.laptop?.name}</span>
+              <span className={styles.value}>?????</span>
+              <span className={styles.value}>{response?.data?.laptop?.ram}</span>
+              <span className={styles.value}>
+                {response?.data?.laptop?.hard_drive_type}
+              </span>
+            </div>
           </div>
 
-          <div className={styles.descriptionContainer}>
-            <span className={styles.description}>CPU:</span>
-            <span className={styles.description}>CPU-ს ბირთვი:</span>
-            <span className={styles.description}>CPU-ს ნაკადი:</span>
-          </div>
-          <div className={styles.descriptionContainer}>
-            <span className={styles.value}>{'hhhh'}</span>
-            <span className={styles.value}>{'hhhh'}</span>
-            <span className={styles.value}>{'hhhh'}</span>
+          <div className={styles.laptopInnerContainer2}>
+            <div className={styles.descriptionContainer}>
+              <span className={styles.description}>CPU:</span>
+              <span className={styles.description}>CPU-ს ბირთვი:</span>
+              <span className={styles.description}>CPU-ს ნაკადი:</span>
+            </div>
+            <div className={styles.descriptionContainer}>
+              <span className={styles.value}>{response?.data?.laptop?.cpu?.name}</span>
+              <span className={styles.value}>{response?.data?.laptop?.cpu?.cores}</span>
+              <span className={styles.value}>{response?.data?.laptop?.cpu?.threads}</span>
+            </div>
           </div>
         </div>
 
         <div className={styles.laptopInformationContainer}>
-          <div className={styles.descriptionContainer}>
-            <span className={styles.description}>ლეპტოპის მდგომარეობა:</span>
-            <span className={styles.description}>ლეპტოპის ფასი:</span>
+          <div className={styles.laptopInnerContainer3}>
+            <div className={styles.descriptionContainer}>
+              <span className={styles.description}>ლეპტოპის მდგომარეობა:</span>
+              <span className={styles.description}>ლეპტოპის ფასი:</span>
+            </div>
+            <div className={styles.descriptionContainer}>
+              <span className={styles.value}>
+                {response?.data?.laptop?.state === 'new' ? 'ახალი' : 'მეორადი'}
+              </span>
+              <span className={styles.value}>{response?.data?.laptop?.price} ₾</span>
+            </div>
           </div>
-          <div className={styles.descriptionContainer}>
-            <span className={styles.value}>{'hhhh'}</span>
-            <span className={styles.value}>{'hhhh'}</span>
-          </div>
-          {/* Conditionally */}
-          <div className={styles.descriptionContainer}>
-            <span className={styles.description}>შეძენის რიცხვი:</span>
-          </div>
-          <div className={styles.descriptionContainer}>
-            <span className={styles.value}>{'hhhh'}</span>
-          </div>
+
+          {response?.data?.laptop?.purchase_date && (
+            <div className={styles.laptopInnerContainer4}>
+              <div className={styles.descriptionContainer}>
+                <span className={styles.description}>შეძენის რიცხვი:</span>
+              </div>
+              <div className={styles.descriptionContainer}>
+                <span className={styles.value}>{laptopPurchaseDate}</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

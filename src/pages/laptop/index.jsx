@@ -13,7 +13,7 @@ import Input from '../../components/UI/input';
 import logo from '../../assets/logo.png';
 import noImage from '../../assets/no-image.png';
 import checked from '../../assets/checked.png';
-import Success from '../success';
+import Success from '../../components/success';
 
 const Laptop = () => {
   const brands = useFetch();
