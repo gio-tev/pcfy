@@ -13,8 +13,8 @@
 }
 
 .landingImg {
-  display: block;
-  width: 40%;
+  /* display: block; */
+  width: 781px;
 }
 
 .btnContainer {
@@ -31,4 +31,15 @@
   line-height: 24px;
   background: var(--primary-blue);
   padding: 22px 70px;
+}
+
+@media screen and (max-width: 390px) {
+  .landingImg {
+    width: 268px;
+    height: 348px;
+  }
+
+  .btnContainer {
+    margin-bottom: 0;
+  }
 }

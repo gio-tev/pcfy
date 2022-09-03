@@ -1,11 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 
+import styles from './Landing.module.css';
 import logo from '../../assets/logo-title.png';
 import landingImage from '../../assets/landing-image.png';
+import landingImageMobile from '../../assets/landing-image-mobile.png';
 import Button from '../../components/UI/button';
-import styles from './Landing.module.css';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 const Landing = () => {
+  const { width } = useWindowDimensions();
+
+  const mobile = width < 391 ? true : false;
+
   const navigate = useNavigate();
 
   const handleAddClick = () => navigate('/employee');
@@ -15,7 +21,13 @@ const Landing = () => {
     <div className={styles.container}>
       <img className={styles.logo} src={logo} alt="logo"></img>
 
-      <img className={styles.landingImg} src={landingImage} alt="landing"></img>
+      {!mobile && (
+        <img className={styles.landingImg} src={landingImage} alt="landing"></img>
+      )}
+
+      {mobile && (
+        <img className={styles.landingImg} src={landingImageMobile} alt="landing"></img>
+      )}
 
       <div className={styles.btnContainer}>
         <Button onClick={handleAddClick} className={styles.btn}>

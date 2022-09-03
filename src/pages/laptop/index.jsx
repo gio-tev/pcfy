@@ -8,18 +8,24 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import Navigation from '../../components/UI/navigation';
 import Button from '../../components/UI/button';
 import arrowBack from '../../assets/arrow-back.png';
+import arrowBackMobile from '../../assets/arrow-back-mobile.png';
+import dropImageMobile from '../../assets/drop-image-mobile.png';
 import Label from '../../components/UI/label';
 import Input from '../../components/UI/input';
 import logo from '../../assets/logo.png';
-import noImage from '../../assets/no-image.png';
+import errorImage from '../../assets/error-image.png';
 import checked from '../../assets/checked.png';
 import Success from '../../components/success';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 const Laptop = () => {
   const brands = useFetch();
   const cpus = useFetch();
 
-  const [showPopup, setShowPopup] = useState(false);
+  const { width } = useWindowDimensions();
+
+  const mobile = width < 391 ? true : false;
+
   const [userInputs, setUserInputs] = useLocalStorage('laptopData', {
     laptop_name: '',
     laptop_brand: '',
@@ -38,8 +44,9 @@ const Laptop = () => {
   const [imagePreviewData, setImagePreviewData] = useLocalStorage('imagePreviewData', {});
 
   const [hasError, setHasError] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
-  const { imageName, imageSize } = imagePreviewData;
+  const { imageName, imageSize, imagePath } = imagePreviewData;
 
   const {
     laptop_name,
@@ -73,11 +80,11 @@ const Laptop = () => {
   const navigate = useNavigate();
 
   const onDrop = useCallback(acceptedFiles => {
-    // const imagePath = URL.createObjectURL(acceptedFiles[0]);
+    const imagePath = URL.createObjectURL(acceptedFiles[0]);
     const imageName = acceptedFiles[0].name;
     const imageSize = (acceptedFiles[0].size / 1000000 + 0.1).toString().substring(0, 3);
 
-    setImagePreviewData({ imageName, imageSize });
+    setImagePreviewData({ imageName, imageSize, imagePath });
     // setImage(acceptedFiles[0]);
 
     const reader = new FileReader();
@@ -172,7 +179,8 @@ const Laptop = () => {
       ) : (
         <div className={styles.container}>
           <Button onClick={handleGoBackClick} className={styles.btnBack}>
-            <img src={arrowBack} alt="arrow back" />
+            {mobile && <img src={arrowBackMobile} alt="arrow back" />}
+            {!mobile && <img src={arrowBack} alt="arrow back" />}
           </Button>
 
           <Navigation onToEmployee={handleGoBackClick} />
@@ -180,8 +188,8 @@ const Laptop = () => {
           <form className={styles.form}>
             {imageDataURL && (
               <div className={styles.imagePreviewContainer}>
-                {/* <img src={imagePath} alt="img upload" className={styles.previewImage} /> */}
-                <div className={`${styles.imageContainer} ${styles.noBorder}`}></div>
+                <img src={imagePath} alt="img upload" className={styles.previewImage} />
+                {/* <div className={`${styles.imageContainer} ${styles.noBorder}`}></div> */}
                 <div className={styles.prevDescriptionContainer}>
                   <div className={styles.prevDescriptionInnerContainer}>
                     <img
@@ -192,7 +200,7 @@ const Laptop = () => {
                     <p className={styles.imageName}>{imageName},</p>
                     <p className={styles.imageSize}>{imageSize} mb</p>
                   </div>
-                  <Button onClick={handleUploadAgain} className={styles.btnAgainNext}>
+                  <Button onClick={handleUploadAgain} className={styles.btnAgain}>
                     თავიდან ატვირთე
                   </Button>
                 </div>
@@ -210,15 +218,53 @@ const Laptop = () => {
                 >
                   <input {...getInputProps()} />
 
-                  <div className={styles.errorImageTitleContainer}>
-                    {selectUploadFieldHasError(imageDataURL) && (
-                      <img src={noImage} alt="no image" className={styles.noImage} />
-                    )}
+                  {!mobile && selectUploadFieldHasError(imageDataURL) && (
+                    <>
+                      <div className={styles.errorImageTitleContainer}>
+                        <img src={errorImage} alt="no image" className={styles.noImage} />
 
-                    <p className={styles.uploadTitle}>ჩააგდე ან ატვირთე ლეპტოპის ფოტო</p>
-                  </div>
+                        <p className={styles.uploadTitle}>
+                          ჩააგდე ან ატვირთე ლეპტოპის ფოტო
+                        </p>
+                      </div>
+                      <Button className={styles.uploadBtn}>ატვირთე</Button>
+                    </>
+                  )}
 
-                  <Button className={styles.uploadBtn}>ატვირთე</Button>
+                  {!mobile && !selectUploadFieldHasError(imageDataURL) && (
+                    <>
+                      <p className={styles.uploadTitle}>
+                        ჩააგდე ან ატვირთე ლეპტოპის ფოტო
+                      </p>
+                      <Button className={styles.uploadBtn}>ატვირთე</Button>
+                    </>
+                  )}
+                  {/* {!mobile && !selectUploadFieldHasError(imageDataURL) && (
+                  )} */}
+
+                  {mobile && selectUploadFieldHasError(imageDataURL) && (
+                    <div className={styles.errorImageTitleContainer}>
+                      <img
+                        src={dropImageMobile}
+                        alt="drop"
+                        className={styles.mobileDropIcon}
+                      />
+                      <p className={styles.uploadTitle}>ლეპტოპის ფოტოს ატვირთვა</p>
+
+                      <img src={errorImage} alt="no image" className={styles.noImage} />
+                    </div>
+                  )}
+                  {mobile && !selectUploadFieldHasError(imageDataURL) && (
+                    <>
+                      <img
+                        src={dropImageMobile}
+                        alt="drop"
+                        className={styles.mobileDropIcon}
+                      />
+
+                      <p className={styles.uploadTitle}>ლეპტოპის ფოტოს ატვირთვა</p>
+                    </>
+                  )}
                 </div>
               </div>
             )}
@@ -380,7 +426,16 @@ const Laptop = () => {
                     selectUploadFieldHasError(driveType) ? styles.error : undefined
                   }
                 >
-                  მეხსიერების ტიპი
+                  <div className={styles.memoryTypeTitleContainer}>
+                    მეხსიერების ტიპი
+                    {selectUploadFieldHasError(driveType) && (
+                      <img
+                        src={errorImage}
+                        alt="no image"
+                        className={styles.noMemoryType}
+                      />
+                    )}
+                  </div>
                 </Label>
                 <div className={styles.radioContainer}>
                   <div className={styles.radioLabelInputContainer}>
@@ -449,7 +504,16 @@ const Laptop = () => {
                     selectUploadFieldHasError(laptopState) ? styles.error : undefined
                   }
                 >
-                  ლეპტოპის მდგომარეობა
+                  <div className={styles.memoryTypeTitleContainer}>
+                    ლეპტოპის მდგომარეობა
+                    {selectUploadFieldHasError(driveType) && (
+                      <img
+                        src={errorImage}
+                        alt="no image"
+                        className={styles.noMemoryType}
+                      />
+                    )}
+                  </div>
                 </Label>
                 <div className={styles.radioContainer}>
                   <div className={styles.radioLabelInputContainer}>
@@ -479,8 +543,8 @@ const Laptop = () => {
               <Button onClick={handleGoBackClick} className={styles.formBtnBack}>
                 უკან
               </Button>
-              <Button onClick={handleNextClick} className={styles.btnAgainNext}>
-                შემდეგი
+              <Button onClick={handleNextClick} className={styles.btnSave}>
+                დამახსოვრება
               </Button>
             </div>
           </form>

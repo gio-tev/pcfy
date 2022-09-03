@@ -22,3 +22,23 @@
   padding-top: 10px;
   border-bottom: 2px solid black;
 }
+
+@media screen and (max-width: 390px) {
+  .navigationCounter {
+    font-family: 'HelveticaNeue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    color: var(--black-320);
+    margin-top: 5px;
+  }
+  .btn {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    /* text-align: center; */
+  }
+}

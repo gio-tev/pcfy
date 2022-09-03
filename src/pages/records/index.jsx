@@ -4,10 +4,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './Records.module.css';
 import Button from '../../components/UI/button';
 import arrowBack from '../../assets/arrow-back.png';
+import arrowBackMobile from '../../assets/arrow-back-mobile.png';
 import useFetch from '../../hooks/useFetch';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 const Records = () => {
   const { response, sendHttp } = useFetch();
+
+  const { width } = useWindowDimensions();
+
+  const mobile = width < 391 ? true : false;
 
   const navigate = useNavigate();
 
@@ -23,7 +29,8 @@ const Records = () => {
     <div className={styles.container}>
       <div className={styles.btnTitleContainer}>
         <Button onClick={handleGoBackClick} className={styles.btnBack}>
-          <img src={arrowBack} alt="arrow back" />
+          {mobile && <img src={arrowBackMobile} alt="arrow back" />}
+          {!mobile && <img src={arrowBack} alt="arrow back" />}
         </Button>
         <h1 className={styles.title}>ᲩᲐᲜᲐᲬᲔᲠᲔᲑᲘᲡ ᲡᲘᲐ</h1>
       </div>
@@ -43,6 +50,7 @@ const Records = () => {
                 </p>
 
                 <p className={styles.employeeLaptopName}>{record.laptop.name}</p>
+
                 <Link to={`${record.laptop.id}`} className={styles.link}>
                   მეტის ნახვა
                 </Link>

@@ -8,15 +8,21 @@ import Label from '../../components/UI/label';
 import logo from '../../assets/logo.png';
 import Button from '../../components/UI/button';
 import arrowBack from '../../assets/arrow-back.png';
+import arrowBackMobile from '../../assets/arrow-back-mobile.png';
 import useFetch from '../../hooks/useFetch';
-import { AppContext } from '../../store';
+// import { AppContext } from '../../store';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 const Employee = () => {
-  const { dispatch } = useContext(AppContext);
+  // const { dispatch } = useContext(AppContext);
 
   const teams = useFetch();
   const positions = useFetch();
+
+  const { width } = useWindowDimensions();
+
+  const mobile = width < 391 ? true : false;
 
   const [userInputs, setUserInputs] = useLocalStorage('employeeData', {
     name: '',
@@ -131,16 +137,16 @@ const Employee = () => {
       return setHasError(true);
     }
 
-    const payloadData = {
-      name,
-      surname,
-      team_id,
-      position_id,
-      phone_number,
-      email,
-    };
+    // const payloadData = {
+    //   name,
+    //   surname,
+    //   team_id,
+    //   position_id,
+    //   phone_number,
+    //   email,
+    // };
 
-    dispatch({ type: 'EMPLOYEE_INPUT', payload: payloadData });
+    // dispatch({ type: 'EMPLOYEE_INPUT', payload: payloadData });
 
     navigate('/laptop');
   };
@@ -172,7 +178,8 @@ const Employee = () => {
   return (
     <div className={styles.container}>
       <Button onClick={handleGoBackClick} className={styles.btnBack}>
-        <img src={arrowBack} alt="arrow back" />
+        {mobile && <img src={arrowBackMobile} alt="arrow back" />}
+        {!mobile && <img src={arrowBack} alt="arrow back" />}
       </Button>
 
       <Navigation onToLaptop={handleNextClick} />
@@ -308,7 +315,8 @@ const Employee = () => {
                 phoneHasError(phone_number) ? styles.error : undefined
               }`}
             >
-              უნდა აკმაყოფილებდეს ქართული მობ-ნომრის ფორმატს
+              {mobile && 'ქართული მობ-ნომრის ფორმატი'}
+              {!mobile && 'უნდა აკმაყოფილებდეს ქართული მობ-ნომრის ფორმატს'}
             </p>
           </div>
         </div>

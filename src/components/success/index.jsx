@@ -6,6 +6,7 @@ import useFetch from '../../hooks/useFetch';
 import successImage from '../../assets/success-image.png';
 import Button from '../UI/button';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 const Success = () => {
   const [employeeData] = useLocalStorage('employeeData', {});
@@ -17,6 +18,10 @@ const Success = () => {
   const [laptopBrandId] = useLocalStorage('laptopBrandId', '');
   const [imageDataURL] = useLocalStorage('laptopImage', '');
   const [imagePreviewData] = useLocalStorage('imagePreviewData', {});
+
+  const { width } = useWindowDimensions();
+
+  const mobile = width < 391 ? true : false;
 
   const [imageFile, setImageFile] = useState(null);
 
@@ -128,7 +133,14 @@ const Success = () => {
       <div className={styles.popupContainer}>
         <img src={successImage} alt="success" className={styles.img} />
 
-        <h1 className={styles.title}>ჩანაწერი დამატებულია!</h1>
+        {mobile && (
+          <div className={styles.title}>
+            <div>ჩანაწერი</div>
+            <div>დამატებულია!</div>
+          </div>
+        )}
+
+        {!mobile && <h1 className={styles.title}>ჩანაწერი დამატებულია!</h1>}
 
         <div className={styles.btnContainer}>
           <Button className={styles.btnRecords} onClick={handleRecordsClick}>
