@@ -1,5 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useDropzone } from 'react-dropzone';
 
 import styles from './Laptop.module.css';
@@ -16,15 +17,13 @@ import logo from '../../assets/logo.png';
 import errorImage from '../../assets/error-image.png';
 import checked from '../../assets/checked.png';
 import Success from '../../components/success';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import useWidth from '../../hooks/useWidth';
 
 const Laptop = () => {
+  const mobile = useWidth();
+
   const brands = useFetch();
   const cpus = useFetch();
-
-  const { width } = useWindowDimensions();
-
-  const mobile = width < 391 ? true : false;
 
   const [userInputs, setUserInputs] = useLocalStorage('laptopData', {
     laptop_name: '',
@@ -171,7 +170,7 @@ const Laptop = () => {
   const numberInputHasError = value =>
     hasError && (!value || +value < 1 || !isFinite(value)) ? true : false;
 
-  // console.log(userInputs);
+  console.log(userInputs);
   return (
     <>
       {showPopup ? (
@@ -183,7 +182,7 @@ const Laptop = () => {
             {!mobile && <img src={arrowBack} alt="arrow back" />}
           </Button>
 
-          <Navigation onToEmployee={handleGoBackClick} />
+          <Navigation onToEmployee={handleGoBackClick} mobile={mobile} />
 
           <form className={styles.form}>
             {imageDataURL && (

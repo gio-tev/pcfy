@@ -12,17 +12,13 @@ import arrowBackMobile from '../../assets/arrow-back-mobile.png';
 import useFetch from '../../hooks/useFetch';
 // import { AppContext } from '../../store';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import useWidth from '../../hooks/useWidth';
 
 const Employee = () => {
-  // const { dispatch } = useContext(AppContext);
+  const mobile = useWidth();
 
   const teams = useFetch();
   const positions = useFetch();
-
-  const { width } = useWindowDimensions();
-
-  const mobile = width < 391 ? true : false;
 
   const [userInputs, setUserInputs] = useLocalStorage('employeeData', {
     name: '',
@@ -151,6 +147,8 @@ const Employee = () => {
     navigate('/laptop');
   };
 
+  // console.log(width, 'widthhhhhhh employeeeee');
+
   const nameSurnameHasError = value =>
     (hasError && value && !/^[ა-ჰ]+$/i.test(value.trim())) ||
     (hasError && !value) ||
@@ -182,7 +180,7 @@ const Employee = () => {
         {!mobile && <img src={arrowBack} alt="arrow back" />}
       </Button>
 
-      <Navigation onToLaptop={handleNextClick} />
+      <Navigation onToLaptop={handleNextClick} mobile={mobile} />
 
       <form className={styles.form}>
         <div className={styles.nameLastnameContainer}>

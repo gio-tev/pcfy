@@ -5,12 +5,10 @@ import logo from '../../assets/logo-title.png';
 import landingImage from '../../assets/landing-image.png';
 import landingImageMobile from '../../assets/landing-image-mobile.png';
 import Button from '../../components/UI/button';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import useWidth from '../../hooks/useWidth';
 
 const Landing = () => {
-  const { width } = useWindowDimensions();
-
-  const mobile = width < 391 ? true : false;
+  const mobile = useWidth();
 
   const navigate = useNavigate();
 

@@ -6,9 +6,11 @@ import useFetch from '../../hooks/useFetch';
 import successImage from '../../assets/success-image.png';
 import Button from '../UI/button';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import useWidth from '../../hooks/useWidth';
 
 const Success = () => {
+  const mobile = useWidth();
+
   const [employeeData] = useLocalStorage('employeeData', {});
   const [teamPositionIds] = useLocalStorage('teamPositionIds', {});
 
@@ -18,10 +20,6 @@ const Success = () => {
   const [laptopBrandId] = useLocalStorage('laptopBrandId', '');
   const [imageDataURL] = useLocalStorage('laptopImage', '');
   const [imagePreviewData] = useLocalStorage('imagePreviewData', {});
-
-  const { width } = useWindowDimensions();
-
-  const mobile = width < 391 ? true : false;
 
   const [imageFile, setImageFile] = useState(null);
 

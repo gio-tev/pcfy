@@ -6,14 +6,12 @@ import Button from '../../components/UI/button';
 import arrowBack from '../../assets/arrow-back.png';
 import arrowBackMobile from '../../assets/arrow-back-mobile.png';
 import useFetch from '../../hooks/useFetch';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import useWidth from '../../hooks/useWidth';
 
 const Records = () => {
+  const mobile = useWidth();
+
   const { response, sendHttp } = useFetch();
-
-  const { width } = useWindowDimensions();
-
-  const mobile = width < 391 ? true : false;
 
   const navigate = useNavigate();
 

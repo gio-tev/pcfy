@@ -24,6 +24,11 @@
 }
 
 @media screen and (max-width: 390px) {
+  .container {
+    /* display: flex; */
+    gap: 0px;
+    /* list-style: none; */
+  }
   .navigationCounter {
     font-family: 'HelveticaNeue';
     font-style: normal;
