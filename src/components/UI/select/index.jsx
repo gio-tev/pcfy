@@ -9,6 +9,7 @@ const Select = ({
   identifier,
   defaultValue,
   data,
+  team,
 }) => {
   return (
     <select
@@ -17,6 +18,9 @@ const Select = ({
       } `}
       onChange={handleInputs.bind(this, `${identifier}`)}
       defaultValue="default"
+      disabled={
+        identifier === 'team' ? false : identifier === 'position' && team ? false : true
+      }
     >
       <option value="default" disabled hidden>
         {value ? value : `${defaultValue}`}

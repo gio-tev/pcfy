@@ -195,6 +195,7 @@ const Employee = () => {
             identifier="team"
             defaultValue="თიმი"
             data={teams}
+            team={team}
           />
 
           <Select
@@ -205,6 +206,7 @@ const Employee = () => {
             identifier="position"
             defaultValue="პოზიცია"
             data={filteredPositions}
+            team={team}
           />
         </div>
 

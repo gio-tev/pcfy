@@ -99,6 +99,7 @@ const Success = () => {
 
   const handleLandingClick = () => navigate('/');
 
+  console.log(response, 'responseeeeeeeeeeeeeeeeeeeee');
   return (
     <div className={styles.container}>
       <div className={styles.popupContainer}>
