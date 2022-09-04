@@ -42,7 +42,7 @@ const Success = () => {
 
       dataURLtoFile(imageDataURL);
     }
-  }, [imageDataURL]);
+  }, [imageDataURL, imagePreviewData.imageName]);
 
   const navigate = useNavigate();
 
@@ -56,28 +56,6 @@ const Success = () => {
     laptop_brand_id: laptopBrandId,
     token: process.env.REACT_APP_TOKEN,
   };
-
-  // const isValidFormat = str => {
-  //   if (
-  //     /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/.test(
-  //       str
-  //     )
-  //   ) {
-  //     return true;
-  //   }
-  // };
-
-  // const isDateInPast = str => {
-  //   const dateString = str,
-  //     dateArgs = dateString.match(/\d{2,4}/g),
-  //     year = dateArgs[2],
-  //     month = parseInt(dateArgs[1]) - 1,
-  //     day = dateArgs[0];
-
-  //   const milliseconds = new Date(year, month, day).getTime();
-
-  //   return Date.now() > milliseconds;
-  // };
 
   if (
     finalData.laptop_purchase_date &&
@@ -121,10 +99,10 @@ const Success = () => {
     return () => {
       window.localStorage.clear();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageFile, employeeData.name]);
 
   console.log(response, 'ressssssssssssssssssss');
-  // window.localStorage.clear(); // To be deleted
 
   const handleRecordsClick = () => navigate('/records');
 

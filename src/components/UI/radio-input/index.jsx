@@ -21,7 +21,7 @@ const RadioInput = ({
         <div className={styles.memoryTypeTitleContainer}>
           {labelTitle}
           {validator(value, hasError) && (
-            <img src={errorImage} alt="no image" className={styles.noMemoryType} />
+            <img src={errorImage} alt="noImage" className={styles.noMemoryType} />
           )}
         </div>
       </label>

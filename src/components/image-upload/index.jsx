@@ -21,22 +21,27 @@ const ImageUpload = ({ hasError, onImageUpload }) => {
 
   const { imageName, imageSize, imagePath } = imagePreviewData;
 
-  const onDrop = useCallback(acceptedFiles => {
-    const imagePath = URL.createObjectURL(acceptedFiles[0]);
-    const imageName = acceptedFiles[0].name;
-    const imageSize = (acceptedFiles[0].size / 1000000 + 0.1).toString().substring(0, 3);
+  const onDrop = useCallback(
+    acceptedFiles => {
+      const imagePath = URL.createObjectURL(acceptedFiles[0]);
+      const imageName = acceptedFiles[0].name;
+      const imageSize = (acceptedFiles[0].size / 1000000 + 0.1)
+        .toString()
+        .substring(0, 3);
 
-    setImagePreviewData({ imageName, imageSize, imagePath });
+      setImagePreviewData({ imageName, imageSize, imagePath });
 
-    const reader = new FileReader();
+      const reader = new FileReader();
 
-    reader.onload = () => {
-      setImageDataURL(reader.result);
+      reader.onload = () => {
+        setImageDataURL(reader.result);
 
-      onImageUpload();
-    };
-    reader.readAsDataURL(acceptedFiles[0]);
-  }, []);
+        onImageUpload();
+      };
+      reader.readAsDataURL(acceptedFiles[0]);
+    },
+    [setImageDataURL, onImageUpload, setImagePreviewData]
+  );
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
@@ -79,7 +84,7 @@ const ImageUpload = ({ hasError, onImageUpload }) => {
             {!mobile && selectUploadFieldHasError(imageDataURL, hasError) && (
               <>
                 <div className={styles.errorImageTitleContainer}>
-                  <img src={errorImage} alt="no image" className={styles.noImage} />
+                  <img src={errorImage} alt="noImage" className={styles.noImage} />
 
                   <p className={styles.uploadTitle}>ჩააგდე ან ატვირთე ლეპტოპის ფოტო</p>
                 </div>
@@ -99,7 +104,7 @@ const ImageUpload = ({ hasError, onImageUpload }) => {
                 <img src={dropImageMobile} alt="drop" className={styles.mobileDropIcon} />
                 <p className={styles.uploadTitle}>ლეპტოპის ფოტოს ატვირთვა</p>
 
-                <img src={errorImage} alt="no image" className={styles.noImage} />
+                <img src={errorImage} alt="noImage" className={styles.noImage} />
               </div>
             )}
             {mobile && !selectUploadFieldHasError(imageDataURL, hasError) && (

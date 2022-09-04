@@ -57,10 +57,12 @@ const Laptop = () => {
   useEffect(() => {
     brands.sendHttp(process.env.REACT_APP_GET_BRANDS);
     cpus.sendHttp(process.env.REACT_APP_GET_CPUS);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setBrandId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [laptop_brand]);
 
   const setBrandId = () => {

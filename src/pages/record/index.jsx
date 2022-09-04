@@ -27,6 +27,7 @@ const Record = () => {
     teams.sendHttp(process.env.REACT_APP_GET_TEAMS);
     positions.sendHttp(process.env.REACT_APP_GET_POSITIONS);
     brands.sendHttp(process.env.REACT_APP_GET_BRANDS);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleGoBackClick = () => navigate(-1);

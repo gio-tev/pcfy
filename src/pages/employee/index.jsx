@@ -42,14 +42,17 @@ const Employee = () => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     filterPostionsAndSetTeamId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [team]);
 
   useEffect(() => {
     setPositionId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position]);
 
   const getData = () => {
