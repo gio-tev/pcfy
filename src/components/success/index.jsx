@@ -11,21 +11,16 @@ import useValidation from '../../hooks/useValidation';
 
 const Success = () => {
   const mobile = useWidth();
-
   const { isValidFormat, isDateInPast } = useValidation();
-
   const [employeeData] = useLocalStorage('employeeData', {});
   const [teamPositionIds] = useLocalStorage('teamPositionIds', {});
-
   const [laptopData] = useLocalStorage('laptopData', {});
   const [driveType] = useLocalStorage('driveType', '');
   const [laptopState] = useLocalStorage('laptopState', '');
   const [laptopBrandId] = useLocalStorage('laptopBrandId', '');
   const [imageDataURL] = useLocalStorage('laptopImage', '');
   const [imagePreviewData] = useLocalStorage('imagePreviewData', {});
-
   const { response, sendHttp } = useFetch();
-
   const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
@@ -43,6 +38,23 @@ const Success = () => {
       dataURLtoFile(imageDataURL);
     }
   }, [imageDataURL, imagePreviewData.imageName]);
+
+  useEffect(() => {
+    if (imageFile && employeeData.name) {
+      sendHttp(process.env.REACT_APP_CREATE_LAPTOP, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+        },
+        body: formData,
+      });
+    }
+
+    return () => {
+      window.localStorage.clear();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imageFile, employeeData.name]);
 
   const navigate = useNavigate();
 
@@ -82,27 +94,6 @@ const Success = () => {
   for (const name in finalData) {
     formData.append(name, finalData[name]);
   }
-
-  console.log(finalData, 'finalData');
-
-  useEffect(() => {
-    if (imageFile && employeeData.name) {
-      sendHttp(process.env.REACT_APP_CREATE_LAPTOP, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-        },
-        body: formData,
-      });
-    }
-
-    return () => {
-      window.localStorage.clear();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageFile, employeeData.name]);
-
-  console.log(response, 'ressssssssssssssssssss');
 
   const handleRecordsClick = () => navigate('/records');
 
