@@ -18,12 +18,16 @@ import errorImage from '../../assets/error-image.png';
 import checked from '../../assets/checked.png';
 import Success from '../../components/success';
 import useWidth from '../../hooks/useWidth';
+import useValidation from '../../hooks/useValidation';
 
 const Laptop = () => {
   const mobile = useWidth();
 
   const brands = useFetch();
   const cpus = useFetch();
+
+  const { laptopNameHasError, selectUploadFieldHasError, numberInputHasError } =
+    useValidation();
 
   const [userInputs, setUserInputs] = useLocalStorage('laptopData', {
     laptop_name: '',
@@ -162,19 +166,19 @@ const Laptop = () => {
     setShowPopup(true);
   };
 
-  const laptopNameHasError = value =>
-    hasError && (!value || !/^[\w!@#$%^&*()+= ]*$/.test(value.trim())) ? true : false;
+  // const laptopNameHasError = value =>
+  //   hasError && (!value || !/^[\w!@#$%^&*()+= ]*$/.test(value.trim())) ? true : false;
 
-  const selectUploadFieldHasError = value => (hasError && !value ? true : false);
+  // const selectUploadFieldHasError = value => (hasError && !value ? true : false);
 
-  const numberInputHasError = value =>
-    hasError && (!value || +value < 1 || !isFinite(value)) ? true : false;
+  // const numberInputHasError = value =>
+  //   hasError && (!value || +value < 1 || !isFinite(value)) ? true : false;
 
   return (
     <>
-      {showPopup ? (
-        <Success />
-      ) : (
+      {showPopup && <Success />}
+
+      {!showPopup && (
         <div className={styles.container}>
           <Button onClick={handleGoBackClick} className={styles.btnBack}>
             {mobile && <img src={arrowBackMobile} alt="arrow back" />}
@@ -209,14 +213,14 @@ const Laptop = () => {
               <div {...getRootProps()}>
                 <div
                   className={`${styles.imageContainer} ${
-                    selectUploadFieldHasError(imageDataURL)
+                    selectUploadFieldHasError(imageDataURL, hasError)
                       ? styles.imageError
                       : undefined
                   }`}
                 >
                   <input {...getInputProps()} />
 
-                  {!mobile && selectUploadFieldHasError(imageDataURL) && (
+                  {!mobile && selectUploadFieldHasError(imageDataURL, hasError) && (
                     <>
                       <div className={styles.errorImageTitleContainer}>
                         <img src={errorImage} alt="no image" className={styles.noImage} />
@@ -229,7 +233,7 @@ const Laptop = () => {
                     </>
                   )}
 
-                  {!mobile && !selectUploadFieldHasError(imageDataURL) && (
+                  {!mobile && !selectUploadFieldHasError(imageDataURL, hasError) && (
                     <>
                       <p className={styles.uploadTitle}>
                         ჩააგდე ან ატვირთე ლეპტოპის ფოტო
@@ -237,10 +241,8 @@ const Laptop = () => {
                       <Button className={styles.uploadBtn}>ატვირთე</Button>
                     </>
                   )}
-                  {/* {!mobile && !selectUploadFieldHasError(imageDataURL) && (
-                  )} */}
 
-                  {mobile && selectUploadFieldHasError(imageDataURL) && (
+                  {mobile && selectUploadFieldHasError(imageDataURL, hasError) && (
                     <div className={styles.errorImageTitleContainer}>
                       <img
                         src={dropImageMobile}
@@ -252,7 +254,7 @@ const Laptop = () => {
                       <img src={errorImage} alt="no image" className={styles.noImage} />
                     </div>
                   )}
-                  {mobile && !selectUploadFieldHasError(imageDataURL) && (
+                  {mobile && !selectUploadFieldHasError(imageDataURL, hasError) && (
                     <>
                       <img
                         src={dropImageMobile}
@@ -270,13 +272,17 @@ const Laptop = () => {
             <div className={styles.laptopContainer}>
               <div className={styles.labelInputContainer}>
                 <Label
-                  className={laptopNameHasError(laptop_name) ? styles.error : undefined}
+                  className={
+                    laptopNameHasError(laptop_name, hasError) ? styles.error : undefined
+                  }
                 >
                   ლეპტოპის სახელი
                 </Label>
                 <Input
                   className={`${styles.inputs} ${
-                    laptopNameHasError(laptop_name) ? styles.inputError : undefined
+                    laptopNameHasError(laptop_name, hasError)
+                      ? styles.inputError
+                      : undefined
                   }`}
                   onChange={handleInputs.bind(this, 'laptop_name')}
                   onFocus={handleFocus.bind(this, 'laptop_name')}
@@ -285,7 +291,7 @@ const Laptop = () => {
 
                 <p
                   className={`${styles.hint} ${
-                    laptopNameHasError(laptop_name) ? styles.error : undefined
+                    laptopNameHasError(laptop_name, hasError) ? styles.error : undefined
                   }`}
                 >
                   ლათინური ასოები, ციფრები, !@#$%^&*()_+=
@@ -294,7 +300,7 @@ const Laptop = () => {
               <div className={styles.selectContainer}>
                 <select
                   className={`${styles.selectBrand} ${
-                    selectUploadFieldHasError(laptop_brand)
+                    selectUploadFieldHasError(laptop_brand, hasError)
                       ? styles.inputError
                       : undefined
                   }`}
@@ -320,7 +326,9 @@ const Laptop = () => {
               <div className={styles.selectContainer}>
                 <select
                   className={`${styles.selectCPU} ${
-                    selectUploadFieldHasError(laptop_cpu) ? styles.inputError : undefined
+                    selectUploadFieldHasError(laptop_cpu, hasError)
+                      ? styles.inputError
+                      : undefined
                   }`}
                   onChange={handleInputs.bind(this, 'laptop_cpu')}
                   defaultValue="default"
@@ -342,14 +350,18 @@ const Laptop = () => {
               <div className={styles.labelInputContainer}>
                 <Label
                   className={
-                    numberInputHasError(laptop_cpu_cores) ? styles.error : undefined
+                    numberInputHasError(laptop_cpu_cores, hasError)
+                      ? styles.error
+                      : undefined
                   }
                 >
                   CPU-ს ბირთვი
                 </Label>
                 <Input
                   className={`${styles.cpuInputs} ${
-                    numberInputHasError(laptop_cpu_cores) ? styles.inputError : undefined
+                    numberInputHasError(laptop_cpu_cores, hasError)
+                      ? styles.inputError
+                      : undefined
                   }`}
                   onChange={handleInputs.bind(this, 'laptop_cpu_cores')}
                   onFocus={handleFocus.bind(this, 'laptop_cpu_cores')}
@@ -358,7 +370,9 @@ const Laptop = () => {
 
                 <p
                   className={`${styles.hint} ${
-                    numberInputHasError(laptop_cpu_cores) ? styles.error : undefined
+                    numberInputHasError(laptop_cpu_cores, hasError)
+                      ? styles.error
+                      : undefined
                   }`}
                 >
                   მხოლოდ ციფრები
@@ -368,14 +382,16 @@ const Laptop = () => {
               <div className={styles.labelInputContainer}>
                 <Label
                   className={
-                    numberInputHasError(laptop_cpu_threads) ? styles.error : undefined
+                    numberInputHasError(laptop_cpu_threads, hasError)
+                      ? styles.error
+                      : undefined
                   }
                 >
                   CPU-ს ნაკადი
                 </Label>
                 <Input
                   className={`${styles.cpuInputs} ${
-                    numberInputHasError(laptop_cpu_threads)
+                    numberInputHasError(laptop_cpu_threads, hasError)
                       ? styles.inputError
                       : undefined
                   }`}
@@ -386,7 +402,9 @@ const Laptop = () => {
 
                 <p
                   className={`${styles.hint} ${
-                    numberInputHasError(laptop_cpu_threads) ? styles.error : undefined
+                    numberInputHasError(laptop_cpu_threads, hasError)
+                      ? styles.error
+                      : undefined
                   }`}
                 >
                   მხოლოდ ციფრები
@@ -397,13 +415,17 @@ const Laptop = () => {
             <div className={styles.ramContainer}>
               <div className={styles.labelInputContainer}>
                 <Label
-                  className={numberInputHasError(laptop_ram) ? styles.error : undefined}
+                  className={
+                    numberInputHasError(laptop_ram, hasError) ? styles.error : undefined
+                  }
                 >
                   ლეპტოპის RAM (GB)
                 </Label>
                 <Input
                   className={`${styles.inputs} ${
-                    numberInputHasError(laptop_ram) ? styles.inputError : undefined
+                    numberInputHasError(laptop_ram, hasError)
+                      ? styles.inputError
+                      : undefined
                   }`}
                   onChange={handleInputs.bind(this, 'laptop_ram')}
                   onFocus={handleFocus.bind(this, 'laptop_ram')}
@@ -411,7 +433,7 @@ const Laptop = () => {
                 />
                 <p
                   className={`${styles.hint} ${
-                    numberInputHasError(laptop_ram) ? styles.error : undefined
+                    numberInputHasError(laptop_ram, hasError) ? styles.error : undefined
                   }`}
                 >
                   მხოლოდ ციფრები
@@ -421,12 +443,14 @@ const Laptop = () => {
               <div className={styles.labelInputContainer}>
                 <Label
                   className={
-                    selectUploadFieldHasError(driveType) ? styles.error : undefined
+                    selectUploadFieldHasError(driveType, hasError)
+                      ? styles.error
+                      : undefined
                   }
                 >
                   <div className={styles.memoryTypeTitleContainer}>
                     მეხსიერების ტიპი
-                    {selectUploadFieldHasError(driveType) && (
+                    {selectUploadFieldHasError(driveType, hasError) && (
                       <img
                         src={errorImage}
                         alt="no image"
@@ -472,13 +496,17 @@ const Laptop = () => {
 
               <div className={styles.labelInputContainer}>
                 <Label
-                  className={numberInputHasError(laptop_price) ? styles.error : undefined}
+                  className={
+                    numberInputHasError(laptop_price, hasError) ? styles.error : undefined
+                  }
                 >
                   ლეპტოპის ფასი
                 </Label>
                 <Input
                   className={`${styles.inputs} ${
-                    numberInputHasError(laptop_price) ? styles.inputError : undefined
+                    numberInputHasError(laptop_price, hasError)
+                      ? styles.inputError
+                      : undefined
                   }`}
                   onChange={handleInputs.bind(this, 'laptop_price')}
                   onFocus={handleFocus.bind(this, 'laptop_price')}
@@ -487,7 +515,7 @@ const Laptop = () => {
 
                 <p
                   className={`${styles.hint} ${
-                    numberInputHasError(laptop_price) ? styles.error : undefined
+                    numberInputHasError(laptop_price, hasError) ? styles.error : undefined
                   }`}
                 >
                   მხოლოდ ციფრები
@@ -499,12 +527,14 @@ const Laptop = () => {
               <div className={`${styles.labelInputContainer} ${styles.laptopState}`}>
                 <Label
                   className={
-                    selectUploadFieldHasError(laptopState) ? styles.error : undefined
+                    selectUploadFieldHasError(laptopState, hasError)
+                      ? styles.error
+                      : undefined
                   }
                 >
                   <div className={styles.memoryTypeTitleContainer}>
                     ლეპტოპის მდგომარეობა
-                    {selectUploadFieldHasError(driveType) && (
+                    {selectUploadFieldHasError(driveType, hasError) && (
                       <img
                         src={errorImage}
                         alt="no image"

@@ -13,12 +13,16 @@ import useFetch from '../../hooks/useFetch';
 // import { AppContext } from '../../store';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import useWidth from '../../hooks/useWidth';
+import useValidation from '../../hooks/useValidation';
 
 const Employee = () => {
   const mobile = useWidth();
 
   const teams = useFetch();
   const positions = useFetch();
+
+  const { nameSurnameHasError, emailHasError, phoneHasError, selectUploadFieldHasError } =
+    useValidation();
 
   const [userInputs, setUserInputs] = useLocalStorage('employeeData', {
     name: '',
@@ -147,29 +151,27 @@ const Employee = () => {
     navigate('/laptop');
   };
 
-  // console.log(width, 'widthhhhhhh employeeeee');
+  // const nameSurnameHasError = value =>
+  //   (hasError && value && !/^[ა-ჰ]+$/i.test(value.trim())) ||
+  //   (hasError && !value) ||
+  //   (hasError && value && value.trim().length < 2)
+  //     ? true
+  //     : false;
 
-  const nameSurnameHasError = value =>
-    (hasError && value && !/^[ა-ჰ]+$/i.test(value.trim())) ||
-    (hasError && !value) ||
-    (hasError && value && value.trim().length < 2)
-      ? true
-      : false;
+  // const emailHasError = value =>
+  //   (hasError && value && !value.trim().endsWith('@redberry.ge')) || (hasError && !value)
+  //     ? true
+  //     : false;
 
-  const emailHasError = value =>
-    (hasError && value && !value.trim().endsWith('@redberry.ge')) || (hasError && !value)
-      ? true
-      : false;
+  // const phoneHasError = value =>
+  //   (hasError &&
+  //     value &&
+  //     (value.trim().length !== 13 || !value.trim().startsWith('+995'))) ||
+  //   (hasError && !value)
+  //     ? true
+  //     : false;
 
-  const phoneHasError = value =>
-    (hasError &&
-      value &&
-      (value.trim().length !== 13 || !value.trim().startsWith('+995'))) ||
-    (hasError && !value)
-      ? true
-      : false;
-
-  const selectFieldHasError = value => (hasError && !value ? true : false);
+  // const selectUploadFieldHasError = value => (hasError && !value ? true : false);
 
   // console.log(userInputs);
 
@@ -185,12 +187,14 @@ const Employee = () => {
       <form className={styles.form}>
         <div className={styles.nameLastnameContainer}>
           <div className={styles.labelInputContainer}>
-            <Label className={nameSurnameHasError(name) ? styles.error : undefined}>
+            <Label
+              className={nameSurnameHasError(name, hasError) ? styles.error : undefined}
+            >
               სახელი
             </Label>
             <Input
               className={`${styles.nameLastnameInput} ${
-                nameSurnameHasError(name) ? styles.inputError : undefined
+                nameSurnameHasError(name, hasError) ? styles.inputError : undefined
               }`}
               onChange={handleInputs.bind(this, 'name')}
               onFocus={handleFocus.bind(this, 'name')}
@@ -199,7 +203,7 @@ const Employee = () => {
 
             <p
               className={`${styles.hint} ${
-                nameSurnameHasError(name) ? styles.error : undefined
+                nameSurnameHasError(name, hasError) ? styles.error : undefined
               }`}
             >
               მინიმუმ 2 სიმბოლო, ქართული ასოები
@@ -207,12 +211,16 @@ const Employee = () => {
           </div>
 
           <div className={styles.labelInputContainer}>
-            <Label className={nameSurnameHasError(surname) ? styles.error : undefined}>
+            <Label
+              className={
+                nameSurnameHasError(surname, hasError) ? styles.error : undefined
+              }
+            >
               გვარი
             </Label>
             <Input
               className={`${styles.nameLastnameInput} ${
-                nameSurnameHasError(surname) ? styles.inputError : undefined
+                nameSurnameHasError(surname, hasError) ? styles.inputError : undefined
               }`}
               onChange={handleInputs.bind(this, 'surname')}
               onFocus={handleFocus.bind(this, 'surname')}
@@ -220,7 +228,7 @@ const Employee = () => {
             />
             <p
               className={`${styles.hint} ${
-                nameSurnameHasError(surname) ? styles.error : undefined
+                nameSurnameHasError(surname, hasError) ? styles.error : undefined
               }`}
             >
               მინიმუმ 2 სიმბოლო, ქართული ასოები
@@ -231,7 +239,9 @@ const Employee = () => {
         <div className={styles.dropdownsContainer}>
           <div>
             <select
-              className={selectFieldHasError(team) ? styles.inputError : undefined}
+              className={
+                selectUploadFieldHasError(team, hasError) ? styles.inputError : undefined
+              }
               onChange={handleInputs.bind(this, 'team')}
               defaultValue="default"
             >
@@ -251,7 +261,11 @@ const Employee = () => {
 
           <div>
             <select
-              className={selectFieldHasError(position) ? styles.inputError : undefined}
+              className={
+                selectUploadFieldHasError(position, hasError)
+                  ? styles.inputError
+                  : undefined
+              }
               onChange={handleInputs.bind(this, 'position')}
               defaultValue="default"
               disabled={team ? false : true}
@@ -274,12 +288,12 @@ const Employee = () => {
 
         <div className={styles.emailNumberContainer}>
           <div className={styles.labelInputContainer}>
-            <Label className={emailHasError(email) ? styles.error : undefined}>
+            <Label className={emailHasError(email, hasError) ? styles.error : undefined}>
               მეილი
             </Label>
             <Input
               className={`${styles.emailNumberInput} ${
-                emailHasError(email) ? styles.inputError : undefined
+                emailHasError(email, hasError) ? styles.inputError : undefined
               }`}
               onChange={handleInputs.bind(this, 'email')}
               onFocus={handleFocus.bind(this, 'email')}
@@ -288,7 +302,7 @@ const Employee = () => {
 
             <p
               className={`${styles.hint} ${
-                emailHasError(email) ? styles.error : undefined
+                emailHasError(email, hasError) ? styles.error : undefined
               }`}
             >
               უნდა მთავრდებოდეს @redberry.ge-ით
@@ -296,12 +310,14 @@ const Employee = () => {
           </div>
 
           <div className={styles.labelInputContainer}>
-            <Label className={phoneHasError(phone_number) ? styles.error : undefined}>
+            <Label
+              className={phoneHasError(phone_number, hasError) ? styles.error : undefined}
+            >
               ტელეფონის ნომერი
             </Label>
             <Input
               className={`${styles.emailNumberInput} ${
-                phoneHasError(phone_number) ? styles.inputError : undefined
+                phoneHasError(phone_number, hasError) ? styles.inputError : undefined
               }`}
               onChange={handleInputs.bind(this, 'phone_number')}
               onFocus={handleFocus.bind(this, 'phone_number')}
@@ -310,7 +326,7 @@ const Employee = () => {
 
             <p
               className={`${styles.hint} ${
-                phoneHasError(phone_number) ? styles.error : undefined
+                phoneHasError(phone_number, hasError) ? styles.error : undefined
               }`}
             >
               {mobile && 'ქართული მობ-ნომრის ფორმატი'}
