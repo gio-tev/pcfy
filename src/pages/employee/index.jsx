@@ -1,23 +1,18 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './Employee.module.css';
-import Navigation from '../../components/UI/navigation';
-import Input from '../../components/UI/input';
-import Label from '../../components/UI/label';
+
 import logo from '../../assets/logo.png';
 import Button from '../../components/UI/button';
-import arrowBack from '../../assets/arrow-back.png';
-import arrowBackMobile from '../../assets/arrow-back-mobile.png';
 import useFetch from '../../hooks/useFetch';
-// import { AppContext } from '../../store';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import useWidth from '../../hooks/useWidth';
 import useValidation from '../../hooks/useValidation';
+import FormHeader from '../../components/UI/form-header';
+import Input from '../../components/UI/input';
+import Select from '../../components/UI/select';
 
 const Employee = () => {
-  const mobile = useWidth();
-
   const teams = useFetch();
   const positions = useFetch();
 
@@ -32,7 +27,7 @@ const Employee = () => {
     phone_number: '',
     email: '',
   });
-  const [teamPositionIds, setTeamPositionIds] = useLocalStorage('teamPositionIds', {});
+  const [, setTeamPositionIds] = useLocalStorage('teamPositionIds', {});
   const [filteredPositions, setFilteredPositions] = useLocalStorage(
     'filteredPositions',
     []
@@ -43,28 +38,37 @@ const Employee = () => {
 
   const { name, surname, team, position, email, phone_number } = userInputs;
 
-  const { team_id, position_id } = teamPositionIds;
-
   const navigate = useNavigate();
 
   useEffect(() => {
-    teams.sendHttp(process.env.REACT_APP_GET_TEAMS);
-    positions.sendHttp(process.env.REACT_APP_GET_POSITIONS);
+    getData();
   }, []);
 
-  const teamsData = teams.response?.data;
+  useEffect(() => {
+    filterPostionsAndSetTeamId();
+  }, [team]);
 
   useEffect(() => {
+    setPositionId();
+  }, [position]);
+
+  const getData = () => {
+    teams.sendHttp(process.env.REACT_APP_GET_TEAMS);
+    positions.sendHttp(process.env.REACT_APP_GET_POSITIONS);
+  };
+
+  const filterPostionsAndSetTeamId = () => {
     if (team) {
       const currentTeamObj = teams.response?.data.filter(value => value.name === team);
 
-      const teamId = currentTeamObj ? currentTeamObj[0]?.id : undefined;
+      const teamId = currentTeamObj && currentTeamObj[0]?.id;
       const filtered = positions.response?.data.filter(
         position => position.team_id === teamId
       );
+
       if (filtered && position && sameTeam) {
         setUserInputs(prevState => {
-          return { ...prevState, position: position };
+          return { ...prevState, position };
         });
       } else if (filtered && position && !sameTeam) {
         setUserInputs(prevState => {
@@ -72,34 +76,38 @@ const Employee = () => {
         });
       }
 
-      setFilteredPositions(filtered);
+      if (filtered) {
+        setFilteredPositions(filtered);
+      }
 
-      setTeamPositionIds(prevState => {
-        return {
-          ...prevState,
-          team_id: teamId,
-        };
-      });
+      if (teamId) {
+        setTeamPositionIds(prevState => {
+          return {
+            ...prevState,
+            team_id: teamId,
+          };
+        });
+      }
     }
-  }, [team, teamsData]);
+  };
 
-  const positionsData = positions.response?.data;
-
-  useEffect(() => {
+  const setPositionId = () => {
     if (position) {
       const currentPosObj = positions.response?.data.filter(
         value => value.name === position
       );
-      const positionId = currentPosObj ? currentPosObj[0]?.id : undefined;
+      const positionId = currentPosObj && currentPosObj[0]?.id;
 
-      setTeamPositionIds(prevState => {
-        return {
-          ...prevState,
-          position_id: positionId,
-        };
-      });
+      if (positionId) {
+        setTeamPositionIds(prevState => {
+          return {
+            ...prevState,
+            position_id: positionId,
+          };
+        });
+      }
     }
-  }, [position, positionsData]);
+  };
 
   const handleInputs = (inputIdentifier, e) => {
     if (inputIdentifier === 'team') {
@@ -137,56 +145,107 @@ const Employee = () => {
       return setHasError(true);
     }
 
-    // const payloadData = {
-    //   name,
-    //   surname,
-    //   team_id,
-    //   position_id,
-    //   phone_number,
-    //   email,
-    // };
-
-    // dispatch({ type: 'EMPLOYEE_INPUT', payload: payloadData });
-
     navigate('/laptop');
   };
 
-  // const nameSurnameHasError = value =>
-  //   (hasError && value && !/^[ა-ჰ]+$/i.test(value.trim())) ||
-  //   (hasError && !value) ||
-  //   (hasError && value && value.trim().length < 2)
-  //     ? true
-  //     : false;
-
-  // const emailHasError = value =>
-  //   (hasError && value && !value.trim().endsWith('@redberry.ge')) || (hasError && !value)
-  //     ? true
-  //     : false;
-
-  // const phoneHasError = value =>
-  //   (hasError &&
-  //     value &&
-  //     (value.trim().length !== 13 || !value.trim().startsWith('+995'))) ||
-  //   (hasError && !value)
-  //     ? true
-  //     : false;
-
-  // const selectUploadFieldHasError = value => (hasError && !value ? true : false);
-
-  // console.log(userInputs);
-
   return (
     <div className={styles.container}>
-      <Button onClick={handleGoBackClick} className={styles.btnBack}>
-        {mobile && <img src={arrowBackMobile} alt="arrow back" />}
-        {!mobile && <img src={arrowBack} alt="arrow back" />}
-      </Button>
-
-      <Navigation onToLaptop={handleNextClick} mobile={mobile} />
+      <FormHeader
+        handleGoBackClick={handleGoBackClick}
+        handleNextClick={handleNextClick}
+        className={styles.btnBack}
+      />
 
       <form className={styles.form}>
         <div className={styles.nameLastnameContainer}>
-          <div className={styles.labelInputContainer}>
+          <Input
+            label="სახელი"
+            value={name}
+            hasError={hasError}
+            handleInputs={handleInputs}
+            handleFocus={handleFocus}
+            validator={nameSurnameHasError}
+            className={styles.nameLastnameInput}
+            identifier="name"
+            hintMessage="მინიმუმ 2 სიმბოლო, ქართული ასოები"
+          />
+
+          <Input
+            label="გვარი"
+            value={surname}
+            hasError={hasError}
+            handleInputs={handleInputs}
+            handleFocus={handleFocus}
+            validator={nameSurnameHasError}
+            className={styles.nameLastnameInput}
+            identifier="surname"
+            hintMessage="მინიმუმ 2 სიმბოლო, ქართული ასოები"
+          />
+        </div>
+
+        <div className={styles.dropdownsContainer}>
+          <Select
+            value={team}
+            hasError={hasError}
+            validator={selectUploadFieldHasError}
+            handleInputs={handleInputs}
+            identifier="team"
+            defaultValue="თიმი"
+            data={teams}
+          />
+
+          <Select
+            value={position}
+            hasError={hasError}
+            validator={selectUploadFieldHasError}
+            handleInputs={handleInputs}
+            identifier="position"
+            defaultValue="პოზიცია"
+            data={filteredPositions}
+          />
+        </div>
+
+        <div className={styles.emailNumberContainer}>
+          <Input
+            label="მეილი"
+            value={email}
+            hasError={hasError}
+            handleInputs={handleInputs}
+            handleFocus={handleFocus}
+            validator={emailHasError}
+            className={styles.emailNumberInput}
+            identifier="email"
+            hintMessage="უნდა მთავრდებოდეს @redberry.ge-ით"
+          />
+
+          <Input
+            label="ტელეფონის ნომერი"
+            value={phone_number}
+            hasError={hasError}
+            handleInputs={handleInputs}
+            handleFocus={handleFocus}
+            validator={phoneHasError}
+            className={styles.emailNumberInput}
+            identifier="phone_number"
+            hintMessage="უნდა აკმაყოფილებდეს ქართული მობ-ნომრის ფორმატს"
+            changedHint="ქართული მობ-ნომრის ფორმატი"
+          />
+        </div>
+
+        <Button onClick={handleNextClick} className={styles.btnNext}>
+          შემდეგი
+        </Button>
+      </form>
+
+      <img src={logo} alt="logo" className={styles.logo} />
+    </div>
+  );
+};
+
+export default Employee;
+
+{
+  /* <div className={styles.labelInputContainer}>
             <Label
               className={nameSurnameHasError(name, hasError) ? styles.error : undefined}
             >
@@ -208,9 +267,11 @@ const Employee = () => {
             >
               მინიმუმ 2 სიმბოლო, ქართული ასოები
             </p>
-          </div>
+          </div> */
+}
 
-          <div className={styles.labelInputContainer}>
+{
+  /* <div className={styles.labelInputContainer}>
             <Label
               className={
                 nameSurnameHasError(surname, hasError) ? styles.error : undefined
@@ -233,12 +294,11 @@ const Employee = () => {
             >
               მინიმუმ 2 სიმბოლო, ქართული ასოები
             </p>
-          </div>
-        </div>
+          </div> */
+}
 
-        <div className={styles.dropdownsContainer}>
-          <div>
-            <select
+{
+  /* <select
               className={
                 selectUploadFieldHasError(team, hasError) ? styles.inputError : undefined
               }
@@ -256,11 +316,11 @@ const Employee = () => {
                   </option>
                 );
               })}
-            </select>
-          </div>
+            </select> */
+}
 
-          <div>
-            <select
+{
+  /* <select
               className={
                 selectUploadFieldHasError(position, hasError)
                   ? styles.inputError
@@ -282,12 +342,11 @@ const Employee = () => {
                     </option>
                   );
                 })}
-            </select>
-          </div>
-        </div>
+            </select> */
+}
 
-        <div className={styles.emailNumberContainer}>
-          <div className={styles.labelInputContainer}>
+{
+  /* <div className={styles.labelInputContainer}>
             <Label className={emailHasError(email, hasError) ? styles.error : undefined}>
               მეილი
             </Label>
@@ -307,8 +366,11 @@ const Employee = () => {
             >
               უნდა მთავრდებოდეს @redberry.ge-ით
             </p>
-          </div>
+          </div> */
+}
 
+{
+  /* 
           <div className={styles.labelInputContainer}>
             <Label
               className={phoneHasError(phone_number, hasError) ? styles.error : undefined}
@@ -332,17 +394,5 @@ const Employee = () => {
               {mobile && 'ქართული მობ-ნომრის ფორმატი'}
               {!mobile && 'უნდა აკმაყოფილებდეს ქართული მობ-ნომრის ფორმატს'}
             </p>
-          </div>
-        </div>
-
-        <Button onClick={handleNextClick} className={styles.btnNext}>
-          შემდეგი
-        </Button>
-      </form>
-
-      <img src={logo} alt="logo" className={styles.logo} />
-    </div>
-  );
-};
-
-export default Employee;
+          </div> */
+}

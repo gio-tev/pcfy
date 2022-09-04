@@ -6,19 +6,19 @@ import { useDropzone } from 'react-dropzone';
 import styles from './Laptop.module.css';
 import useFetch from '../../hooks/useFetch';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import Navigation from '../../components/UI/navigation';
 import Button from '../../components/UI/button';
-import arrowBack from '../../assets/arrow-back.png';
-import arrowBackMobile from '../../assets/arrow-back-mobile.png';
 import dropImageMobile from '../../assets/drop-image-mobile.png';
-import Label from '../../components/UI/label';
-import Input from '../../components/UI/input';
+
 import logo from '../../assets/logo.png';
 import errorImage from '../../assets/error-image.png';
 import checked from '../../assets/checked.png';
 import Success from '../../components/success';
 import useWidth from '../../hooks/useWidth';
 import useValidation from '../../hooks/useValidation';
+import FormHeader from '../../components/UI/form-header';
+import Input from '../../components/UI/input';
+import Select from '../../components/UI/select';
+import RadioInput from '../../components/UI/radio-input';
 
 const Laptop = () => {
   const mobile = useWidth();
@@ -147,32 +147,9 @@ const Laptop = () => {
       return setHasError(true);
     }
 
-    // const payloadData = {
-    //   laptop_name,
-    //   laptop_image: image,
-    //   laptop_brand_id: laptopBrandId,
-    //   laptop_cpu,
-    //   laptop_cpu_cores,
-    //   laptop_cpu_threads,
-    //   laptop_ram,
-    //   laptop_hard_drive_type: driveType,
-    //   laptop_state: laptopState,
-    //   laptop_price,
-    //   laptop_purchase_date: dateISValid ? laptopPurchaseDate : undefined,
-    // };
-
-    // dispatch({ type: 'LAPTOP_INPUT', payload: payloadData });
     // navigate('/success');
     setShowPopup(true);
   };
-
-  // const laptopNameHasError = value =>
-  //   hasError && (!value || !/^[\w!@#$%^&*()+= ]*$/.test(value.trim())) ? true : false;
-
-  // const selectUploadFieldHasError = value => (hasError && !value ? true : false);
-
-  // const numberInputHasError = value =>
-  //   hasError && (!value || +value < 1 || !isFinite(value)) ? true : false;
 
   return (
     <>
@@ -180,18 +157,13 @@ const Laptop = () => {
 
       {!showPopup && (
         <div className={styles.container}>
-          <Button onClick={handleGoBackClick} className={styles.btnBack}>
-            {mobile && <img src={arrowBackMobile} alt="arrow back" />}
-            {!mobile && <img src={arrowBack} alt="arrow back" />}
-          </Button>
-
-          <Navigation onToEmployee={handleGoBackClick} mobile={mobile} />
+          <FormHeader handleGoBackClick={handleGoBackClick} className={styles.btnBack} />
 
           <form className={styles.form}>
             {imageDataURL && (
               <div className={styles.imagePreviewContainer}>
                 <img src={imagePath} alt="img upload" className={styles.previewImage} />
-                {/* <div className={`${styles.imageContainer} ${styles.noBorder}`}></div> */}
+
                 <div className={styles.prevDescriptionContainer}>
                   <div className={styles.prevDescriptionInnerContainer}>
                     <img
@@ -270,7 +242,149 @@ const Laptop = () => {
             )}
 
             <div className={styles.laptopContainer}>
+              <Input
+                label="ლეპტოპის სახელი"
+                value={laptop_name}
+                hasError={hasError}
+                handleInputs={handleInputs}
+                handleFocus={handleFocus}
+                validator={laptopNameHasError}
+                className={styles.inputs}
+                identifier="laptop_name"
+                hintMessage="ლათინური ასოები, ციფრები, !@#$%^&*()_+="
+              />
+
+              <Select
+                className={styles.selectBrand}
+                value={laptop_brand}
+                hasError={hasError}
+                validator={selectUploadFieldHasError}
+                handleInputs={handleInputs}
+                identifier="laptop_brand"
+                defaultValue="ლეპტოპის ბრენდი"
+                data={brands}
+              />
+            </div>
+
+            <div className={styles.cpuContainer}>
+              <Select
+                className={styles.selectCPU}
+                value={laptop_cpu}
+                hasError={hasError}
+                validator={selectUploadFieldHasError}
+                handleInputs={handleInputs}
+                identifier="laptop_cpu"
+                defaultValue="CPU"
+                data={cpus}
+              />
+
+              <Input
+                label="CPU-ს ბირთვი"
+                value={laptop_cpu_cores}
+                hasError={hasError}
+                handleInputs={handleInputs}
+                handleFocus={handleFocus}
+                validator={numberInputHasError}
+                className={styles.cpuInputs}
+                identifier="laptop_cpu_cores"
+                hintMessage="მხოლოდ ციფრები"
+              />
+
+              <Input
+                label="CPU-ს ნაკადი"
+                value={laptop_cpu_threads}
+                hasError={hasError}
+                handleInputs={handleInputs}
+                handleFocus={handleFocus}
+                validator={numberInputHasError}
+                className={styles.cpuInputs}
+                identifier="laptop_cpu_threads"
+                hintMessage="მხოლოდ ციფრები"
+              />
+            </div>
+
+            <div className={styles.ramContainer}>
+              <Input
+                label="ლეპტოპის RAM (GB)"
+                value={laptop_ram}
+                hasError={hasError}
+                handleInputs={handleInputs}
+                handleFocus={handleFocus}
+                validator={numberInputHasError}
+                className={styles.inputs}
+                identifier="laptop_ram"
+                hintMessage="მხოლოდ ციფრები"
+              />
+
+              <RadioInput
+                value={driveType}
+                identifierOne="SSD"
+                identifierTwo="HDD"
+                validator={selectUploadFieldHasError}
+                labelTitle="მეხსიერების ტიპი"
+                hasError={hasError}
+                onCheck={handleDriveTypeCheck}
+                name="memoryType"
+              />
+            </div>
+
+            <div className={styles.priceDateContainer}>
               <div className={styles.labelInputContainer}>
+                <label className={styles.label}>შეძენის რიცხვი (არჩევითი)</label>
+                <input
+                  className={`${styles.input} ${styles.inputs}`}
+                  onChange={handleInputs.bind(this, 'laptop_purchase_date')}
+                  value={laptop_purchase_date}
+                  placeholder="დდ / თთ / წწწწ"
+                />
+              </div>
+
+              <Input
+                label="ლეპტოპის ფასი"
+                value={laptop_price}
+                hasError={hasError}
+                handleInputs={handleInputs}
+                handleFocus={handleFocus}
+                validator={numberInputHasError}
+                className={styles.inputs}
+                identifier="laptop_price"
+                hintMessage="მხოლოდ ციფრები"
+              />
+            </div>
+
+            <div className={styles.laptopStateContainer}>
+              <RadioInput
+                value={laptopState}
+                identifierOne="ახალი"
+                identifierTwo="მეორადი"
+                validator={selectUploadFieldHasError}
+                labelTitle="ლეპტოპის მდგომარეობა"
+                hasError={hasError}
+                onCheck={handleLaptopStateCheck}
+                name="laptopState"
+              />
+            </div>
+
+            <div className={styles.formBtnsContainer}>
+              <Button onClick={handleGoBackClick} className={styles.formBtnBack}>
+                უკან
+              </Button>
+              <Button onClick={handleNextClick} className={styles.btnSave}>
+                დამახსოვრება
+              </Button>
+            </div>
+          </form>
+          <img src={logo} alt="logo" className={styles.logo} />
+        </div>
+      )}
+    </>
+  );
+};
+
+export default Laptop;
+
+{
+  /* <div className={styles.labelInputContainer}>
                 <Label
                   className={
                     laptopNameHasError(laptop_name, hasError) ? styles.error : undefined
@@ -296,9 +410,14 @@ const Laptop = () => {
                 >
                   ლათინური ასოები, ციფრები, !@#$%^&*()_+=
                 </p>
-              </div>
-              <div className={styles.selectContainer}>
-                <select
+              </div> */
+}
+
+{
+  /* <div className={styles.selectContainer}> */
+}
+{
+  /* <select
                   className={`${styles.selectBrand} ${
                     selectUploadFieldHasError(laptop_brand, hasError)
                       ? styles.inputError
@@ -318,13 +437,14 @@ const Laptop = () => {
                       </option>
                     );
                   })}
-                </select>
-              </div>
-            </div>
+                </select> */
+}
 
-            <div className={styles.cpuContainer}>
-              <div className={styles.selectContainer}>
-                <select
+{
+  /* <div className={styles.selectContainer}> */
+}
+{
+  /* <select
                   className={`${styles.selectCPU} ${
                     selectUploadFieldHasError(laptop_cpu, hasError)
                       ? styles.inputError
@@ -344,10 +464,14 @@ const Laptop = () => {
                       </option>
                     );
                   })}
-                </select>
-              </div>
+                </select> */
+}
+{
+  /* </div> */
+}
 
-              <div className={styles.labelInputContainer}>
+{
+  /* <div className={styles.labelInputContainer}>
                 <Label
                   className={
                     numberInputHasError(laptop_cpu_cores, hasError)
@@ -377,9 +501,11 @@ const Laptop = () => {
                 >
                   მხოლოდ ციფრები
                 </p>
-              </div>
+              </div> */
+}
 
-              <div className={styles.labelInputContainer}>
+{
+  /* <div className={styles.labelInputContainer}>
                 <Label
                   className={
                     numberInputHasError(laptop_cpu_threads, hasError)
@@ -409,11 +535,11 @@ const Laptop = () => {
                 >
                   მხოლოდ ციფრები
                 </p>
-              </div>
-            </div>
+              </div> */
+}
 
-            <div className={styles.ramContainer}>
-              <div className={styles.labelInputContainer}>
+{
+  /* <div className={styles.labelInputContainer}>
                 <Label
                   className={
                     numberInputHasError(laptop_ram, hasError) ? styles.error : undefined
@@ -438,8 +564,10 @@ const Laptop = () => {
                 >
                   მხოლოდ ციფრები
                 </p>
-              </div>
-
+              </div> */
+}
+{
+  /* 
               <div className={styles.labelInputContainer}>
                 <Label
                   className={
@@ -480,21 +608,11 @@ const Laptop = () => {
                     <Label>HDD</Label>
                   </div>
                 </div>
-              </div>
-            </div>
+              </div> */
+}
 
-            <div className={styles.priceDateContainer}>
-              <div className={styles.labelInputContainer}>
-                <Label>შეძენის რიცხვი (არჩევითი)</Label>
-                <Input
-                  className={styles.inputs}
-                  onChange={handleInputs.bind(this, 'laptop_purchase_date')}
-                  value={laptop_purchase_date}
-                  placeholder="დდ / თთ / წწწწ"
-                />
-              </div>
-
-              <div className={styles.labelInputContainer}>
+{
+  /* <div className={styles.labelInputContainer}>
                 <Label
                   className={
                     numberInputHasError(laptop_price, hasError) ? styles.error : undefined
@@ -520,11 +638,11 @@ const Laptop = () => {
                 >
                   მხოლოდ ციფრები
                 </p>
-              </div>
-            </div>
+              </div> */
+}
 
-            <div className={styles.laptopStateContainer}>
-              <div className={`${styles.labelInputContainer} ${styles.laptopState}`}>
+{
+  /* <div className={`${styles.labelInputContainer} ${styles.laptopState}`}>
                 <Label
                   className={
                     selectUploadFieldHasError(laptopState, hasError)
@@ -564,23 +682,5 @@ const Laptop = () => {
                     <Label>მეორადი</Label>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            <div className={styles.formBtnsContainer}>
-              <Button onClick={handleGoBackClick} className={styles.formBtnBack}>
-                უკან
-              </Button>
-              <Button onClick={handleNextClick} className={styles.btnSave}>
-                დამახსოვრება
-              </Button>
-            </div>
-          </form>
-          <img src={logo} alt="logo" className={styles.logo} />
-        </div>
-      )}
-    </>
-  );
-};
-
-export default Laptop;
+              </div> */
+}

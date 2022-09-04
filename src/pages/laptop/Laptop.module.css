@@ -8,6 +8,21 @@
   margin-top: 50px;
   padding: 40px 0;
 }
+.label {
+  height: 21px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21px;
+}
+
+.input {
+  /* width: 407px; */
+  height: 50px;
+  /* border: 1.8px solid var(--blue-400); */
+  border-radius: 8px;
+  outline: none;
+}
 
 .form {
   /* position: relative; */
@@ -209,15 +224,17 @@
 
 .selectBrand {
   width: 407px;
+  align-self: center;
 }
 
 .selectCPU {
   width: 277px;
-}
-
-.selectContainer {
   align-self: center;
 }
+
+/* .selectContainer {
+  align-self: center;
+} */
 
 .cpuContainer {
   display: flex;
@@ -527,21 +544,6 @@
 
     height: 21px;
     width: 23px;
-  }
-
-  .memoryTypeTitleContainer {
-    /* max-width: 390px; */
-
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .noMemoryType {
-    /* max-width: 390px; */
-
-    width: 22px;
-    height: 20px;
   }
 
   .errorImageTitleContainer {
