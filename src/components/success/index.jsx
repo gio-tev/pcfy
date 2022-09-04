@@ -7,9 +7,12 @@ import successImage from '../../assets/success-image.png';
 import Button from '../UI/button';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import useWidth from '../../hooks/useWidth';
+import useValidation from '../../hooks/useValidation';
 
 const Success = () => {
   const mobile = useWidth();
+
+  const { isValidFormat, isDateInPast } = useValidation();
 
   const [employeeData] = useLocalStorage('employeeData', {});
   const [teamPositionIds] = useLocalStorage('teamPositionIds', {});
@@ -54,27 +57,27 @@ const Success = () => {
     token: process.env.REACT_APP_TOKEN,
   };
 
-  const isValidFormat = str => {
-    if (
-      /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/.test(
-        str
-      )
-    ) {
-      return true;
-    }
-  };
+  // const isValidFormat = str => {
+  //   if (
+  //     /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/.test(
+  //       str
+  //     )
+  //   ) {
+  //     return true;
+  //   }
+  // };
 
-  const isDateInPast = str => {
-    const dateString = str,
-      dateArgs = dateString.match(/\d{2,4}/g),
-      year = dateArgs[2],
-      month = parseInt(dateArgs[1]) - 1,
-      day = dateArgs[0];
+  // const isDateInPast = str => {
+  //   const dateString = str,
+  //     dateArgs = dateString.match(/\d{2,4}/g),
+  //     year = dateArgs[2],
+  //     month = parseInt(dateArgs[1]) - 1,
+  //     day = dateArgs[0];
 
-    const milliseconds = new Date(year, month, day).getTime();
+  //   const milliseconds = new Date(year, month, day).getTime();
 
-    return Date.now() > milliseconds;
-  };
+  //   return Date.now() > milliseconds;
+  // };
 
   if (
     finalData.laptop_purchase_date &&

@@ -137,7 +137,7 @@ const Employee = () => {
       !team ||
       !position ||
       !email ||
-      !email.trim().endsWith('@redberry.ge') ||
+      !email.trim().toLowerCase().endsWith('@redberry.ge') ||
       !phone_number ||
       phone_number.trim().length !== 13 ||
       !phone_number.trim().startsWith('+995')

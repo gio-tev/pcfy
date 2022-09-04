@@ -10,7 +10,7 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import Button from '../UI/button';
 import useValidation from '../../hooks/useValidation';
 
-const ImageUpload = ({ hasError }) => {
+const ImageUpload = ({ hasError, onImageUpload }) => {
   const mobile = useWidth();
 
   const { selectUploadFieldHasError } = useValidation();
@@ -32,6 +32,8 @@ const ImageUpload = ({ hasError }) => {
 
     reader.onload = () => {
       setImageDataURL(reader.result);
+
+      onImageUpload();
     };
     reader.readAsDataURL(acceptedFiles[0]);
   }, []);

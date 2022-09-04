@@ -34,11 +34,14 @@ const Laptop = () => {
 
   const [driveType, setDriveType] = useLocalStorage('driveType', '');
   const [laptopState, setLaptopState] = useLocalStorage('laptopState', '');
-  const [setLaptopBrandId] = useLocalStorage('laptopBrandId', '');
+  const [, setLaptopBrandId] = useLocalStorage('laptopBrandId', '');
   const [imageDataURL] = useLocalStorage('laptopImage', '');
 
   const [hasError, setHasError] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [imageUploaded, setImageUploaded] = useState(false);
+
+  const navigate = useNavigate();
 
   const {
     laptop_name,
@@ -74,8 +77,6 @@ const Laptop = () => {
     }
   };
 
-  const navigate = useNavigate();
-
   const handleInputs = (inputIdentifier, e) => {
     setUserInputs(prevState => {
       return {
@@ -91,13 +92,15 @@ const Laptop = () => {
   const handleLaptopStateCheck = inputIdentifier =>
     setLaptopState(inputIdentifier === 'ახალი' ? 'new' : 'used');
 
+  const onImageUpload = () => setImageUploaded(true);
+
   const handleFocus = () => setHasError(false);
 
   const handleGoBackClick = () => navigate('/employee');
 
   const handleNextClick = () => {
     if (
-      !imageDataURL ||
+      (!imageUploaded && !imageDataURL) ||
       !laptop_name ||
       !/^[\w!@#$%^&*()+= ]*$/.test(laptop_name.trim()) ||
       !laptop_brand ||
@@ -132,7 +135,7 @@ const Laptop = () => {
           <FormHeader handleGoBackClick={handleGoBackClick} className={styles.btnBack} />
 
           <form className={styles.form}>
-            <ImageUpload hasError={hasError} />
+            <ImageUpload hasError={hasError} onImageUpload={onImageUpload} />
 
             <div className={styles.laptopContainer}>
               <Input
