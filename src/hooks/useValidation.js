@@ -8,8 +8,8 @@ const useValidation = () => {
   };
 
   const emailHasError = (value, hasError) => {
-    return (hasError && value && !value.trim().toLowerCase().endsWith('@redberry.ge')) ||
-      (hasError && !value)
+    return (hasError && !value.trim().toLowerCase().endsWith('@redberry.ge')) ||
+      (hasError && value.trim().length < 13)
       ? true
       : false;
   };

@@ -139,9 +139,8 @@ const Employee = () => {
       !/^[ა-ჰ]+$/i.test(surname.trim()) ||
       !team ||
       !position ||
-      !email ||
+      email.trim().length < 13 ||
       !email.trim().toLowerCase().endsWith('@redberry.ge') ||
-      !phone_number ||
       phone_number.trim().length !== 13 ||
       !phone_number.trim().startsWith('+995')
     ) {
@@ -195,7 +194,6 @@ const Employee = () => {
             identifier="team"
             defaultValue="თიმი"
             data={teams}
-            team={team}
           />
 
           <Select
