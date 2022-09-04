@@ -12,6 +12,7 @@
   line-height: 24px;
   color: var(--black-700);
   text-decoration: none;
+  background-color: var(--background-color);
 }
 
 .underline {

@@ -21,6 +21,8 @@ const Success = () => {
   const [imageDataURL] = useLocalStorage('laptopImage', '');
   const [imagePreviewData] = useLocalStorage('imagePreviewData', {});
 
+  const { response, sendHttp } = useFetch();
+
   const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
@@ -38,8 +40,6 @@ const Success = () => {
       dataURLtoFile(imageDataURL);
     }
   }, [imageDataURL]);
-
-  const { sendHttp } = useFetch();
 
   const navigate = useNavigate();
 
@@ -120,6 +120,7 @@ const Success = () => {
     };
   }, [imageFile, employeeData.name]);
 
+  console.log(response, 'ressssssssssssssssssss');
   // window.localStorage.clear(); // To be deleted
 
   const handleRecordsClick = () => navigate('/records');

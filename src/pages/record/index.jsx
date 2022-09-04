@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { useNavigate, useParams } from 'react-router-dom';
 
 import styles from './Record.module.css';
@@ -12,27 +11,43 @@ import useWidth from '../../hooks/useWidth';
 const Record = () => {
   const mobile = useWidth();
 
-  const { response, sendHttp } = useFetch();
-
-  console.log(response, 'response');
+  const laptop = useFetch();
+  const teams = useFetch();
+  const positions = useFetch();
+  const brands = useFetch();
 
   const { id } = useParams();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    sendHttp(
+    laptop.sendHttp(
       `${process.env.REACT_APP_GET_REGISTERED_LAPTOP}${id}?token=${process.env.REACT_APP_TOKEN}`
     );
+    teams.sendHttp(process.env.REACT_APP_GET_TEAMS);
+    positions.sendHttp(process.env.REACT_APP_GET_POSITIONS);
+    brands.sendHttp(process.env.REACT_APP_GET_BRANDS);
   }, [id]);
 
   const handleGoBackClick = () => navigate(-1);
 
-  const image = response?.data?.laptop?.image;
+  const image = laptop?.response?.data?.laptop?.image;
 
   const laptopPurchaseDate =
-    response?.data?.laptop?.purchase_date &&
-    response?.data?.laptop?.purchase_date.split('-').join(' / ');
+    laptop?.response?.data?.laptop?.purchase_date &&
+    laptop?.response?.data?.laptop?.purchase_date.split('-').join(' / ');
+
+  const team = teams?.response?.data.filter(
+    team => team.id === laptop?.response?.data?.user?.team_id
+  )[0]?.name;
+
+  const position = positions?.response?.data.filter(
+    position => position.id === laptop?.response?.data?.user?.position_id
+  )[0]?.name;
+
+  const brand = brands?.response?.data.filter(
+    brand => brand.id === laptop?.response?.data?.laptop?.brand_id
+  )[0]?.name;
 
   return (
     <div className={styles.container}>
@@ -64,12 +79,15 @@ const Record = () => {
             </div>
             <div className={styles.descriptionContainer}>
               <span className={styles.value}>
-                {response?.data?.user?.name} {response?.data?.user?.surname}
+                {laptop?.response?.data?.user?.name}{' '}
+                {laptop?.response?.data?.user?.surname}
               </span>
-              <span className={styles.value}>?????</span>
-              <span className={styles.value}>?????</span>
-              <span className={styles.value}>{response?.data?.user?.email}</span>
-              <span className={styles.value}>{response?.data?.user?.phone_number}</span>
+              <span className={styles.value}>{team}</span>
+              <span className={styles.value}>{position}</span>
+              <span className={styles.value}>{laptop?.response?.data?.user?.email}</span>
+              <span className={styles.value}>
+                {laptop?.response?.data?.user?.phone_number}
+              </span>
             </div>
           </div>
         </div>
@@ -83,11 +101,11 @@ const Record = () => {
               <span className={styles.description}>მეხსიერების ტიპი:</span>
             </div>
             <div className={styles.descriptionContainer}>
-              <span className={styles.value}>{response?.data?.laptop?.name}</span>
-              <span className={styles.value}>?????</span>
-              <span className={styles.value}>{response?.data?.laptop?.ram}</span>
+              <span className={styles.value}>{laptop?.response?.data?.laptop?.name}</span>
+              <span className={styles.value}>{brand}</span>
+              <span className={styles.value}>{laptop?.response?.data?.laptop?.ram}</span>
               <span className={styles.value}>
-                {response?.data?.laptop?.hard_drive_type}
+                {laptop?.response?.data?.laptop?.hard_drive_type}
               </span>
             </div>
           </div>
@@ -99,9 +117,15 @@ const Record = () => {
               <span className={styles.description}>CPU-ს ნაკადი:</span>
             </div>
             <div className={styles.descriptionContainer}>
-              <span className={styles.value}>{response?.data?.laptop?.cpu?.name}</span>
-              <span className={styles.value}>{response?.data?.laptop?.cpu?.cores}</span>
-              <span className={styles.value}>{response?.data?.laptop?.cpu?.threads}</span>
+              <span className={styles.value}>
+                {laptop?.response?.data?.laptop?.cpu?.name}
+              </span>
+              <span className={styles.value}>
+                {laptop?.response?.data?.laptop?.cpu?.cores}
+              </span>
+              <span className={styles.value}>
+                {laptop?.response?.data?.laptop?.cpu?.threads}
+              </span>
             </div>
           </div>
         </div>
@@ -116,13 +140,15 @@ const Record = () => {
             </div>
             <div className={styles.descriptionContainer}>
               <span className={styles.value}>
-                {response?.data?.laptop?.state === 'new' ? 'ახალი' : 'მეორადი'}
+                {laptop?.response?.data?.laptop?.state === 'new' ? 'ახალი' : 'მეორადი'}
               </span>
-              <span className={styles.value}>{response?.data?.laptop?.price} ₾</span>
+              <span className={styles.value}>
+                {laptop?.response?.data?.laptop?.price} ₾
+              </span>
             </div>
           </div>
 
-          {response?.data?.laptop?.purchase_date && (
+          {laptop?.response?.data?.laptop?.purchase_date && (
             <div className={styles.laptopInnerContainer4}>
               <div className={styles.descriptionContainer}>
                 <span className={styles.description}>შეძენის რიცხვი:</span>

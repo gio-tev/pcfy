@@ -170,7 +170,6 @@ const Laptop = () => {
   const numberInputHasError = value =>
     hasError && (!value || +value < 1 || !isFinite(value)) ? true : false;
 
-  console.log(userInputs);
   return (
     <>
       {showPopup ? (
