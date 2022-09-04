@@ -429,6 +429,14 @@
   }
 
   .prevDescriptionInnerContainer {
+    display: flex;
+    max-width: 500px;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+  }
+
+  .prevDescriptionInnerContainer {
     gap: 5px;
   }
 
