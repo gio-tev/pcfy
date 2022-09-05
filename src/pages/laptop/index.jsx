@@ -105,7 +105,7 @@ const Laptop = () => {
     if (
       (!imageUploaded && !imageDataURL) ||
       laptop_name.trim().length === 0 ||
-      !/^[\w!@#$%^&*()+= ]*$/.test(laptop_name.trim()) ||
+      !/^[\w!@#$%^&*()+=]*$/.test(laptop_name.trim()) ||
       !laptop_brand ||
       !laptop_cpu ||
       !laptop_cpu_cores ||
@@ -229,12 +229,15 @@ const Laptop = () => {
 
             <div className={styles.priceDateContainer}>
               <div className={styles.labelInputContainer}>
-                <label className={styles.label}>შეძენის რიცხვი (არჩევითი)</label>
+                <label htmlFor="laptop_purchase_date" className={styles.label}>
+                  შეძენის რიცხვი (არჩევითი)
+                </label>
                 <input
                   className={`${styles.input} ${styles.inputs}`}
                   onChange={handleInputs.bind(this, 'laptop_purchase_date')}
                   value={laptop_purchase_date}
                   placeholder="დდ / თთ / წწწწ"
+                  id="laptop_purchase_date"
                 />
               </div>
 

@@ -80,16 +80,21 @@
   color: var(--error);
 }
 
-.errorImageTitleContainer {
+.imageContentContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 15px;
 }
 
-.noImage {
-  width: 45px;
-  height: 40px;
+.errorIcon {
+  height: 45px;
+  width: 40px;
+  visibility: hidden;
+}
+
+.showErrorIcon {
+  visibility: visible;
 }
 
 .uploadBtn {
@@ -155,9 +160,14 @@
     height: 244px;
   }
 
-  .noImage {
+  .errorIcon {
     height: 21px;
     width: 23px;
+    visibility: hidden;
+  }
+
+  .showErrorIcon {
+    visibility: visible;
   }
 
   .mobileDropIcon {

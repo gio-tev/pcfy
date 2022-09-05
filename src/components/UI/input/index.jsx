@@ -19,6 +19,7 @@ const Input = ({
   return (
     <div className={styles.labelInputContainer}>
       <label
+        htmlFor={identifier}
         className={`${styles.label} ${
           validator(value, hasError) ? styles.error : undefined
         }`}
@@ -33,6 +34,7 @@ const Input = ({
         onFocus={handleFocus.bind(this, `${identifier}`)}
         value={value}
         placeholder={placeholder}
+        id={identifier}
       />
 
       <p

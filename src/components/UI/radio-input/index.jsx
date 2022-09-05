@@ -34,8 +34,11 @@ const RadioInput = ({
             type="radio"
             name={name}
             checked={value === `${identifierOne}` || value === 'new' ? true : false}
+            id={identifierOne}
           />
-          <label className={styles.label}>{identifierOne}</label>
+          <label htmlFor={identifierOne} className={styles.label}>
+            {identifierOne}
+          </label>
         </div>
 
         <div className={styles.radioLabelInputContainer}>
@@ -45,8 +48,11 @@ const RadioInput = ({
             type="radio"
             name={name}
             checked={value === `${identifierTwo}` || value === 'used' ? true : false}
+            id={identifierTwo}
           />
-          <label className={styles.label}>{identifierTwo}</label>
+          <label htmlFor={identifierTwo} className={styles.label}>
+            {identifierTwo}
+          </label>
         </div>
       </div>
     </div>

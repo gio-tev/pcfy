@@ -22,7 +22,7 @@ const Success = () => {
   const [imageDataURL] = useLocalStorage('laptopImage', '');
   const [imagePreviewData] = useLocalStorage('imagePreviewData', {});
 
-  const { response, sendHttp } = useFetch();
+  const { sendHttp } = useFetch();
   const [imageFile, setImageFile] = useState(null);
 
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ const Success = () => {
 
   employeeData.email = employeeData.email.trim();
   employeeData.phone_number = employeeData.phone_number.trim();
-  console.log(employeeData, '...............................');
+
   const finalData = {
     ...employeeData,
     ...teamPositionIds,
@@ -84,26 +84,21 @@ const Success = () => {
     delete finalData.laptop_purchase_date;
   }
 
-  for (const [key, value] of Object.entries(finalData)) {
-    if (
-      value === undefined ||
-      key === 'laptop_brand' ||
-      key === 'team' ||
-      key === 'position'
-    )
+  for (const key in finalData) {
+    if (key === 'laptop_brand' || key === 'team' || key === 'position')
       delete finalData[key];
   }
 
   const formData = new FormData();
 
-  for (const name in finalData) {
-    formData.append(name, finalData[name]);
+  for (const key in finalData) {
+    formData.append(key, finalData[key]);
   }
 
   const handleRecordsClick = () => navigate('/records');
 
   const handleLandingClick = () => navigate('/');
-  console.log(response, 'resssssss');
+
   return (
     <div className={styles.container}>
       <div className={styles.popupContainer}>

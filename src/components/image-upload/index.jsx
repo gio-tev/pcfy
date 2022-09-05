@@ -81,38 +81,41 @@ const ImageUpload = ({ hasError, onImageUpload }) => {
           >
             <input {...getInputProps()} />
 
-            {!mobile && selectUploadFieldHasError(imageDataURL, hasError) && (
+            {!mobile && (
               <>
-                <div className={styles.errorImageTitleContainer}>
-                  <img src={errorImage} alt="noImage" className={styles.noImage} />
+                <div className={styles.imageContentContainer}>
+                  <img
+                    src={errorImage}
+                    alt="noImage"
+                    className={`${styles.errorIcon} ${
+                      selectUploadFieldHasError(imageDataURL, hasError)
+                        ? styles.showErrorIcon
+                        : undefined
+                    }`}
+                  />
 
                   <p className={styles.uploadTitle}>ჩააგდე ან ატვირთე ლეპტოპის ფოტო</p>
                 </div>
+
                 <Button className={styles.uploadBtn}>ატვირთე</Button>
               </>
             )}
 
-            {!mobile && !selectUploadFieldHasError(imageDataURL, hasError) && (
-              <>
-                <p className={styles.uploadTitle}>ჩააგდე ან ატვირთე ლეპტოპის ფოტო</p>
-                <Button className={styles.uploadBtn}>ატვირთე</Button>
-              </>
-            )}
-
-            {mobile && selectUploadFieldHasError(imageDataURL, hasError) && (
-              <div className={styles.errorImageTitleContainer}>
+            {mobile && (
+              <div className={styles.imageContentContainer}>
                 <img src={dropImageMobile} alt="drop" className={styles.mobileDropIcon} />
                 <p className={styles.uploadTitle}>ლეპტოპის ფოტოს ატვირთვა</p>
 
-                <img src={errorImage} alt="noImage" className={styles.noImage} />
+                <img
+                  src={errorImage}
+                  alt="noImage"
+                  className={`${styles.errorIcon} ${
+                    selectUploadFieldHasError(imageDataURL, hasError)
+                      ? styles.showErrorIcon
+                      : undefined
+                  }`}
+                />
               </div>
-            )}
-            {mobile && !selectUploadFieldHasError(imageDataURL, hasError) && (
-              <>
-                <img src={dropImageMobile} alt="drop" className={styles.mobileDropIcon} />
-
-                <p className={styles.uploadTitle}>ლეპტოპის ფოტოს ატვირთვა</p>
-              </>
             )}
           </div>
         </div>
