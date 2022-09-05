@@ -31,7 +31,7 @@ const Input = ({
           validator(value, hasError) ? styles.inputError : undefined
         }`}
         onChange={handleInputs.bind(this, `${identifier}`)}
-        onFocus={handleFocus.bind(this, `${identifier}`)}
+        onFocus={handleFocus}
         value={value}
         placeholder={placeholder}
         id={identifier}

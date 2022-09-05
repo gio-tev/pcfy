@@ -16,7 +16,6 @@ const ImageUpload = ({ hasError, onImageUpload }) => {
   const { selectUploadFieldHasError } = useValidation();
 
   const [imagePreviewData, setImagePreviewData] = useLocalStorage('imagePreviewData', {});
-
   const [imageDataURL, setImageDataURL] = useLocalStorage('laptopImage', '');
 
   const { imageName, imageSize, imagePath } = imagePreviewData;

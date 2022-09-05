@@ -11,6 +11,7 @@ import useValidation from '../../hooks/useValidation';
 
 const Success = () => {
   const mobile = useWidth();
+
   const { isValidFormat, isDateInPast } = useValidation();
 
   const [employeeData] = useLocalStorage('employeeData', {});

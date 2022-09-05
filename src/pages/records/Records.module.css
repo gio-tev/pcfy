@@ -45,6 +45,15 @@
   margin-bottom: 15px;
 }
 
+.employeeName {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: var(--black-500);
+  margin-bottom: 15px;
+}
+
 .link {
   font-style: normal;
   font-weight: 400;
@@ -68,12 +77,13 @@
   .record {
     min-width: 358px;
     width: 358px;
-    height: 109px;
-    height: 130px;
+    height: 123px;
+    border-radius: 10px;
   }
 
   .recordImage {
     width: 164px;
+    border-radius: 6px;
   }
 
   .recordDescriptionContainer {
@@ -86,6 +96,11 @@
   }
 
   .employeeLaptopName {
+    line-height: 21px;
+    font-size: 15px;
+    margin-bottom: 0px;
+  }
+  .employeeName {
     line-height: 21px;
     font-size: 12px;
     margin-bottom: 0px;

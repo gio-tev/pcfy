@@ -31,7 +31,7 @@ const Records = () => {
                 className={styles.recordImage}
               />
               <div className={styles.recordDescriptionContainer}>
-                <p className={styles.employeeLaptopName}>
+                <p className={styles.employeeName}>
                   {record.user.name} {record.user.surname}
                 </p>
 

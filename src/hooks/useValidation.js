@@ -29,7 +29,7 @@ const useValidation = () => {
     hasError && !value ? true : false;
 
   const laptopNameHasError = (value, hasError) =>
-    hasError && (value.trim().length === 0 || !/^[\w!@#$%^&*()+=]*$/.test(value.trim()))
+    hasError && (value.trim().length === 0 || !/^[\w!@#$%^&*()+= ]*$/.test(value.trim()))
       ? true
       : false;
 
