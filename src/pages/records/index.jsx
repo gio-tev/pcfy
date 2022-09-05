@@ -17,9 +17,8 @@ const Records = () => {
 
   useEffect(() => {
     sendHttp(`${process.env.REACT_APP_GET_LAPTOPS}?token=${process.env.REACT_APP_TOKEN}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(response, 'responseeeeee');
 
   const handleGoBackClick = () => navigate('/');
 

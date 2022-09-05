@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function useFetch() {
   const [response, setResponse] = useState(null);
@@ -10,7 +10,7 @@ function useFetch() {
       const response = await fetch(url, options);
 
       const data = await response.json();
-      // console.log(data, 'hook');
+
       setResponse(data);
 
       setIsLoading(false);

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './Employee.module.css';
-
 import logo from '../../assets/logo.png';
 import Button from '../../components/UI/button';
 import useFetch from '../../hooks/useFetch';

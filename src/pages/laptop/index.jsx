@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Laptop.module.css';
 import useFetch from '../../hooks/useFetch';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import useValidation from '../../hooks/useValidation';
 import Button from '../../components/UI/button';
 import logo from '../../assets/logo.png';
 import Success from '../../components/success';
-import useValidation from '../../hooks/useValidation';
 import FormHeader from '../../components/UI/form-header';
 import Input from '../../components/UI/input';
 import Select from '../../components/UI/select';
@@ -31,7 +31,6 @@ const Laptop = () => {
     laptop_price: '',
     laptop_purchase_date: '',
   });
-
   const [driveType, setDriveType] = useLocalStorage('driveType', '');
   const [laptopState, setLaptopState] = useLocalStorage('laptopState', '');
   const [, setLaptopBrandId] = useLocalStorage('laptopBrandId', '');

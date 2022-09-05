@@ -12,6 +12,7 @@ import useValidation from '../../hooks/useValidation';
 const Success = () => {
   const mobile = useWidth();
   const { isValidFormat, isDateInPast } = useValidation();
+
   const [employeeData] = useLocalStorage('employeeData', {});
   const [teamPositionIds] = useLocalStorage('teamPositionIds', {});
   const [laptopData] = useLocalStorage('laptopData', {});
@@ -20,8 +21,11 @@ const Success = () => {
   const [laptopBrandId] = useLocalStorage('laptopBrandId', '');
   const [imageDataURL] = useLocalStorage('laptopImage', '');
   const [imagePreviewData] = useLocalStorage('imagePreviewData', {});
-  const { response, sendHttp } = useFetch();
+
+  const { sendHttp } = useFetch();
   const [imageFile, setImageFile] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (imageDataURL) {
@@ -55,8 +59,6 @@ const Success = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageFile, employeeData.name]);
-
-  const navigate = useNavigate();
 
   const finalData = {
     ...employeeData,
@@ -99,7 +101,6 @@ const Success = () => {
 
   const handleLandingClick = () => navigate('/');
 
-  console.log(response, 'responseeeeeeeeeeeeeeeeeeeee');
   return (
     <div className={styles.container}>
       <div className={styles.popupContainer}>
