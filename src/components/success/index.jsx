@@ -22,7 +22,7 @@ const Success = () => {
   const [imageDataURL] = useLocalStorage('laptopImage', '');
   const [imagePreviewData] = useLocalStorage('imagePreviewData', {});
 
-  const { sendHttp } = useFetch();
+  const { response, sendHttp } = useFetch();
   const [imageFile, setImageFile] = useState(null);
 
   const navigate = useNavigate();
@@ -60,6 +60,9 @@ const Success = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageFile, employeeData.name]);
 
+  employeeData.email = employeeData.email.trim();
+  employeeData.phone_number = employeeData.phone_number.trim();
+  console.log(employeeData, '...............................');
   const finalData = {
     ...employeeData,
     ...teamPositionIds,
@@ -100,7 +103,7 @@ const Success = () => {
   const handleRecordsClick = () => navigate('/records');
 
   const handleLandingClick = () => navigate('/');
-
+  console.log(response, 'resssssss');
   return (
     <div className={styles.container}>
       <div className={styles.popupContainer}>

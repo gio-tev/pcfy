@@ -8,15 +8,19 @@ const useValidation = () => {
   };
 
   const emailHasError = (value, hasError) => {
-    return (hasError && !value.trim().toLowerCase().endsWith('@redberry.ge')) ||
-      (hasError && value.trim().replaceAll(' ', '').length < 13)
+    return hasError &&
+      (!value.trim().toLowerCase().endsWith('@redberry.ge') ||
+        !/\S+@\S+\.\S+/.test(value) ||
+        value.trim().length < 13)
       ? true
       : false;
   };
 
   const phoneHasError = (value, hasError) => {
     return hasError &&
-      (value.trim().replaceAll(' ', '').length !== 13 || !value.trim().startsWith('+995'))
+      (value.trim().includes(' ') ||
+        value.trim().length !== 13 ||
+        !value.trim().startsWith('+995'))
       ? true
       : false;
   };
@@ -25,7 +29,9 @@ const useValidation = () => {
     hasError && !value ? true : false;
 
   const laptopNameHasError = (value, hasError) =>
-    hasError && (!value || !/^[\w!@#$%^&*()+= ]*$/.test(value.trim())) ? true : false;
+    hasError && (value.trim().length === 0 || !/^[\w!@#$%^&*()+= ]*$/.test(value.trim()))
+      ? true
+      : false;
 
   const numberInputHasError = (value, hasError) =>
     hasError && (!value || +value < 1 || !isFinite(value)) ? true : false;

@@ -140,9 +140,11 @@ const Employee = () => {
       !/^[ა-ჰ]+$/i.test(surname.trim()) ||
       !team ||
       !position ||
-      email.trim().replaceAll(' ', '').length < 13 ||
+      !/\S+@\S+\.\S+/.test(email) ||
+      email.trim().length < 13 ||
       !email.trim().toLowerCase().endsWith('@redberry.ge') ||
-      phone_number.trim().replaceAll(' ', '').length !== 13 ||
+      phone_number.trim().includes(' ') ||
+      phone_number.trim().length !== 13 ||
       !phone_number.trim().startsWith('+995')
     ) {
       return setHasError(true);
@@ -150,7 +152,6 @@ const Employee = () => {
 
     navigate('/laptop');
   };
-  console.log(phone_number.replaceAll(' ', '').length);
 
   return (
     <div className={styles.container}>

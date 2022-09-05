@@ -104,7 +104,7 @@ const Laptop = () => {
   const handleNextClick = () => {
     if (
       (!imageUploaded && !imageDataURL) ||
-      !laptop_name ||
+      laptop_name.trim().length === 0 ||
       !/^[\w!@#$%^&*()+= ]*$/.test(laptop_name.trim()) ||
       !laptop_brand ||
       !laptop_cpu ||
