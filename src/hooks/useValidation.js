@@ -9,13 +9,14 @@ const useValidation = () => {
 
   const emailHasError = (value, hasError) => {
     return (hasError && !value.trim().toLowerCase().endsWith('@redberry.ge')) ||
-      (hasError && value.trim().length < 13)
+      (hasError && value.trim().replaceAll(' ', '').length < 13)
       ? true
       : false;
   };
 
   const phoneHasError = (value, hasError) => {
-    return hasError && (value.trim().length !== 13 || !value.trim().startsWith('+995'))
+    return hasError &&
+      (value.trim().replaceAll(' ', '').length !== 13 || !value.trim().startsWith('+995'))
       ? true
       : false;
   };

@@ -14,6 +14,17 @@ import Select from '../../components/UI/select';
 import RadioInput from '../../components/UI/radio-input';
 import ImageUpload from '../../components/image-upload';
 
+const initialState = {
+  laptop_name: '',
+  laptop_brand: '',
+  laptop_cpu: '',
+  laptop_cpu_cores: '',
+  laptop_cpu_threads: '',
+  laptop_ram: '',
+  laptop_price: '',
+  laptop_purchase_date: '',
+};
+
 const Laptop = () => {
   const brands = useFetch();
   const cpus = useFetch();
@@ -21,16 +32,7 @@ const Laptop = () => {
   const { laptopNameHasError, selectUploadFieldHasError, numberInputHasError } =
     useValidation();
 
-  const [userInputs, setUserInputs] = useLocalStorage('laptopData', {
-    laptop_name: '',
-    laptop_brand: '',
-    laptop_cpu: '',
-    laptop_cpu_cores: '',
-    laptop_cpu_threads: '',
-    laptop_ram: '',
-    laptop_price: '',
-    laptop_purchase_date: '',
-  });
+  const [userInputs, setUserInputs] = useLocalStorage('laptopData', initialState);
   const [driveType, setDriveType] = useLocalStorage('driveType', '');
   const [laptopState, setLaptopState] = useLocalStorage('laptopState', '');
   const [, setLaptopBrandId] = useLocalStorage('laptopBrandId', '');

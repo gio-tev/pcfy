@@ -11,6 +11,15 @@ import FormHeader from '../../components/UI/form-header';
 import Input from '../../components/UI/input';
 import Select from '../../components/UI/select';
 
+const initialState = {
+  name: '',
+  surname: '',
+  team: '',
+  position: '',
+  phone_number: '',
+  email: '',
+};
+
 const Employee = () => {
   const teams = useFetch();
   const positions = useFetch();
@@ -18,14 +27,7 @@ const Employee = () => {
   const { nameSurnameHasError, emailHasError, phoneHasError, selectUploadFieldHasError } =
     useValidation();
 
-  const [userInputs, setUserInputs] = useLocalStorage('employeeData', {
-    name: '',
-    surname: '',
-    team: '',
-    position: '',
-    phone_number: '',
-    email: '',
-  });
+  const [userInputs, setUserInputs] = useLocalStorage('employeeData', initialState);
   const [, setTeamPositionIds] = useLocalStorage('teamPositionIds', {});
   const [filteredPositions, setFilteredPositions] = useLocalStorage(
     'filteredPositions',
@@ -138,9 +140,9 @@ const Employee = () => {
       !/^[ა-ჰ]+$/i.test(surname.trim()) ||
       !team ||
       !position ||
-      email.trim().length < 13 ||
+      email.trim().replaceAll(' ', '').length < 13 ||
       !email.trim().toLowerCase().endsWith('@redberry.ge') ||
-      phone_number.trim().length !== 13 ||
+      phone_number.trim().replaceAll(' ', '').length !== 13 ||
       !phone_number.trim().startsWith('+995')
     ) {
       return setHasError(true);
@@ -148,6 +150,7 @@ const Employee = () => {
 
     navigate('/laptop');
   };
+  console.log(phone_number.replaceAll(' ', '').length);
 
   return (
     <div className={styles.container}>

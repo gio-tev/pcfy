@@ -15,6 +15,14 @@
   background-color: var(--background-color);
 }
 
+.btn:hover {
+  background-color: var(--background-color);
+}
+
+.btn:active {
+  background-color: var(--background-color);
+}
+
 .underline {
   content: '';
   display: block;
