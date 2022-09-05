@@ -95,6 +95,14 @@
   background-color: var(--background-color);
 }
 
+.btnBack:hover {
+  background-color: var(--background-color);
+}
+
+.btnBack:active {
+  background-color: var(--background-color);
+}
+
 .logo {
   width: 75px;
   height: 75px;

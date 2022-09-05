@@ -2,11 +2,9 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import styles from './Record.module.css';
-import Button from '../../components/UI/button';
 import useFetch from '../../hooks/useFetch';
-import arrowBack from '../../assets/arrow-back.png';
-import arrowBackMobile from '../../assets/arrow-back-mobile.png';
 import useWidth from '../../hooks/useWidth';
+import RecordsHeader from '../../components/UI/records-header';
 
 const Record = () => {
   const mobile = useWidth();
@@ -52,13 +50,7 @@ const Record = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.btnTitleContainer}>
-        <Button onClick={handleGoBackClick} className={styles.btnBack}>
-          {mobile && <img src={arrowBackMobile} alt="arrow back" />}
-          {!mobile && <img src={arrowBack} alt="arrow back" />}
-        </Button>
-        <h1 className={styles.title}>ᲚᲔᲞᲢᲝᲞᲘᲡ ᲘᲜᲤᲝ</h1>
-      </div>
+      <RecordsHeader handleGoBackClick={handleGoBackClick} title="ᲚᲔᲞᲢᲝᲞᲘᲡ ᲘᲜᲤᲝ" />
 
       <div className={styles.recordContainer}>
         <div className={styles.employeeInformationContainer}>

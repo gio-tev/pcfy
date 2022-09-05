@@ -56,6 +56,14 @@
   color: var(--blue-800);
 }
 
+.btnLanding:hover {
+  background-color: white;
+}
+
+.btnLanding:active {
+  background-color: white;
+}
+
 @media screen and (max-width: 390px) {
   .popupContainer {
     width: 390px;

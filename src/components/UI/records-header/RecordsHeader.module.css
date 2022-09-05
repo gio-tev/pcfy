@@ -1,0 +1,39 @@
+.btnTitleContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 70px;
+  align-items: center;
+  width: 55%;
+  align-self: flex-start;
+}
+
+.btnBack {
+  background-color: var(--background-color);
+}
+
+.btnBack:hover {
+  background-color: var(--background-color);
+}
+
+.btnBack:active {
+  background-color: var(--background-color);
+}
+
+.title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 21px;
+}
+
+@media screen and (max-width: 390px) {
+  .btnTitleContainer {
+    margin-left: 20px;
+    width: 62%;
+  }
+
+  .title {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}

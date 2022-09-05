@@ -42,6 +42,14 @@
   background-color: var(--background-color);
 }
 
+.btnBack:hover {
+  background-color: var(--background-color);
+}
+
+.btnBack:active {
+  background-color: var(--background-color);
+}
+
 .laptopContainer {
   display: flex;
   flex-wrap: wrap;
@@ -139,6 +147,14 @@
   font-size: 18px;
   line-height: 21px;
   color: var(--blue-500);
+  background-color: white;
+}
+
+.formBtnBack:hover {
+  background-color: white;
+}
+
+.formBtnBack:active {
   background-color: white;
 }
 
