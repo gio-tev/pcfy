@@ -56,19 +56,6 @@
   gap: 0.5rem;
 }
 
-.hint {
-  height: 21px;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 21px;
-  color: var(--black-400);
-}
-
-.error {
-  color: var(--error);
-}
-
 .inputs {
   font-family: 'HelveticaNeue';
   width: 407px;

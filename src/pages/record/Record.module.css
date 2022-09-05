@@ -1,10 +1,8 @@
 .container {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
   gap: 70px;
-  /* border: 1px solid red; */
   padding: 50px 0;
   min-height: 100vh;
 }
@@ -14,10 +12,8 @@
   justify-content: space-between;
   margin-left: 70px;
   align-items: center;
-  /* border: 1px solid blue; */
   width: 55%;
   align-self: flex-start;
-  /* position: absolute; */
 }
 
 .title {
@@ -28,13 +24,9 @@
 }
 
 .recordContainer {
-  /* border: 1px solid green; */
   display: flex;
-  /* justify-content: space-between; */
   flex-direction: column;
-  /* flex-wrap: wrap; */
   width: 1255px;
-  /* gap: 50px; */
 }
 
 .employeeInformationContainer {
@@ -45,83 +37,52 @@
 
 .img {
   width: 577px;
-  /* width: 50%; */
   height: 342px;
-  /* margin-right: 50px; */
 }
 
 .employeeInformation {
   display: flex;
-  /* margin-left: 50px; */
   gap: 70px;
   padding: 50px 0;
-  /* border: 1px solid red; */
   width: 50%;
-  /* justify-content: space-between; */
-  /* width: 280px; */
 }
 
 .laptopInformationContainer {
   display: flex;
-  /* width: 25%; */
-  /* margin-left: 50px; */
-  /* gap: 85px; */
-
   padding: 50px 0;
   border-top: 1px solid var(--black-300);
-  /* width: 800px; */
-  /* border: 1px solid red; */
 }
 
 .laptopInnerContainer1 {
-  /* border: 1px solid blue; */
   display: flex;
   width: 577px;
   margin-right: 60px;
   gap: 100px;
 }
+
 .laptopInnerContainer2 {
-  /* border: 1px solid blue; */
   display: flex;
   width: 577px;
-  /* margin-right: 50px; */
   gap: 65px;
 }
+
 .laptopInnerContainer3 {
-  /* border: 1px solid blue; */
   display: flex;
   width: 577px;
   margin-right: 60px;
   gap: 30px;
 }
+
 .laptopInnerContainer4 {
-  /* border: 1px solid blue; */
   display: flex;
   width: 577px;
-  /* margin-right: 50px; */
   gap: 50px;
 }
-.containerWidth {
-  /* width: 280px; */
-  /* justify-content: space-between; */
-  /* gap: 70px; */
-  display: flex;
-  /* border: 1px solid rgb(250, 16, 172); */
-}
-
-/* .extraWidth {
-  width: 577px;
-} */
 
 .descriptionContainer {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  /* width: 25%; */
-  /* border: 1px solid rgb(0, 47, 255); */
-  /* width: 100%; */
-  /* justify-content: baseline; */
-  /* min-width: 400px; */
 }
 
 .description {
@@ -131,8 +92,6 @@
   font-size: 22px;
   line-height: 27px;
   color: var(--black-500);
-
-  /* შავი/500 */
 }
 
 .value {
@@ -141,34 +100,21 @@
   font-weight: 400;
   font-size: 22px;
   line-height: 27px;
-
   color: var(--black-350);
 }
 
-/* ///////////////////////////////////////////////////////////////////////////////// */
-
 @media screen and (max-width: 390px) {
   .container {
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* align-items: center; */
     gap: 30px;
     padding: 30px 0;
-    /* min-height: 100vh; */
   }
 
   .btnTitleContainer {
-    /* display: flex; */
-    /* justify-content: space-between; */
     margin-left: 20px;
     width: 62%;
-    /* align-items: center; */
-    /* align-self: flex-start; */
   }
 
   .title {
-    /* width: 147px; */
-    /* height: 20px; */
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -176,8 +122,6 @@
   }
 
   .recordContainer {
-    /* display: flex; */
-    /* flex-direction: column; */
     width: 358px;
   }
 
@@ -195,72 +139,51 @@
   }
 
   .employeeInformation {
-    /* display: flex; */
-
     gap: 66px;
     padding: 30px 0;
     width: 358px;
   }
 
   .laptopInformationContainer {
-    /* display: flex; */
     flex-direction: column;
     padding: 30px 0;
     border-top: 0.6px solid var(--black-300);
   }
 
   .laptopInnerContainer1 {
-    /* display: flex; */
     width: 358px;
     margin-right: 0px;
     gap: 30px;
   }
 
   .laptopInnerContainer2 {
-    /* display: flex; */
     width: 358px;
     gap: 61px;
   }
 
   .laptopInnerContainer3 {
-    /* display: flex; */
     width: 358px;
     margin-right: 0px;
     gap: 51px;
   }
 
   .laptopInnerContainer4 {
-    /* display: flex; */
     width: 358px;
     gap: 52px;
   }
 
-  /* .containerWidth {
-    display: flex;
-  } */
-
   .descriptionContainer {
-    /* display: flex; */
     flex-direction: column;
     gap: 0px;
-    /* border: 1px solid red; */
   }
 
   .description {
-    /* font-family: 'HelveticaNeue'; */
-    /* font-style: normal; */
-    /* font-weight: 500; */
     font-size: 14px;
     line-height: 25px;
-    /* color: var(--black-500); */
   }
 
   .value {
-    /* font-family: 'HelveticaNeue'; */
-    /* font-style: normal; */
-    /* font-weight: 400; */
     font-size: 14px;
     line-height: 25px;
-    /* color: var(--black-350); */
   }
 }

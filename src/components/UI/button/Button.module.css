@@ -4,3 +4,11 @@
   border: none;
   cursor: pointer;
 }
+
+.btnPrimarty:hover {
+  background-color: var(--blue-900);
+}
+
+.btnPrimarty:active {
+  background-color: var(--blue-950);
+}

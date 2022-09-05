@@ -49,19 +49,12 @@
 }
 
 .btnAgain {
-  /* position: absolute;
-    right: 174px;
-    bottom: 40px; */
-  /* align-self: flex-end; */
   font-family: 'HelveticaNeue';
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
   background: var(--primary-blue);
-  /* margin-right: 174px; */
-  /* margin-top: 50px; */
-  /* margin-bottom: 30px; */
   padding: 20px 50px;
 }
 
@@ -163,8 +156,6 @@
   }
 
   .noImage {
-    /* max-width: 390px; */
-
     height: 21px;
     width: 23px;
   }

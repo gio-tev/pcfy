@@ -25,11 +25,6 @@
 }
 
 @media screen and (max-width: 390px) {
-  .container {
-    /* display: flex; */
-    gap: 0px;
-    /* list-style: none; */
-  }
   .navigationCounter {
     font-family: 'HelveticaNeue';
     font-style: normal;
@@ -40,11 +35,11 @@
     color: var(--black-320);
     margin-top: 5px;
   }
+
   .btn {
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
     line-height: 20px;
-    /* text-align: center; */
   }
 }

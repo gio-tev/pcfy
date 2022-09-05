@@ -1,24 +1,3 @@
-/* .hint {
-  width: 407px;
-  height: 21px;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 21px;
-  color: var(--black-400);
-
-}
-
-.error {
-  color: var(--error);
-} */
-
 .inputError {
   border-color: var(--error);
 }
-/* 
-@media screen and (max-width: 390px) {
-  .hint {
-    width: 358px;
-  }
-} */

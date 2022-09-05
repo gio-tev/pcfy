@@ -15,10 +15,7 @@ const useValidation = () => {
   };
 
   const phoneHasError = (value, hasError) => {
-    return (hasError &&
-      value &&
-      (value.trim().length !== 13 || !value.trim().startsWith('+995'))) ||
-      (hasError && !value)
+    return hasError && (value.trim().length !== 13 || !value.trim().startsWith('+995'))
       ? true
       : false;
   };
@@ -32,18 +29,18 @@ const useValidation = () => {
   const numberInputHasError = (value, hasError) =>
     hasError && (!value || +value < 1 || !isFinite(value)) ? true : false;
 
-  const isValidFormat = str => {
+  const isValidFormat = value => {
     if (
       /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/.test(
-        str
+        value
       )
     ) {
       return true;
     }
   };
 
-  const isDateInPast = str => {
-    const dateString = str,
+  const isDateInPast = value => {
+    const dateString = value,
       dateArgs = dateString.match(/\d{2,4}/g),
       year = dateArgs[2],
       month = parseInt(dateArgs[1]) - 1,

@@ -7,11 +7,13 @@
 }
 
 .input {
-  /* width: 407px; */
   height: 50px;
-  /* border: 1.8px solid var(--blue-400); */
   border-radius: 8px;
   outline: none;
+}
+
+.input:focus {
+  border-color: var(--blue-550);
 }
 
 .labelInputContainer {
@@ -21,14 +23,12 @@
 }
 
 .hint {
-  /* width: 407px; */
   height: 21px;
   font-style: normal;
   font-weight: 300;
   font-size: 14px;
   line-height: 21px;
   color: var(--black-400);
-  /* color: var(--black-500); */
 }
 
 .error {
@@ -41,9 +41,7 @@
 
 @media screen and (max-width: 390px) {
   .labelInputContainer {
-    /* display: flex; */
     flex-direction: column;
-    /* gap: 30px; */
     width: 358px;
     max-width: 390px;
   }
