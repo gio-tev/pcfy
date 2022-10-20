@@ -1,13 +1,14 @@
 import styles from './Input.module.css';
 import useWidth from '../../../hooks/useWidth';
+import currency from '../../../assets/currency.png';
 
 const Input = ({
   label,
   value,
-  hasError,
+  formHasError,
   handleInputs,
   handleFocus,
-  validator,
+  validate,
   className,
   identifier,
   hintMessage,
@@ -20,31 +21,30 @@ const Input = ({
     <div className={styles.labelInputContainer}>
       <label
         htmlFor={identifier}
-        className={`${styles.label} ${
-          validator(value, hasError) ? styles.error : undefined
-        }`}
+        className={`${styles.label}  ${formHasError && validate(value) ? styles.error : undefined}`}
       >
         {label}
       </label>
-      <input
-        className={`${styles.input} ${className} ${
-          validator(value, hasError) ? styles.inputError : undefined
-        }`}
-        onChange={handleInputs.bind(this, `${identifier}`)}
-        onFocus={handleFocus}
-        value={value}
-        placeholder={placeholder}
-        id={identifier}
-      />
+      <div className={styles.inputContainer}>
+        <input
+          className={`${styles.input} ${className} ${
+            formHasError && validate(value) ? styles.inputError : undefined
+          }`}
+          onChange={handleInputs.bind(this, `${identifier}`)}
+          onFocus={handleFocus}
+          value={value}
+          placeholder={placeholder}
+          id={identifier}
+        />
+        {identifier === 'laptop_price' && (
+          <img className={styles.currency} src={currency} alt="gel" />
+        )}
+      </div>
 
-      <p
-        className={`${styles.hint} ${
-          validator(value, hasError) ? styles.error : undefined
-        }`}
-      >
-        {mobile && identifier === 'phone_number' && changedHint}
-        {mobile && identifier !== 'phone_number' && hintMessage}
+      <p className={`${styles.hint} ${formHasError && validate(value) ? styles.error : undefined}`}>
         {!mobile && hintMessage}
+        {mobile && identifier !== 'phone_number' && hintMessage}
+        {mobile && identifier === 'phone_number' && changedHint}
       </p>
     </div>
   );

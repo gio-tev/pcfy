@@ -2,116 +2,56 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './Employee.module.css';
-import logo from '../../assets/logo.png';
-import Button from '../../components/UI/button';
-import useFetch from '../../hooks/useFetch';
-import useLocalStorage from '../../hooks/useLocalStorage';
 import useValidation from '../../hooks/useValidation';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import useFetch from '../../hooks/useFetch';
+import useSetIdsAndFilterPositions from '../../hooks/useSetIdsAndFilterPositions';
 import FormHeader from '../../components/UI/form-header';
-import Input from '../../components/UI/input';
-import Select from '../../components/UI/select';
-
-const initialState = {
-  name: '',
-  surname: '',
-  team: '',
-  position: '',
-  phone_number: '',
-  email: '',
-};
+import Logo from '../../components/logo';
+import EmployeeInputs from './employee-inputs';
+import EmployeePagination from './employee-pagination';
+import { employeeInitialState } from '../../utils/inputsInitialState';
 
 const Employee = () => {
   const teams = useFetch();
   const positions = useFetch();
 
-  const { nameSurnameHasError, emailHasError, phoneHasError, selectUploadFieldHasError } =
-    useValidation();
+  const [userInputs, setUserInputs] = useLocalStorage('employeeData', employeeInitialState);
+  const [filteredPositions, setFilteredPositions] = useLocalStorage('filteredPositions', []);
 
-  const [userInputs, setUserInputs] = useLocalStorage('employeeData', initialState);
-  const [, setTeamPositionIds] = useLocalStorage('teamPositionIds', {});
-  const [filteredPositions, setFilteredPositions] = useLocalStorage(
-    'filteredPositions',
-    []
-  );
+  const { filterPostionsAndSetTeamId, setPositionId } = useSetIdsAndFilterPositions();
+  const { employeeFormHasError } = useValidation();
 
+  const [formHasError, setFormHasError] = useState(false);
   const [sameTeam, setSameTeam] = useState(true);
-  const [hasError, setHasError] = useState(false);
-
-  const { name, surname, team, position, email, phone_number } = userInputs;
 
   const navigate = useNavigate();
 
+  const { team, position } = userInputs;
+
   useEffect(() => {
-    getData();
+    teams.sendHttp(process.env.REACT_APP_GET_TEAMS);
+    positions.sendHttp(process.env.REACT_APP_GET_POSITIONS);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    filterPostionsAndSetTeamId();
+    const filtered = filterPostionsAndSetTeamId(teams, positions, team);
+
+    if (filtered && position && !sameTeam) {
+      setUserInputs(prevState => {
+        return { ...prevState, position: filtered[0]?.name };
+      });
+    }
+
+    filtered && setFilteredPositions(filtered);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [team]);
 
   useEffect(() => {
-    setPositionId();
+    setPositionId(positions, position);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position]);
-
-  const getData = () => {
-    teams.sendHttp(process.env.REACT_APP_GET_TEAMS);
-    positions.sendHttp(process.env.REACT_APP_GET_POSITIONS);
-  };
-
-  const filterPostionsAndSetTeamId = () => {
-    if (team) {
-      const currentTeamObj = teams.response?.data.filter(value => value.name === team);
-
-      const teamId = currentTeamObj && currentTeamObj[0]?.id;
-      const filtered = positions.response?.data.filter(
-        position => position.team_id === teamId
-      );
-
-      if (filtered && position && sameTeam) {
-        setUserInputs(prevState => {
-          return { ...prevState, position };
-        });
-      } else if (filtered && position && !sameTeam) {
-        setUserInputs(prevState => {
-          return { ...prevState, position: filtered[0]?.name };
-        });
-      }
-
-      if (filtered) {
-        setFilteredPositions(filtered);
-      }
-
-      if (teamId) {
-        setTeamPositionIds(prevState => {
-          return {
-            ...prevState,
-            team_id: teamId,
-          };
-        });
-      }
-    }
-  };
-
-  const setPositionId = () => {
-    if (position) {
-      const currentPosObj = positions.response?.data.filter(
-        value => value.name === position
-      );
-      const positionId = currentPosObj && currentPosObj[0]?.id;
-
-      if (positionId) {
-        setTeamPositionIds(prevState => {
-          return {
-            ...prevState,
-            position_id: positionId,
-          };
-        });
-      }
-    }
-  };
 
   const handleInputs = (inputIdentifier, e) => {
     if (inputIdentifier === 'team') {
@@ -126,32 +66,12 @@ const Employee = () => {
     });
   };
 
-  const handleFocus = () => setHasError(false);
+  const handleFocus = () => setFormHasError(false);
+  const handleClick = () => setFormHasError(false);
 
   const handleGoBackClick = () => navigate('/');
-
-  const handleNextClick = () => {
-    if (
-      !name ||
-      name.trim().length < 2 ||
-      !/^[ა-ჰ]+$/i.test(name.trim()) ||
-      !surname ||
-      surname.trim().length < 2 ||
-      !/^[ა-ჰ]+$/i.test(surname.trim()) ||
-      !team ||
-      !position ||
-      !/\S+@\S+\.\S+/.test(email) ||
-      email.trim().length < 13 ||
-      !email.trim().toLowerCase().endsWith('@redberry.ge') ||
-      phone_number.trim().includes(' ') ||
-      phone_number.trim().length !== 13 ||
-      !phone_number.trim().startsWith('+995')
-    ) {
-      return setHasError(true);
-    }
-
-    navigate('/laptop');
-  };
+  const handleNextClick = () =>
+    employeeFormHasError(userInputs) ? setFormHasError(true) : navigate('/laptop');
 
   return (
     <div className={styles.container}>
@@ -162,88 +82,23 @@ const Employee = () => {
       />
 
       <form className={styles.form}>
-        <div className={styles.nameLastnameContainer}>
-          <Input
-            label="სახელი"
-            value={name}
-            hasError={hasError}
-            handleInputs={handleInputs}
-            handleFocus={handleFocus}
-            validator={nameSurnameHasError}
-            className={styles.nameLastnameInput}
-            identifier="name"
-            hintMessage="მინიმუმ 2 სიმბოლო, ქართული ასოები"
-          />
+        <EmployeeInputs
+          data={{
+            styles,
+            formHasError,
+            handleInputs,
+            handleClick,
+            handleFocus,
+            userInputs,
+            filteredPositions,
+            teams,
+          }}
+        />
 
-          <Input
-            label="გვარი"
-            value={surname}
-            hasError={hasError}
-            handleInputs={handleInputs}
-            handleFocus={handleFocus}
-            validator={nameSurnameHasError}
-            className={styles.nameLastnameInput}
-            identifier="surname"
-            hintMessage="მინიმუმ 2 სიმბოლო, ქართული ასოები"
-          />
-        </div>
-
-        <div className={styles.dropdownsContainer}>
-          <Select
-            value={team}
-            hasError={hasError}
-            validator={selectUploadFieldHasError}
-            handleInputs={handleInputs}
-            identifier="team"
-            defaultValue="თიმი"
-            data={teams}
-          />
-
-          <Select
-            value={position}
-            hasError={hasError}
-            validator={selectUploadFieldHasError}
-            handleInputs={handleInputs}
-            identifier="position"
-            defaultValue="პოზიცია"
-            data={filteredPositions}
-            team={team}
-          />
-        </div>
-
-        <div className={styles.emailNumberContainer}>
-          <Input
-            label="მეილი"
-            value={email}
-            hasError={hasError}
-            handleInputs={handleInputs}
-            handleFocus={handleFocus}
-            validator={emailHasError}
-            className={styles.emailNumberInput}
-            identifier="email"
-            hintMessage="უნდა მთავრდებოდეს @redberry.ge-ით"
-          />
-
-          <Input
-            label="ტელეფონის ნომერი"
-            value={phone_number}
-            hasError={hasError}
-            handleInputs={handleInputs}
-            handleFocus={handleFocus}
-            validator={phoneHasError}
-            className={styles.emailNumberInput}
-            identifier="phone_number"
-            hintMessage="უნდა აკმაყოფილებდეს ქართული მობ-ნომრის ფორმატს"
-            changedHint="ქართული მობ-ნომრის ფორმატი"
-          />
-        </div>
-
-        <Button onClick={handleNextClick} className={styles.btnNext}>
-          შემდეგი
-        </Button>
+        <EmployeePagination data={{ styles, handleNextClick }} />
       </form>
 
-      <img src={logo} alt="logo" className={styles.logo} />
+      <Logo />
     </div>
   );
 };

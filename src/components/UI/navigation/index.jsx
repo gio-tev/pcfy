@@ -17,9 +17,7 @@ const Navigation = ({ onToLaptop, onToEmployee }) => {
             <Button className={styles.btn} onClick={onToEmployee}>
               თანამშრომლის ინფო
             </Button>
-            {location.pathname === '/employee' && (
-              <div className={styles.underline}></div>
-            )}
+            {location.pathname === '/employee' && <div className={styles.underline}></div>}
           </li>
 
           <li>
@@ -39,6 +37,7 @@ const Navigation = ({ onToLaptop, onToEmployee }) => {
           <div className={styles.navigationCounter}>1/2</div>
         </li>
       )}
+
       {mobile && location.pathname === '/laptop' && (
         <li>
           <Button className={styles.btn} onClick={onToEmployee}>

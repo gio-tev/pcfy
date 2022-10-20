@@ -1,26 +1,25 @@
-import styles from './RadioInput.module.css';
+import styles from './Radio.module.css';
 import errorImage from '../../../assets/error-image.png';
 
-const RadioInput = ({
+const Radio = ({
   value,
   identifierOne,
   identifierTwo,
-  validator,
+  validate,
   labelTitle,
-  hasError,
-  onCheck,
+  formHasError,
+  handleInputs,
+  handleClick,
   name,
 }) => {
   return (
     <div className={`${styles.labelInputContainer} `}>
       <label
-        className={`${styles.label} ${
-          validator(value, hasError) ? styles.error : undefined
-        }`}
+        className={`${styles.label} ${formHasError && validate(value) ? styles.error : undefined}`}
       >
         <div className={styles.memoryTypeTitleContainer}>
           {labelTitle}
-          {validator(value, hasError) && (
+          {formHasError && validate(value) && (
             <img src={errorImage} alt="noImage" className={styles.noMemoryType} />
           )}
         </div>
@@ -30,7 +29,8 @@ const RadioInput = ({
         <div className={styles.radioLabelInputContainer}>
           <input
             style={styles.Input}
-            onChange={onCheck.bind(this, `${identifierOne}`)}
+            onChange={handleInputs.bind(this, `${identifierOne}`)}
+            onClick={handleClick}
             type="radio"
             name={name}
             checked={value === `${identifierOne}` || value === 'new' ? true : false}
@@ -44,7 +44,8 @@ const RadioInput = ({
         <div className={styles.radioLabelInputContainer}>
           <input
             style={styles.Input}
-            onChange={onCheck.bind(this, `${identifierTwo}`)}
+            onChange={handleInputs.bind(this, `${identifierTwo}`)}
+            onClick={handleClick}
             type="radio"
             name={name}
             checked={value === `${identifierTwo}` || value === 'used' ? true : false}
@@ -59,4 +60,4 @@ const RadioInput = ({
   );
 };
 
-export default RadioInput;
+export default Radio;

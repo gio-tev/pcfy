@@ -2,17 +2,16 @@ import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import styles from './ImageUpload.module.css';
-import dropImageMobile from '../../assets/drop-image-mobile.png';
-import errorImage from '../../assets/error-image.png';
-import checked from '../../assets/checked.png';
-import useWidth from '../../hooks/useWidth';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import Button from '../UI/button';
-import useValidation from '../../hooks/useValidation';
+import dropImageMobile from '../../../assets/drop-image-mobile.png';
+import errorImage from '../../../assets/error-image.png';
+import checked from '../../../assets/checked.png';
+import Button from '../../../components/UI/button';
+import useWidth from '../../../hooks/useWidth';
+import useLocalStorage from '../../../hooks/useLocalStorage';
+import useValidation from '../../../hooks/useValidation';
 
-const ImageUpload = ({ hasError, onImageUpload }) => {
+const ImageUpload = ({ formHasError, onImageUpload }) => {
   const mobile = useWidth();
-
   const { selectUploadFieldHasError } = useValidation();
 
   const [imagePreviewData, setImagePreviewData] = useLocalStorage('imagePreviewData', {});
@@ -24,9 +23,7 @@ const ImageUpload = ({ hasError, onImageUpload }) => {
     acceptedFiles => {
       const imagePath = URL.createObjectURL(acceptedFiles[0]);
       const imageName = acceptedFiles[0].name;
-      const imageSize = (acceptedFiles[0].size / 1000000 + 0.1)
-        .toString()
-        .substring(0, 3);
+      const imageSize = (acceptedFiles[0].size / 1000000 + 0.1).toString().substring(0, 3);
 
       setImagePreviewData({ imageName, imageSize, imagePath });
 
@@ -54,11 +51,7 @@ const ImageUpload = ({ hasError, onImageUpload }) => {
 
           <div className={styles.prevDescriptionContainer}>
             <div className={styles.prevDescriptionInnerContainer}>
-              <img
-                src={checked}
-                alt="img checked"
-                className={styles.previewImageChecked}
-              />
+              <img src={checked} alt="img checked" className={styles.previewImageChecked} />
               <p className={styles.imageName}>{imageName},</p>
               <p className={styles.imageSize}>{imageSize} mb</p>
             </div>
@@ -73,7 +66,7 @@ const ImageUpload = ({ hasError, onImageUpload }) => {
         <div {...getRootProps()}>
           <div
             className={`${styles.imageContainer} ${
-              selectUploadFieldHasError(imageDataURL, hasError)
+              formHasError && selectUploadFieldHasError(imageDataURL)
                 ? styles.imageError
                 : undefined
             }`}
@@ -87,7 +80,7 @@ const ImageUpload = ({ hasError, onImageUpload }) => {
                     src={errorImage}
                     alt="noImage"
                     className={`${styles.errorIcon} ${
-                      selectUploadFieldHasError(imageDataURL, hasError)
+                      formHasError && selectUploadFieldHasError(imageDataURL)
                         ? styles.showErrorIcon
                         : undefined
                     }`}
@@ -109,7 +102,7 @@ const ImageUpload = ({ hasError, onImageUpload }) => {
                   src={errorImage}
                   alt="noImage"
                   className={`${styles.errorIcon} ${
-                    selectUploadFieldHasError(imageDataURL, hasError)
+                    formHasError && selectUploadFieldHasError(imageDataURL)
                       ? styles.showErrorIcon
                       : undefined
                   }`}

@@ -5,18 +5,18 @@ import styles from './Record.module.css';
 import useFetch from '../../hooks/useFetch';
 import useWidth from '../../hooks/useWidth';
 import RecordsHeader from '../../components/UI/records-header';
+import EmployeeInformation from './employee-information';
+import LaptopInformation from './laptop-information';
 
 const Record = () => {
   const mobile = useWidth();
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   const laptop = useFetch();
   const teams = useFetch();
   const positions = useFetch();
   const brands = useFetch();
-
-  const { id } = useParams();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     laptop.sendHttp(
@@ -26,9 +26,7 @@ const Record = () => {
     positions.sendHttp(process.env.REACT_APP_GET_POSITIONS);
     brands.sendHttp(process.env.REACT_APP_GET_BRANDS);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
-
-  const handleGoBackClick = () => navigate(-1);
+  }, []);
 
   const image = laptop?.response?.data?.laptop?.image;
 
@@ -36,123 +34,42 @@ const Record = () => {
     laptop?.response?.data?.laptop?.purchase_date &&
     laptop?.response?.data?.laptop?.purchase_date.split('-').join(' / ');
 
-  const team = teams?.response?.data.filter(
+  let number = laptop?.response?.data?.user?.phone_number;
+  number = `
+  ${number?.slice(0, 4)}
+  ${number?.slice(4, 7)}
+  ${number?.slice(7, 9)} 
+  ${number?.slice(9, 11)} 
+  ${number?.slice(11)}
+  `;
+
+  const team = teams?.response?.data.find(
     team => team.id === laptop?.response?.data?.user?.team_id
-  )[0]?.name;
+  )?.name;
 
-  const position = positions?.response?.data.filter(
+  const position = positions?.response?.data.find(
     position => position.id === laptop?.response?.data?.user?.position_id
-  )[0]?.name;
+  )?.name;
 
-  const brand = brands?.response?.data.filter(
+  const brand = brands?.response?.data.find(
     brand => brand.id === laptop?.response?.data?.laptop?.brand_id
-  )[0]?.name;
+  )?.name;
+
+  const handleGoBackClick = () => navigate(-1);
 
   return (
     <div className={styles.container}>
       <RecordsHeader handleGoBackClick={handleGoBackClick} title="ᲚᲔᲞᲢᲝᲞᲘᲡ ᲘᲜᲤᲝ" />
 
-      <div className={styles.recordContainer}>
-        <div className={styles.employeeInformationContainer}>
-          {image && (
-            <img
-              src={`https://pcfy.redberryinternship.ge${image}`}
-              alt="laptop"
-              className={styles.img}
-            />
-          )}
+      {laptop.isLoading && <p className={styles.loading}>Loading...</p>}
 
-          <div className={styles.employeeInformation}>
-            <div className={styles.descriptionContainer}>
-              <span className={styles.description}>სახელი:</span>
-              <span className={styles.description}>თიმი:</span>
-              <span className={styles.description}>პოზიცია:</span>
-              <span className={styles.description}>მეილი:</span>
-              <span className={styles.description}>ტელ. ნომერი:</span>
-            </div>
-            <div className={styles.descriptionContainer}>
-              <span className={styles.value}>
-                {laptop?.response?.data?.user?.name}{' '}
-                {laptop?.response?.data?.user?.surname}
-              </span>
-              <span className={styles.value}>{team}</span>
-              <span className={styles.value}>{position}</span>
-              <span className={styles.value}>{laptop?.response?.data?.user?.email}</span>
-              <span className={styles.value}>
-                {laptop?.response?.data?.user?.phone_number}
-              </span>
-            </div>
-          </div>
+      {!laptop.isLoading && (
+        <div className={styles.recordContainer}>
+          <EmployeeInformation data={{ styles, image, laptop, team, position, number }} />
+
+          <LaptopInformation data={{ styles, laptop, brand, mobile, laptopPurchaseDate }} />
         </div>
-
-        <div className={styles.laptopInformationContainer}>
-          <div className={styles.laptopInnerContainer1}>
-            <div className={styles.descriptionContainer}>
-              <span className={styles.description}>ლეპტოპის სახელი:</span>
-              <span className={styles.description}>ლეპტოპის ბრენდი:</span>
-              <span className={styles.description}>RAM:</span>
-              <span className={styles.description}>მეხსიერების ტიპი:</span>
-            </div>
-            <div className={styles.descriptionContainer}>
-              <span className={styles.value}>{laptop?.response?.data?.laptop?.name}</span>
-              <span className={styles.value}>{brand}</span>
-              <span className={styles.value}>{laptop?.response?.data?.laptop?.ram}</span>
-              <span className={styles.value}>
-                {laptop?.response?.data?.laptop?.hard_drive_type}
-              </span>
-            </div>
-          </div>
-
-          <div className={styles.laptopInnerContainer2}>
-            <div className={styles.descriptionContainer}>
-              <span className={styles.description}>CPU:</span>
-              <span className={styles.description}>CPU-ს ბირთვი:</span>
-              <span className={styles.description}>CPU-ს ნაკადი:</span>
-            </div>
-            <div className={styles.descriptionContainer}>
-              <span className={styles.value}>
-                {laptop?.response?.data?.laptop?.cpu?.name}
-              </span>
-              <span className={styles.value}>
-                {laptop?.response?.data?.laptop?.cpu?.cores}
-              </span>
-              <span className={styles.value}>
-                {laptop?.response?.data?.laptop?.cpu?.threads}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.laptopInformationContainer}>
-          <div className={styles.laptopInnerContainer3}>
-            <div className={styles.descriptionContainer}>
-              <span className={styles.description}>
-                {!mobile ? 'ლეპტოპის მდგომარეობა:' : 'მდგომარეობა:'}
-              </span>
-              <span className={styles.description}>ლეპტოპის ფასი:</span>
-            </div>
-            <div className={styles.descriptionContainer}>
-              <span className={styles.value}>
-                {laptop?.response?.data?.laptop?.state === 'new' ? 'ახალი' : 'მეორადი'}
-              </span>
-              <span className={styles.value}>
-                {laptop?.response?.data?.laptop?.price} ₾
-              </span>
-            </div>
-          </div>
-
-          {laptop?.response?.data?.laptop?.purchase_date && (
-            <div className={styles.laptopInnerContainer4}>
-              <div className={styles.descriptionContainer}>
-                <span className={styles.description}>შეძენის რიცხვი:</span>
-              </div>
-              <div className={styles.descriptionContainer}>
-                <span className={styles.value}>{laptopPurchaseDate}</span>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+      )}
     </div>
   );
 };

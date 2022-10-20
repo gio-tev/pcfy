@@ -19,6 +19,7 @@
   --blue-550: #6499ff;
   --blue-500: #62a1eb;
   --blue-400: #8ac0e2;
+  --blue-350: rgba(43, 75, 242, 0.06);
   --blue-300: #aed1ea;
   --blue-200: #eafaff;
   --dropdown-background: #ebebeb;
@@ -35,8 +36,7 @@
 
 @font-face {
   font-family: 'HelveticaNeue';
-  src: local('HelveticaNeue'),
-    url('./fonts/HelveticaNeue-Medium-11.ttf') format('truetype');
+  src: local('HelveticaNeue'), url('./fonts/HelveticaNeue-Medium-11.ttf') format('truetype');
 }
 
 body {

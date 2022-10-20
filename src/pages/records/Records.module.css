@@ -17,7 +17,7 @@
 .record {
   display: flex;
   min-width: 600px;
-  height: 205px;
+  height: 200px;
   padding: 10px;
   background: var(--blue-200);
   border: 1px solid var(--blue-300);
@@ -61,6 +61,13 @@
   line-height: 21px;
   color: var(--blue-700);
   margin-top: 20px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  font-family: 'HelveticaNeue';
+  font-size: 25px;
 }
 
 @media screen and (max-width: 390px) {
@@ -109,9 +116,14 @@
   .link {
     font-size: 12px;
     line-height: 21px;
+    width: 164px;
     margin-top: 0px;
     position: absolute;
     bottom: 10px;
     left: 0;
+  }
+
+  .loading {
+    font-size: 16px;
   }
 }

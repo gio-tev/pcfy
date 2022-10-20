@@ -3,9 +3,10 @@ import styles from './Select.module.css';
 const Select = ({
   className,
   value,
-  hasError,
-  validator,
+  formHasError,
+  validate,
   handleInputs,
+  handleClick,
   identifier,
   defaultValue,
   data,
@@ -13,17 +14,14 @@ const Select = ({
 }) => {
   return (
     <select
-      className={`${className} ${
-        validator(value, hasError) ? styles.inputError : undefined
+      className={`${className} ${styles.inputBorder} ${
+        formHasError && validate(value) ? styles.inputError : undefined
       } `}
       onChange={handleInputs.bind(this, `${identifier}`)}
+      onClick={handleClick}
       defaultValue="default"
       disabled={
-        identifier !== 'position'
-          ? false
-          : identifier === 'position' && team
-          ? false
-          : true
+        identifier !== 'position' ? false : identifier === 'position' && team ? false : true
       }
     >
       <option value="default" disabled hidden>

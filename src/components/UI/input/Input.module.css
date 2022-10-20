@@ -10,16 +10,34 @@
   height: 50px;
   border-radius: 8px;
   outline: none;
+  padding-left: 1rem;
+  border: 1.8px solid var(--blue-400);
 }
 
 .input:focus {
   border-color: var(--blue-550);
+  background: var(--blue-350);
 }
 
 .labelInputContainer {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.currency {
+  position: absolute;
+  right: 30px;
+  color: var(--black-350);
+  width: 18px;
+  height: 21px;
+  border: 0.4px solid #ffffff;
 }
 
 .hint {

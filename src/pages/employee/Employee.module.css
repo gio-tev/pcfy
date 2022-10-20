@@ -30,8 +30,6 @@
 
 .nameLastnameInput {
   width: 407px;
-  padding-left: 1rem;
-  border: 1.8px solid var(--blue-400);
 }
 
 .dropdownsContainer {
@@ -70,8 +68,6 @@
 
 .emailNumberInput {
   width: 878px;
-  padding-left: 1rem;
-  border: 1.8px solid var(--blue-400);
 }
 
 .btnNext {
@@ -103,18 +99,12 @@
   background-color: var(--background-color);
 }
 
-.logo {
-  width: 75px;
-  height: 75px;
-}
-
 .form input {
   color: var(--black-400);
 }
 
 @media screen and (max-width: 390px) {
   .container {
-    padding: 40px 0 20px 0;
     gap: 10px;
     margin-top: 0;
     max-width: 390px;
@@ -129,7 +119,7 @@
   }
 
   .form {
-    padding: 20px 0 20px 0;
+    padding: 40px 0;
     gap: 30px;
     background: white;
     border-radius: 18px;
@@ -180,9 +170,5 @@
     font-weight: 500;
     font-size: 16px;
     line-height: 22px;
-  }
-
-  .logo {
-    display: none;
   }
 }

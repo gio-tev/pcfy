@@ -1,11 +1,14 @@
-import Button from '../button';
-import Navigation from '../navigation';
+import { useLocation } from 'react-router-dom';
+
 import arrowBackMobile from '../../../assets/arrow-back-mobile.png';
 import arrowBack from '../../../assets/arrow-back.png';
+import Button from '../button';
+import Navigation from '../navigation';
 import useWidth from '../../../hooks/useWidth';
 
 const FormHeader = ({ handleGoBackClick, handleNextClick, className }) => {
   const mobile = useWidth();
+  const location = useLocation();
 
   return (
     <>
@@ -14,7 +17,10 @@ const FormHeader = ({ handleGoBackClick, handleNextClick, className }) => {
         {!mobile && <img src={arrowBack} alt="arrow back" />}
       </Button>
 
-      <Navigation onToEmployee={handleGoBackClick} onToLaptop={handleNextClick} />
+      <Navigation
+        onToEmployee={location.pathname === '/laptop' ? handleGoBackClick : undefined}
+        onToLaptop={handleNextClick}
+      />
     </>
   );
 };

@@ -2,31 +2,25 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './Success.module.css';
-import useFetch from '../../hooks/useFetch';
-import successImage from '../../assets/success-image.png';
-import Button from '../UI/button';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import useWidth from '../../hooks/useWidth';
-import useValidation from '../../hooks/useValidation';
+import successImage from '../../../assets/success-image.png';
+import Button from '../../../components/UI/button';
+import useFetch from '../../../hooks/useFetch';
+import useLocalStorage from '../../../hooks/useLocalStorage';
+import useWidth from '../../../hooks/useWidth';
+import useValidation from '../../../hooks/useValidation';
 
 const Success = () => {
   const mobile = useWidth();
-
-  const { isValidFormat, isDateInPast } = useValidation();
-
-  const [employeeData] = useLocalStorage('employeeData', {});
-  const [teamPositionIds] = useLocalStorage('teamPositionIds', {});
-  const [laptopData] = useLocalStorage('laptopData', {});
-  const [driveType] = useLocalStorage('driveType', '');
-  const [laptopState] = useLocalStorage('laptopState', '');
-  const [laptopBrandId] = useLocalStorage('laptopBrandId', '');
-  const [imageDataURL] = useLocalStorage('laptopImage', '');
-  const [imagePreviewData] = useLocalStorage('imagePreviewData', {});
-
+  const navigate = useNavigate();
   const { sendHttp } = useFetch();
+  const { isValidFormat, isDateInPast } = useValidation();
   const [imageFile, setImageFile] = useState(null);
 
-  const navigate = useNavigate();
+  const [employeeData] = useLocalStorage('employeeData', {});
+  const [laptopData] = useLocalStorage('laptopData', {});
+  const [ids] = useLocalStorage('ids', {});
+  const [imageDataURL] = useLocalStorage('laptopImage', '');
+  const [imagePreviewData] = useLocalStorage('imagePreviewData', {});
 
   useEffect(() => {
     if (imageDataURL) {
@@ -55,23 +49,15 @@ const Success = () => {
       });
     }
 
-    return () => {
-      window.localStorage.clear();
-    };
+    return () => window.localStorage.clear();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageFile, employeeData.name]);
 
-  employeeData.email = employeeData.email.trim();
-  employeeData.phone_number = employeeData.phone_number.trim();
-
   const finalData = {
     ...employeeData,
-    ...teamPositionIds,
     ...laptopData,
+    ...ids,
     laptop_image: imageFile,
-    laptop_hard_drive_type: driveType,
-    laptop_state: laptopState,
-    laptop_brand_id: laptopBrandId,
     token: process.env.REACT_APP_TOKEN,
   };
 
@@ -86,8 +72,7 @@ const Success = () => {
   }
 
   for (const key in finalData) {
-    if (key === 'laptop_brand' || key === 'team' || key === 'position')
-      delete finalData[key];
+    if (key === 'laptop_brand' || key === 'team' || key === 'position') delete finalData[key];
   }
 
   const formData = new FormData();
@@ -97,7 +82,6 @@ const Success = () => {
   }
 
   const handleRecordsClick = () => navigate('/records');
-
   const handleLandingClick = () => navigate('/');
 
   return (

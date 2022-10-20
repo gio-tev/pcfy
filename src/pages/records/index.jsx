@@ -6,8 +6,7 @@ import useFetch from '../../hooks/useFetch';
 import RecordsHeader from '../../components/UI/records-header';
 
 const Records = () => {
-  const { response, sendHttp } = useFetch();
-
+  const { response, isLoading, sendHttp } = useFetch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,6 +19,8 @@ const Records = () => {
   return (
     <div className={styles.container}>
       <RecordsHeader handleGoBackClick={handleGoBackClick} title="ᲩᲐᲜᲐᲬᲔᲠᲔᲑᲘᲡ ᲡᲘᲐ" />
+
+      {isLoading && <p className={styles.loading}>Loading...</p>}
 
       <ul className={styles.recordsContainer}>
         {response?.data.map(record => {

@@ -47,7 +47,7 @@
 .laptopInnerContainer2 {
   display: flex;
   width: 577px;
-  gap: 65px;
+  gap: 55px;
 }
 
 .laptopInnerContainer3 {
@@ -87,6 +87,13 @@
   color: var(--black-350);
 }
 
+.loading {
+  display: flex;
+  justify-content: center;
+  font-family: 'HelveticaNeue';
+  font-size: 25px;
+}
+
 @media screen and (max-width: 390px) {
   .container {
     gap: 30px;
@@ -111,7 +118,7 @@
   }
 
   .employeeInformation {
-    gap: 66px;
+    gap: 48px;
     padding: 30px 0;
     width: 358px;
   }
@@ -125,23 +132,23 @@
   .laptopInnerContainer1 {
     width: 358px;
     margin-right: 0px;
-    gap: 30px;
+    gap: 12px;
   }
 
   .laptopInnerContainer2 {
     width: 358px;
-    gap: 61px;
+    gap: 40px;
   }
 
   .laptopInnerContainer3 {
     width: 358px;
     margin-right: 0px;
-    gap: 51px;
+    gap: 27px;
   }
 
   .laptopInnerContainer4 {
     width: 358px;
-    gap: 52px;
+    gap: 28px;
   }
 
   .descriptionContainer {
@@ -150,12 +157,16 @@
   }
 
   .description {
-    font-size: 14px;
+    font-size: 13px;
     line-height: 25px;
   }
 
   .value {
-    font-size: 14px;
+    font-size: 13px;
     line-height: 25px;
+  }
+
+  .loading {
+    font-size: 16px;
   }
 }

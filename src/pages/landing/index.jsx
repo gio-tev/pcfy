@@ -9,7 +9,6 @@ import useWidth from '../../hooks/useWidth';
 
 const Landing = () => {
   const mobile = useWidth();
-
   const navigate = useNavigate();
 
   const handleAddClick = () => navigate('/employee');
@@ -19,13 +18,9 @@ const Landing = () => {
     <div className={styles.container}>
       <img className={styles.logo} src={logo} alt="logo"></img>
 
-      {!mobile && (
-        <img className={styles.landingImg} src={landingImage} alt="landing"></img>
-      )}
+      {!mobile && <img className={styles.landingImg} src={landingImage} alt="landing"></img>}
 
-      {mobile && (
-        <img className={styles.landingImg} src={landingImageMobile} alt="landing"></img>
-      )}
+      {mobile && <img className={styles.landingImg} src={landingImageMobile} alt="landing"></img>}
 
       <div className={styles.btnContainer}>
         <Button onClick={handleAddClick} className={styles.btn}>
